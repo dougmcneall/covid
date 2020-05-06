@@ -4,51 +4,89 @@ author: Doug McNeall @dougmcneall dougmcneall@gmail.com
 output: html_document
 ---
 
-
+This code takes a small ensemble of runs of MetaWards and fits an emulator to the maximum number of infections in each run. The code then does a sensitivty analysis using the FASTT99 algorithm, and emulated output.
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Load Packages   
+### Load Packages   
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(sensitivity)
 library(DiceKriging)
 library(dplyr)
 source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtools.R")
 ```
 
-Read the design matrix from a designed ensemble of MetaWards, created in file "create_design_MetaWards.Rmd"
+### Read the design matrix from a designed ensemble of MetaWards, created in file "create_design_MetaWards.Rmd"
 ```{r}
 # Need to fix the parameter names
 X <- read.csv('design.csv', sep = "")
+parnames = colnames(X)
 
 ```
 
-Read and summarise the results from the runs 
+### Read and summarise the results from the runs 
 ```{r}
 # A container for all the data
 # Each row has a "fingerprint" that contains the values of all the changed parameters,
 # and the values of the parameters are also given.
-
+# This alters the order of the parameters.
 dat <- read.csv('output/results.csv.bz2')
+
+
+# find an
+unique_fingerprint = unique(dat$fingerprint)
 
 # Use the dplyr package to find the maximum number of infections for each ensemble member.
 max_infections <- dat %>% 
                       group_by(fingerprint) %>%
                       summarize(max(I))
 
+reorder_ix <- match(unique_fingerprint, max_infections$fingerprint)
+max_infections <- max_infections[reorder_ix, ]
+
 head(max_infections)
 
 ```
 
-## FAST99 sensitivity analysis of Saltelli et al (1999)
+Plot each parameter against the output to get an idea of sensitivity
+```{r, fig.width = 10, fig.height = 8}
 
-```{r}
+d <- ncol(X)
 
-X.norm = normalize(X)
+X.norm <- normalize(X)
+y <- pull(max_infections,'max(I)')
+
+par(mfrow = c(2,3), las = 1)
+
+for(i in 1:d){
+  plot(X[ ,i], y, xlab = parnames[i], ylab = 'max(I)')
+}
+
+```
+
+### Fit the emulator
+```{r, fig.width = 6, fig.height = 6, message=FALSE, warning=FALSE}
+
 # Fit an emulator using DiceKriging
-fit = km(~., design=X.norm, response=max_infections[, 'max(I)'])
+fit = km(~., design=X.norm, response=y)
+
+# a quick check of the emulator using cross validation
+loo = leaveOneOut.km(fit, type = 'UK', trend.reestim = TRUE)
+```
+
+
+```{r, fig.width = 6, fig.height = 6}
+ylim = range(loo$mean - (2*loo$sd),loo$mean + (2*loo$sd) )
+plot(y, loo$mean, xlab = 'max(I)', ylab = 'emulator prediction', ylim = ylim)
+segments(x0 = y, y0 = loo$mean - (2*loo$sd), x1 = y, y1 = loo$mean + (2*loo$sd))
+abline(0,1)
+
+```
+
+### FAST99 sensitivity analysis of Saltelli et al (1999)
+```{r}
 
 # Generate a design for the FAST99 analysis
 X.fast <- fast99(model = NULL, factors = colnames(X), n = 1000,
@@ -61,7 +99,6 @@ pred.fast = predict(fit, newdata = X.fast$X, type = 'UK')
 # Calculate the sensitivity indices
 fast.tell <- tell(X.fast, pred.fast$mean)
 
-
 bp.convert <- function(fastmodel){
   # get the FAST summary into an easier format for barplot
   fast.summ <- print(fastmodel)
@@ -70,11 +107,9 @@ bp.convert <- function(fastmodel){
   fast.bp
 }
 
-#pdf(width = 7, height = 5, file = 'graphics/fast_barplot.pdf')
-#par(las = 2, mar = c(9,5,3,2))
-#barplot(bp.convert(fast.tell), col = c('skyblue', 'grey'), ylab = 'relative sensitivity')
-#legend('topleft',legend = c('Main effect', 'Interactions'), fill = c('skyblue', 'grey') )
-#dev.off()
+par(las = 2, mar = c(9,5,3,2))
+barplot(bp.convert(fast.tell), col = c('skyblue', 'grey'), ylab = 'relative sensitivity')
+legend('topleft',legend = c('Main effect', 'Interactions'), fill = c('skyblue', 'grey') )
 
 ```
 

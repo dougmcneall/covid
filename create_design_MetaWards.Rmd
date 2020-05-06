@@ -8,7 +8,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Load packages and helper functions.   
+### Load packages and helper functions.   
 
 ```{r}
 library(lhs)
@@ -18,7 +18,7 @@ source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtool
 ```
 
 
-Create a latin hypercube design to run an ensemble of MetaWards.   
+### Create a latin hypercube design to run an ensemble of MetaWards.   
 
 ```{r}
 # For reference, here's the original "disease" file ncov.json
@@ -47,13 +47,13 @@ lhs <- maximinLHS(n, k, method = "build", dup = 1, eps = 0.05,
 
 colnames(lhs) <- varnames
 
-write.matrix(lhs, file = 'lhs.csv')
+#write.matrix(lhs, file = 'lhs.csv')
 
 head(lhs)
 
 ```
 
-Set the design to the limits of the parameters that you want to explore.   
+### Set the design to the limits of the parameters that you want to explore.   
 
 The parameters are described in detail here <https://metawards.org/tutorial/part02/01_disease.html>   
 
@@ -67,7 +67,7 @@ design <- unnormalize(
     un.maxes = param_maxes
   )
 
-write.matrix(design, file = 'design.csv')
+#write.matrix(design, file = 'design.csv')
 
 head(design)
 ```
