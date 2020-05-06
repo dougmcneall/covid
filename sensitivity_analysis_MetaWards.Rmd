@@ -1,0 +1,83 @@
+---
+title: "Sensitivity analysis of MetaWards with an emulator"
+author: Doug McNeall @dougmcneall dougmcneall@gmail.com
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load Packages   
+
+```{r}
+library(sensitivity)
+library(DiceKriging)
+library(dplyr)
+source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtools.R")
+```
+
+Read the design matrix from a designed ensemble of MetaWards, created in file "create_design_MetaWards.Rmd"
+```{r}
+# Need to fix the parameter names
+X <- read.csv('design.csv', sep = "")
+
+```
+
+Read and summarise the results from the runs 
+```{r}
+# A container for all the data
+# Each row has a "fingerprint" that contains the values of all the changed parameters,
+# and the values of the parameters are also given.
+
+dat <- read.csv('output/results.csv.bz2')
+
+# Use the dplyr package to find the maximum number of infections for each ensemble member.
+max_infections <- dat %>% 
+                      group_by(fingerprint) %>%
+                      summarize(max(I))
+
+head(max_infections)
+
+```
+
+## FAST99 sensitivity analysis of Saltelli et al (1999)
+
+```{r}
+
+X.norm = normalize(X)
+# Fit an emulator using DiceKriging
+fit = km(~., design=X.norm, response=max_infections[, 'max(I)'])
+
+# Generate a design for the FAST99 analysis
+X.fast <- fast99(model = NULL, factors = colnames(X), n = 1000,
+                 q = "qunif", q.arg = list(min = 0, max = 1))
+
+
+# Predict the response at the FAST99 design points using the emulator
+pred.fast = predict(fit, newdata = X.fast$X, type = 'UK')
+
+# Calculate the sensitivity indices
+fast.tell <- tell(X.fast, pred.fast$mean)
+
+
+bp.convert <- function(fastmodel){
+  # get the FAST summary into an easier format for barplot
+  fast.summ <- print(fastmodel)
+  fast.diff <- fast.summ[ ,2] - fast.summ[ ,1]
+  fast.bp <- t(cbind(fast.summ[ ,1], fast.diff))
+  fast.bp
+}
+
+#pdf(width = 7, height = 5, file = 'graphics/fast_barplot.pdf')
+#par(las = 2, mar = c(9,5,3,2))
+#barplot(bp.convert(fast.tell), col = c('skyblue', 'grey'), ylab = 'relative sensitivity')
+#legend('topleft',legend = c('Main effect', 'Interactions'), fill = c('skyblue', 'grey') )
+#dev.off()
+
+```
+
+
+
+

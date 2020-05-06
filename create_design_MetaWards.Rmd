@@ -1,0 +1,74 @@
+---
+title: "Create a latin hypercube design for MetaWards parameters"
+author: Doug McNeall @dougmcneall dougmcneall@gmail.com
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load packages and helper functions.   
+
+```{r}
+library(lhs)
+library(MASS)
+
+source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtools.R")
+```
+
+
+Create a latin hypercube design to run an ensemble of MetaWards.   
+
+```{r}
+# For reference, here's the original "disease" file ncov.json
+
+#{ "name"             : "SARS-Cov-2",
+#  "version"          : "April 23rd 2020",
+#  "author(s)"        : "Leon Danon",
+#  "contact(s)"       : "l.danon@bristol.ac.uk",
+#  "reference(s)"     : "references...",  
+#  "beta"             : [0.0, 0.0, "1.0/1.15", "1.0/1.15", 0.0],
+#  "progress"         : [1.0, "1.0/5.2", "1.0/1.15", "1.0/1.15", 0.0],
+#  "too_ill_to_move"  : [0.0, 0.0, 0.0, 0.0, 0.0],
+#  "contrib_foi"      : [1.0, 1.0, 1.0, 1.0, 0.0],
+#  "start_symptom"    : 3
+#}
+
+# Choose some variables to perturb
+varnames <- c('beta[3]', 'beta[4]', 'progress[1]', 'progress[2]', 'progress[3]', 'progress[4]')
+
+n <- 10 * length(varnames)  # 10 times number of parameters
+k <- length(varnames)
+
+# Create a template maximin LHS
+lhs <- maximinLHS(n, k, method = "build", dup = 1, eps = 0.05,
+  maxIter = 100, optimize.on = "grid", debug = FALSE)
+
+colnames(lhs) <- varnames
+
+write.matrix(lhs, file = 'lhs.csv')
+
+head(lhs)
+
+```
+
+Set the design to the limits of the parameters that you want to explore.   
+
+The parameters are described in detail here <https://metawards.org/tutorial/part02/01_disease.html>   
+
+```{r}
+param_mins  <- c(0.5, 0.5, 0.5, 0, 0.5, 0.5)
+param_maxes <- c(1, 1, 1, 1, 1, 1)
+
+design <- unnormalize(
+    lhs,
+    un.mins = param_mins,
+    un.maxes = param_maxes
+  )
+
+write.matrix(design, file = 'design.csv')
+
+head(design)
+```
+
