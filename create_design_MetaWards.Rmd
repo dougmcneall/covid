@@ -36,7 +36,8 @@ source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtool
 #}
 
 # Choose some variables to perturb
-varnames <- c('beta[3]', 'beta[4]', 'progress[1]', 'progress[2]', 'progress[3]', 'progress[4]')
+varnames <- c('beta[2]', 'beta[3]', 'beta[4]', 'progress[1]', 'progress[2]', 'progress[3]', 'progress[4]',
+              'too_ill_to_move[3]', 'too_ill_to_move[4]')
 
 n <- 10 * length(varnames)  # 10 times number of parameters
 k <- length(varnames)
@@ -47,7 +48,7 @@ lhs <- maximinLHS(n, k, method = "build", dup = 1, eps = 0.05,
 
 colnames(lhs) <- varnames
 
-#write.matrix(lhs, file = 'lhs.csv')
+write.matrix(lhs, file = 'lhs.csv')
 
 head(lhs)
 
@@ -58,8 +59,8 @@ head(lhs)
 The parameters are described in detail here <https://metawards.org/tutorial/part02/01_disease.html>   
 
 ```{r}
-param_mins  <- c(0.5, 0.5, 0.5, 0, 0.5, 0.5)
-param_maxes <- c(1, 1, 1, 1, 1, 1)
+param_mins  <- rep(0, k)
+param_maxes <- rep(1, k)
 
 design <- unnormalize(
     lhs,
@@ -67,7 +68,7 @@ design <- unnormalize(
     un.maxes = param_maxes
   )
 
-#write.matrix(design, file = 'design.csv')
+ write.matrix(design, file = 'design.csv')
 
 head(design)
 ```

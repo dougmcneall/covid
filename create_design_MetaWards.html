@@ -392,7 +392,8 @@ source(&quot;https://raw.githubusercontent.com/dougmcneall/packages-git/master/e
 #}
 
 # Choose some variables to perturb
-varnames &lt;- c('beta[3]', 'beta[4]', 'progress[1]', 'progress[2]', 'progress[3]', 'progress[4]')
+varnames &lt;- c('beta[2]', 'beta[3]', 'beta[4]', 'progress[1]', 'progress[2]', 'progress[3]', 'progress[4]',
+              'too_ill_to_move[3]', 'too_ill_to_move[4]')
 
 n &lt;- 10 * length(varnames)  # 10 times number of parameters
 k &lt;- length(varnames)
@@ -403,22 +404,29 @@ lhs &lt;- maximinLHS(n, k, method = &quot;build&quot;, dup = 1, eps = 0.05,
 
 colnames(lhs) &lt;- varnames
 
-#write.matrix(lhs, file = 'lhs.csv')
+write.matrix(lhs, file = 'lhs.csv')
 
 head(lhs)</code></pre>
-<pre><code>##        beta[3]   beta[4] progress[1] progress[2] progress[3] progress[4]
-## [1,] 0.4887643 0.7435718   0.7833664   0.6274377   0.5770900   0.4232377
-## [2,] 0.8105776 0.4494508   0.8011868   0.3784102   0.7691701   0.7590409
-## [3,] 0.1786406 0.7060832   0.5600120   0.5079886   0.2165733   0.4057643
-## [4,] 0.5199790 0.3154385   0.4053590   0.7060597   0.2820919   0.2648733
-## [5,] 0.2142448 0.7641126   0.5799705   0.2195045   0.6758827   0.8016707
-## [6,] 0.3021875 0.5320891   0.5467639   0.4197102   0.6428779   0.3776837</code></pre>
+<pre><code>##         beta[2]   beta[3]   beta[4] progress[1] progress[2] progress[3]
+## [1,] 0.03969115 0.5487738 0.4820402   0.4917127   0.7742977   0.6128348
+## [2,] 0.72947885 0.4236461 0.5140176   0.7666982   0.4031789   0.4675363
+## [3,] 0.29409979 0.7397552 0.5851974   0.5933215   0.6098005   0.4313774
+## [4,] 0.41177034 0.5074890 0.3288689   0.4084163   0.8264602   0.4958686
+## [5,] 0.53664045 0.7915201 0.7097633   0.7255256   0.4756592   0.3916772
+## [6,] 0.65550917 0.3483840 0.5585651   0.4524179   0.3879191   0.1311428
+##      progress[4] too_ill_to_move[3] too_ill_to_move[4]
+## [1,]   0.7267083          0.6840668          0.7018889
+## [2,]   0.3316119          0.3261629          0.5032876
+## [3,]   0.4267471          0.3726586          0.8626915
+## [4,]   0.5297378          0.3129964          0.6687390
+## [5,]   0.3706734          0.2161267          0.1639703
+## [6,]   0.7498422          0.7785943          0.3920505</code></pre>
 </div>
 <div id="set-the-design-to-the-limits-of-the-parameters-that-you-want-to-explore." class="section level3">
 <h3>Set the design to the limits of the parameters that you want to explore.</h3>
 <p>The parameters are described in detail here <a href="https://metawards.org/tutorial/part02/01_disease.html" class="uri">https://metawards.org/tutorial/part02/01_disease.html</a></p>
-<pre class="r"><code>param_mins  &lt;- c(0.5, 0.5, 0.5, 0, 0.5, 0.5)
-param_maxes &lt;- c(1, 1, 1, 1, 1, 1)
+<pre class="r"><code>param_mins  &lt;- rep(0, k)
+param_maxes &lt;- rep(1, k)
 
 design &lt;- unnormalize(
     lhs,
@@ -426,16 +434,23 @@ design &lt;- unnormalize(
     un.maxes = param_maxes
   )
 
-#write.matrix(design, file = 'design.csv')
+ write.matrix(design, file = 'design.csv')
 
 head(design)</code></pre>
-<pre><code>##        beta[3]   beta[4] progress[1] progress[2] progress[3] progress[4]
-## [1,] 0.7443821 0.8717859   0.8916832   0.6274377   0.7885450   0.7116188
-## [2,] 0.9052888 0.7247254   0.9005934   0.3784102   0.8845851   0.8795204
-## [3,] 0.5893203 0.8530416   0.7800060   0.5079886   0.6082867   0.7028822
-## [4,] 0.7599895 0.6577192   0.7026795   0.7060597   0.6410459   0.6324367
-## [5,] 0.6071224 0.8820563   0.7899853   0.2195045   0.8379414   0.9008354
-## [6,] 0.6510938 0.7660446   0.7733820   0.4197102   0.8214389   0.6888418</code></pre>
+<pre><code>##         beta[2]   beta[3]   beta[4] progress[1] progress[2] progress[3]
+## [1,] 0.03969115 0.5487738 0.4820402   0.4917127   0.7742977   0.6128348
+## [2,] 0.72947885 0.4236461 0.5140176   0.7666982   0.4031789   0.4675363
+## [3,] 0.29409979 0.7397552 0.5851974   0.5933215   0.6098005   0.4313774
+## [4,] 0.41177034 0.5074890 0.3288689   0.4084163   0.8264602   0.4958686
+## [5,] 0.53664045 0.7915201 0.7097633   0.7255256   0.4756592   0.3916772
+## [6,] 0.65550917 0.3483840 0.5585651   0.4524179   0.3879191   0.1311428
+##      progress[4] too_ill_to_move[3] too_ill_to_move[4]
+## [1,]   0.7267083          0.6840668          0.7018889
+## [2,]   0.3316119          0.3261629          0.5032876
+## [3,]   0.4267471          0.3726586          0.8626915
+## [4,]   0.5297378          0.3129964          0.6687390
+## [5,]   0.3706734          0.2161267          0.1639703
+## [6,]   0.7498422          0.7785943          0.3920505</code></pre>
 </div>
 
 
