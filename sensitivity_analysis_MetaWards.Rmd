@@ -4,12 +4,15 @@ author: Doug McNeall @dougmcneall dougmcneall@gmail.com
 output: html_document
 ---
 
-This code takes a small ensemble of runs of MetaWards and fits an emulator to the maximum number of infections in each run. The code then does a sensitivty analysis using the FASTT99 algorithm, and emulated output.
+This code takes a small ensemble of runs of MetaWards and fits an emulator to the maximum number of infections in each run. The code then does a sensitivty analysis using the FASTT99 algorithm, and emulated output. Finally, it looks at the one-at-a-time sensitivity using emulated output.
+
+This code is an example only, and not a serious analysis. Results of the sensitivity analysis will change - perhaps dramatically - when sensible ranges for the parameters are used.   
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Load Packages   
+## Load Packages   
 
 ```{r, message=FALSE, warning=FALSE}
 library(sensitivity)
@@ -18,21 +21,21 @@ library(dplyr)
 source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtools.R")
 ```
 
-### Read the design matrix from a designed ensemble of MetaWards, created in file "create_design_MetaWards.Rmd"
+## Read the design matrix from a designed ensemble of MetaWards, created in file "create_design_MetaWards.Rmd"
 ```{r}
 # Need to fix the parameter names
-X <- read.csv('design.csv', sep = "")
+X <- read.csv('experiments/2020-05-07-sensitivity-analysis/design.csv', sep = "")
 parnames = colnames(X)
 
 ```
 
-### Read and summarise the results from the runs 
+## Read and summarise the results from the runs 
 ```{r}
 # A container for all the data
 # Each row has a "fingerprint" that contains the values of all the changed parameters,
 # and the values of the parameters are also given.
 # This alters the order of the parameters.
-dat <- read.csv('output/results.csv.bz2')
+dat <- read.csv('experiments/2020-05-07-sensitivity-analysis/output/results.csv.bz2')
 
 
 # find an
@@ -51,14 +54,14 @@ head(max_infections)
 ```
 
 Plot each parameter against the output to get an idea of sensitivity
-```{r, fig.width = 10, fig.height = 8}
+```{r, fig.width = 10, fig.height = 10}
 
 d <- ncol(X)
 
 X.norm <- normalize(X)
 y <- pull(max_infections,'max(I)')
 
-par(mfrow = c(2,3), las = 1)
+par(mfrow = c(3,3), las = 1)
 
 for(i in 1:d){
   plot(X[ ,i], y, xlab = parnames[i], ylab = 'max(I)')
@@ -66,7 +69,7 @@ for(i in 1:d){
 
 ```
 
-### Fit the emulator
+## Fit the emulator
 ```{r, fig.width = 6, fig.height = 6, message=FALSE, warning=FALSE}
 
 # Fit an emulator using DiceKriging
@@ -85,11 +88,11 @@ abline(0,1)
 
 ```
 
-### FAST99 sensitivity analysis of Saltelli et al (1999)
+## FAST99 sensitivity analysis of Saltelli et al (1999)
 ```{r}
 
 # Generate a design for the FAST99 analysis
-X.fast <- fast99(model = NULL, factors = colnames(X), n = 1000,
+X.fast <- fast99(model = NULL, factors = colnames(X), n = 3000,
                  q = "qunif", q.arg = list(min = 0, max = 1))
 
 
@@ -108,11 +111,42 @@ bp.convert <- function(fastmodel){
 }
 
 par(las = 2, mar = c(9,5,3,2))
-barplot(bp.convert(fast.tell), col = c('skyblue', 'grey'), ylab = 'relative sensitivity')
+barplot(bp.convert(fast.tell), col = c('skyblue', 'grey'), ylab = 'relative sensitivity', main = 'FAST99 Sensitivity')
 legend('topleft',legend = c('Main effect', 'Interactions'), fill = c('skyblue', 'grey') )
 
 ```
 
+## One-at-a-time sensitivity analysis
+Parameters are swept across their range one at a time, with the remaining parameters held at central values.
+```{r,fig.width = 7, fig.height = 7}
+n.oat <- 21
+X.oat <- oaat.design(X.norm, n = n.oat, hold = rep(0.5,9))
+
+colnames(X.oat) <- colnames(X)
+pred.oat <- predict(fit, newdata = X.oat, type = 'UK')
+
+col.transp <- adjustcolor('grey', alpha = 0.5)
+par(mfrow = c(3,3), oma = c(0.1,0.1,3,0.1))
+
+  for(i in 1:9){
+    
+  ix <- seq(from = ((i*n.oat) - (n.oat-1)), to =  (i*n.oat), by = 1)
+  
+  plot(X.oat[ix,i], pred.oat$mean[ix], 
+       xlim = c(0,1), ylim = range(pred.oat$mean),
+       xlab = parnames[i], ylab = 'maximum infections',
+       type= 'n')
+  
+     polygon(x = c(X.oat[ix, i], rev(X.oat[ix, i])),
+            y = c(pred.oat$mean[ix] - (2*pred.oat$sd[ix]), rev(pred.oat$mean[ix] + (2*pred.oat$sd[ix]))),
+            col = col.transp, border = col.transp)
+     
+  lines(X.oat[ix,i], pred.oat$mean[ix], xlim = c(0,1), lty = 'solid')
+  
+  }
+
+mtext('One-at-a-time sensitivity', side = 3, outer = TRUE, cex = 1.5)
+```
 
 
 

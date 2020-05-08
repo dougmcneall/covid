@@ -4,6 +4,8 @@ author: Doug McNeall @dougmcneall dougmcneall@gmail.com
 output: html_document
 ---
 
+This code creates a simple maximin latin hypercube with uniform marginal distributions, and then writes a corresponding design file that can be used to perturb parameters in MetaWards.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -23,17 +25,17 @@ source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtool
 ```{r}
 # For reference, here's the original "disease" file ncov.json
 
-#{ "name"             : "SARS-Cov-2",
-#  "version"          : "April 23rd 2020",
-#  "author(s)"        : "Leon Danon",
-#  "contact(s)"       : "l.danon@bristol.ac.uk",
-#  "reference(s)"     : "references...",  
-#  "beta"             : [0.0, 0.0, "1.0/1.15", "1.0/1.15", 0.0],
-#  "progress"         : [1.0, "1.0/5.2", "1.0/1.15", "1.0/1.15", 0.0],
-#  "too_ill_to_move"  : [0.0, 0.0, 0.0, 0.0, 0.0],
-#  "contrib_foi"      : [1.0, 1.0, 1.0, 1.0, 0.0],
-#  "start_symptom"    : 3
-#}
+  #{ "name"             : "SARS-Cov-2",
+  #  "version"          : "April 23rd 2020",
+  #  "author(s)"        : "Leon Danon",
+  #  "contact(s)"       : "l.danon@bristol.ac.uk",
+  #  "reference(s)"     : "references...",  
+  #  "beta"             : [0.0, 0.0, "1.0/1.15", "1.0/1.15", 0.0],
+  #  "progress"         : [1.0, "1.0/5.2", "1.0/1.15", "1.0/1.15", 0.0],
+  #  "too_ill_to_move"  : [0.0, 0.0, 0.0, 0.0, 0.0],
+  #  "contrib_foi"      : [1.0, 1.0, 1.0, 1.0, 0.0],
+  #  "start_symptom"    : 3
+  #}
 
 # Choose some variables to perturb
 varnames <- c('beta[2]', 'beta[3]', 'beta[4]', 'progress[1]', 'progress[2]', 'progress[3]', 'progress[4]',
