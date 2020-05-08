@@ -1,0 +1,4 @@
+# .gitignore file for excluding files from tracking.
+# https://git-scm.com/docs/gitignore
+
+/output
