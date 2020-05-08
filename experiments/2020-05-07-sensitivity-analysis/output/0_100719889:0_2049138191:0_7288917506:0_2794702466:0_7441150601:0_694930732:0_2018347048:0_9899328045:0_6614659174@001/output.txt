@@ -1,0 +1,45 @@
+Using random number seed: 71578074
+First five random numbers equal 50, 37, 59, 53, 46
+Number of threads used equals 1
+Initialise infections...
+Setup by seeding all wards
+Loading additional seeds from /net/home/h01/hadda/GitHub/MetaWardsData/extra_seeds/ExtraSeedsLondon.dat...
+(1, 255, 5)
+S: 56082077    E: 0    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 0 0
+S: 56082077    E: 0    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+seeding play_infections[0][255] += 5
+
+ 1 0
+S: 56082072    E: 5    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 2 5
+S: 56082072    E: 3    I: 2    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 3 5
+S: 56082072    E: 2    I: 3    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 4 5
+S: 56082072    E: 2    I: 2    R: 1    IW: 0   TOTAL POPULATION 56082077
+
+ 5 4
+S: 56082071    E: 1    I: 2    R: 3    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 6 3
+S: 56082071    E: 2    I: 1    R: 3    IW: 0   TOTAL POPULATION 56082077
+
+ 7 3
+S: 56082071    E: 1    I: 2    R: 3    IW: 0   TOTAL POPULATION 56082077
+
+ 8 3
+S: 56082071    E: 0    I: 2    R: 4    IW: 0   TOTAL POPULATION 56082077
+
+ 9 2
+S: 56082071    E: 0    I: 1    R: 5    IW: 0   TOTAL POPULATION 56082077
+
+ 10 1
+S: 56082070    E: 0    I: 0    R: 7    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+Infection died ... Ending on day 11

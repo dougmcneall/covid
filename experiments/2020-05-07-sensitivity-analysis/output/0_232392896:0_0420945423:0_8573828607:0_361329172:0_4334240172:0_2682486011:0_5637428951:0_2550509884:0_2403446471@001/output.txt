@@ -1,0 +1,199 @@
+Using random number seed: 69475015
+First five random numbers equal 53, 41, 52, 50, 52
+Number of threads used equals 1
+Initialise infections...
+Setup by seeding all wards
+Loading additional seeds from /net/home/h01/hadda/GitHub/MetaWardsData/extra_seeds/ExtraSeedsLondon.dat...
+(1, 255, 5)
+S: 56082077    E: 0    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 0 0
+S: 56082077    E: 0    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+seeding play_infections[0][255] += 5
+
+ 1 0
+S: 56082072    E: 5    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 2 5
+S: 56082072    E: 2    I: 3    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 3 5
+S: 56082070    E: 2    I: 3    R: 2    IW: 1   TOTAL POPULATION 56082077
+
+ 4 5
+S: 56082070    E: 4    I: 3    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 5 7
+S: 56082070    E: 4    I: 3    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 6 7
+S: 56082070    E: 2    I: 5    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 7 7
+S: 56082069    E: 1    I: 5    R: 2    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 8 6
+S: 56082066    E: 1    I: 6    R: 4    IW: 3   TOTAL POPULATION 56082077
+
+ 9 7
+S: 56082065    E: 4    I: 4    R: 4    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 10 8
+S: 56082064    E: 4    I: 3    R: 6    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 11 7
+S: 56082063    E: 2    I: 5    R: 7    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 12 7
+S: 56082062    E: 2    I: 5    R: 8    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 13 7
+S: 56082062    E: 3    I: 5    R: 7    IW: 0   TOTAL POPULATION 56082077
+
+ 14 8
+S: 56082061    E: 3    I: 3    R: 10    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 15 6
+S: 56082061    E: 2    I: 4    R: 10    IW: 0   TOTAL POPULATION 56082077
+
+ 16 6
+S: 56082060    E: 1    I: 5    R: 11    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 17 6
+S: 56082059    E: 2    I: 4    R: 12    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 18 6
+S: 56082058    E: 3    I: 4    R: 12    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 19 7
+S: 56082057    E: 3    I: 4    R: 13    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 20 7
+S: 56082057    E: 4    I: 4    R: 12    IW: 0   TOTAL POPULATION 56082077
+
+ 21 8
+S: 56082057    E: 3    I: 4    R: 13    IW: 0   TOTAL POPULATION 56082077
+
+ 22 7
+S: 56082056    E: 1    I: 6    R: 14    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 23 7
+S: 56082053    E: 2    I: 6    R: 16    IW: 3   TOTAL POPULATION 56082077
+
+ 24 8
+S: 56082051    E: 5    I: 4    R: 17    IW: 2   TOTAL POPULATION 56082077
+
+ 25 9
+S: 56082051    E: 4    I: 6    R: 16    IW: 0   TOTAL POPULATION 56082077
+
+ 26 10
+S: 56082050    E: 1    I: 8    R: 18    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 27 9
+S: 56082049    E: 2    I: 8    R: 18    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 28 10
+S: 56082049    E: 2    I: 6    R: 20    IW: 0   TOTAL POPULATION 56082077
+
+ 29 8
+S: 56082048    E: 0    I: 7    R: 22    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 30 7
+S: 56082048    E: 1    I: 5    R: 23    IW: 0   TOTAL POPULATION 56082077
+
+ 31 6
+S: 56082048    E: 1    I: 4    R: 24    IW: 0   TOTAL POPULATION 56082077
+
+ 32 5
+S: 56082048    E: 0    I: 5    R: 24    IW: 0   TOTAL POPULATION 56082077
+
+ 33 5
+S: 56082046    E: 0    I: 5    R: 26    IW: 2   TOTAL POPULATION 56082077
+
+ 34 5
+S: 56082046    E: 2    I: 3    R: 26    IW: 0   TOTAL POPULATION 56082077
+
+ 35 5
+S: 56082045    E: 0    I: 5    R: 27    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 36 5
+S: 56082045    E: 1    I: 5    R: 26    IW: 0   TOTAL POPULATION 56082077
+
+ 37 6
+S: 56082044    E: 1    I: 4    R: 28    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 38 5
+S: 56082044    E: 1    I: 3    R: 29    IW: 0   TOTAL POPULATION 56082077
+
+ 39 4
+S: 56082044    E: 1    I: 2    R: 30    IW: 0   TOTAL POPULATION 56082077
+
+ 40 3
+S: 56082043    E: 0    I: 3    R: 31    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 41 3
+S: 56082043    E: 1    I: 1    R: 32    IW: 0   TOTAL POPULATION 56082077
+
+ 42 2
+S: 56082043    E: 1    I: 1    R: 32    IW: 0   TOTAL POPULATION 56082077
+
+ 43 2
+S: 56082043    E: 1    I: 1    R: 32    IW: 0   TOTAL POPULATION 56082077
+
+ 44 2
+S: 56082043    E: 1    I: 1    R: 32    IW: 0   TOTAL POPULATION 56082077
+
+ 45 2
+S: 56082043    E: 1    I: 0    R: 33    IW: 0   TOTAL POPULATION 56082077
+
+ 46 1
+S: 56082043    E: 1    I: 0    R: 33    IW: 0   TOTAL POPULATION 56082077
+
+ 47 1
+S: 56082043    E: 1    I: 0    R: 33    IW: 0   TOTAL POPULATION 56082077
+
+ 48 1
+S: 56082043    E: 0    I: 1    R: 33    IW: 0   TOTAL POPULATION 56082077
+
+ 49 1
+S: 56082042    E: 0    I: 1    R: 34    IW: 1   TOTAL POPULATION 56082077
+Negative var? 0.0, 0.0 0.0
+
+ 50 1
+S: 56082042    E: 1    I: 1    R: 33    IW: 0   TOTAL POPULATION 56082077
+
+ 51 2
+S: 56082042    E: 1    I: 1    R: 33    IW: 0   TOTAL POPULATION 56082077
+
+ 52 2
+S: 56082042    E: 1    I: 1    R: 33    IW: 0   TOTAL POPULATION 56082077
+
+ 53 2
+S: 56082042    E: 0    I: 1    R: 34    IW: 0   TOTAL POPULATION 56082077
+
+ 54 1
+S: 56082042    E: 0    I: 1    R: 34    IW: 0   TOTAL POPULATION 56082077
+
+ 55 1
+S: 56082042    E: 0    I: 1    R: 34    IW: 0   TOTAL POPULATION 56082077
+
+ 56 1
+S: 56082042    E: 0    I: 0    R: 35    IW: 0   TOTAL POPULATION 56082077
+Infection died ... Ending on day 57

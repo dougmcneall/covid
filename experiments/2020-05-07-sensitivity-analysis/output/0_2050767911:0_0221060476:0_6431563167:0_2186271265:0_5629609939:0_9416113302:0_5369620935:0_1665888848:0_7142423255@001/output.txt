@@ -1,0 +1,52 @@
+Using random number seed: 64000221
+First five random numbers equal 41, 48, 55, 56, 40
+Number of threads used equals 1
+Initialise infections...
+Setup by seeding all wards
+Loading additional seeds from /net/home/h01/hadda/GitHub/MetaWardsData/extra_seeds/ExtraSeedsLondon.dat...
+(1, 255, 5)
+S: 56082077    E: 0    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 0 0
+S: 56082077    E: 0    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+seeding play_infections[0][255] += 5
+
+ 1 0
+S: 56082072    E: 5    I: 0    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 2 5
+S: 56082072    E: 4    I: 1    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 3 5
+S: 56082072    E: 4    I: 1    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 4 5
+S: 56082072    E: 1    I: 4    R: 0    IW: 0   TOTAL POPULATION 56082077
+
+ 5 5
+S: 56082072    E: 1    I: 3    R: 1    IW: 0   TOTAL POPULATION 56082077
+
+ 6 4
+S: 56082072    E: 1    I: 0    R: 4    IW: 0   TOTAL POPULATION 56082077
+
+ 7 1
+S: 56082072    E: 1    I: 0    R: 4    IW: 0   TOTAL POPULATION 56082077
+
+ 8 1
+S: 56082072    E: 0    I: 1    R: 4    IW: 0   TOTAL POPULATION 56082077
+
+ 9 1
+S: 56082072    E: 0    I: 1    R: 4    IW: 0   TOTAL POPULATION 56082077
+
+ 10 1
+S: 56082072    E: 0    I: 1    R: 4    IW: 0   TOTAL POPULATION 56082077
+
+ 11 1
+S: 56082072    E: 0    I: 1    R: 4    IW: 0   TOTAL POPULATION 56082077
+
+ 12 1
+S: 56082072    E: 0    I: 1    R: 4    IW: 0   TOTAL POPULATION 56082077
+
+ 13 1
+S: 56082072    E: 0    I: 0    R: 5    IW: 0   TOTAL POPULATION 56082077
+Infection died ... Ending on day 14
