@@ -368,6 +368,7 @@ summary {
 </div>
 
 
+<p>This code creates a simple maximin latin hypercube with uniform marginal distributions, and then writes a corresponding design file that can be used to perturb parameters in MetaWards.</p>
 <div id="load-packages-and-helper-functions." class="section level3">
 <h3>Load packages and helper functions.</h3>
 <pre class="r"><code>library(lhs)
@@ -379,20 +380,21 @@ source(&quot;https://raw.githubusercontent.com/dougmcneall/packages-git/master/e
 <h3>Create a latin hypercube design to run an ensemble of MetaWards.</h3>
 <pre class="r"><code># For reference, here's the original &quot;disease&quot; file ncov.json
 
-#{ &quot;name&quot;             : &quot;SARS-Cov-2&quot;,
-#  &quot;version&quot;          : &quot;April 23rd 2020&quot;,
-#  &quot;author(s)&quot;        : &quot;Leon Danon&quot;,
-#  &quot;contact(s)&quot;       : &quot;l.danon@bristol.ac.uk&quot;,
-#  &quot;reference(s)&quot;     : &quot;references...&quot;,  
-#  &quot;beta&quot;             : [0.0, 0.0, &quot;1.0/1.15&quot;, &quot;1.0/1.15&quot;, 0.0],
-#  &quot;progress&quot;         : [1.0, &quot;1.0/5.2&quot;, &quot;1.0/1.15&quot;, &quot;1.0/1.15&quot;, 0.0],
-#  &quot;too_ill_to_move&quot;  : [0.0, 0.0, 0.0, 0.0, 0.0],
-#  &quot;contrib_foi&quot;      : [1.0, 1.0, 1.0, 1.0, 0.0],
-#  &quot;start_symptom&quot;    : 3
-#}
+  #{ &quot;name&quot;             : &quot;SARS-Cov-2&quot;,
+  #  &quot;version&quot;          : &quot;April 23rd 2020&quot;,
+  #  &quot;author(s)&quot;        : &quot;Leon Danon&quot;,
+  #  &quot;contact(s)&quot;       : &quot;l.danon@bristol.ac.uk&quot;,
+  #  &quot;reference(s)&quot;     : &quot;references...&quot;,  
+  #  &quot;beta&quot;             : [0.0, 0.0, &quot;1.0/1.15&quot;, &quot;1.0/1.15&quot;, 0.0],
+  #  &quot;progress&quot;         : [1.0, &quot;1.0/5.2&quot;, &quot;1.0/1.15&quot;, &quot;1.0/1.15&quot;, 0.0],
+  #  &quot;too_ill_to_move&quot;  : [0.0, 0.0, 0.0, 0.0, 0.0],
+  #  &quot;contrib_foi&quot;      : [1.0, 1.0, 1.0, 1.0, 0.0],
+  #  &quot;start_symptom&quot;    : 3
+  #}
 
 # Choose some variables to perturb
-varnames &lt;- c('beta[3]', 'beta[4]', 'progress[1]', 'progress[2]', 'progress[3]', 'progress[4]')
+varnames &lt;- c('beta[2]', 'beta[3]', 'beta[4]', 'progress[1]', 'progress[2]', 'progress[3]', 'progress[4]',
+              'too_ill_to_move[3]', 'too_ill_to_move[4]')
 
 n &lt;- 10 * length(varnames)  # 10 times number of parameters
 k &lt;- length(varnames)
@@ -403,22 +405,29 @@ lhs &lt;- maximinLHS(n, k, method = &quot;build&quot;, dup = 1, eps = 0.05,
 
 colnames(lhs) &lt;- varnames
 
-#write.matrix(lhs, file = 'lhs.csv')
+write.matrix(lhs, file = 'lhs.csv')
 
 head(lhs)</code></pre>
-<pre><code>##        beta[3]   beta[4] progress[1] progress[2] progress[3] progress[4]
-## [1,] 0.4887643 0.7435718   0.7833664   0.6274377   0.5770900   0.4232377
-## [2,] 0.8105776 0.4494508   0.8011868   0.3784102   0.7691701   0.7590409
-## [3,] 0.1786406 0.7060832   0.5600120   0.5079886   0.2165733   0.4057643
-## [4,] 0.5199790 0.3154385   0.4053590   0.7060597   0.2820919   0.2648733
-## [5,] 0.2142448 0.7641126   0.5799705   0.2195045   0.6758827   0.8016707
-## [6,] 0.3021875 0.5320891   0.5467639   0.4197102   0.6428779   0.3776837</code></pre>
+<pre><code>##         beta[2]   beta[3]   beta[4] progress[1] progress[2] progress[3]
+## [1,] 0.38710672 0.7569763 0.6833038   0.4779504   0.4627190   0.5614718
+## [2,] 0.26436011 0.7365662 0.5343985   0.3851255   0.4941642   0.6908752
+## [3,] 0.47295186 0.7043941 0.5603399   0.7304604   0.7053776   0.5090968
+## [4,] 0.58942523 0.2583877 0.6218445   0.3134041   0.6259453   0.3612063
+## [5,] 0.04531145 0.4148175 0.4693960   0.4387584   0.5902250   0.4196554
+## [6,] 0.70659331 0.5639490 0.3867551   0.6536937   0.5817538   0.1563858
+##      progress[4] too_ill_to_move[3] too_ill_to_move[4]
+## [1,]   0.1994125          0.4282444          0.5700674
+## [2,]   0.4559605          0.7743606          0.4756666
+## [3,]   0.5422968          0.8408459          0.7618698
+## [4,]   0.3936152          0.4984242          0.3895646
+## [5,]   0.8571437          0.4555724          0.3709516
+## [6,]   0.2028341          0.6502611          0.6407918</code></pre>
 </div>
 <div id="set-the-design-to-the-limits-of-the-parameters-that-you-want-to-explore." class="section level3">
 <h3>Set the design to the limits of the parameters that you want to explore.</h3>
 <p>The parameters are described in detail here <a href="https://metawards.org/tutorial/part02/01_disease.html" class="uri">https://metawards.org/tutorial/part02/01_disease.html</a></p>
-<pre class="r"><code>param_mins  &lt;- c(0.5, 0.5, 0.5, 0, 0.5, 0.5)
-param_maxes &lt;- c(1, 1, 1, 1, 1, 1)
+<pre class="r"><code>param_mins  &lt;- rep(0, k)
+param_maxes &lt;- rep(1, k)
 
 design &lt;- unnormalize(
     lhs,
@@ -426,16 +435,23 @@ design &lt;- unnormalize(
     un.maxes = param_maxes
   )
 
-#write.matrix(design, file = 'design.csv')
+ write.matrix(design, file = 'design.csv')
 
 head(design)</code></pre>
-<pre><code>##        beta[3]   beta[4] progress[1] progress[2] progress[3] progress[4]
-## [1,] 0.7443821 0.8717859   0.8916832   0.6274377   0.7885450   0.7116188
-## [2,] 0.9052888 0.7247254   0.9005934   0.3784102   0.8845851   0.8795204
-## [3,] 0.5893203 0.8530416   0.7800060   0.5079886   0.6082867   0.7028822
-## [4,] 0.7599895 0.6577192   0.7026795   0.7060597   0.6410459   0.6324367
-## [5,] 0.6071224 0.8820563   0.7899853   0.2195045   0.8379414   0.9008354
-## [6,] 0.6510938 0.7660446   0.7733820   0.4197102   0.8214389   0.6888418</code></pre>
+<pre><code>##         beta[2]   beta[3]   beta[4] progress[1] progress[2] progress[3]
+## [1,] 0.38710672 0.7569763 0.6833038   0.4779504   0.4627190   0.5614718
+## [2,] 0.26436011 0.7365662 0.5343985   0.3851255   0.4941642   0.6908752
+## [3,] 0.47295186 0.7043941 0.5603399   0.7304604   0.7053776   0.5090968
+## [4,] 0.58942523 0.2583877 0.6218445   0.3134041   0.6259453   0.3612063
+## [5,] 0.04531145 0.4148175 0.4693960   0.4387584   0.5902250   0.4196554
+## [6,] 0.70659331 0.5639490 0.3867551   0.6536937   0.5817538   0.1563858
+##      progress[4] too_ill_to_move[3] too_ill_to_move[4]
+## [1,]   0.1994125          0.4282444          0.5700674
+## [2,]   0.4559605          0.7743606          0.4756666
+## [3,]   0.5422968          0.8408459          0.7618698
+## [4,]   0.3936152          0.4984242          0.3895646
+## [5,]   0.8571437          0.4555724          0.3709516
+## [6,]   0.2028341          0.6502611          0.6407918</code></pre>
 </div>
 
 
