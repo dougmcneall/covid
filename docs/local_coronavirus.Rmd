@@ -1,0 +1,57 @@
+---
+title: "Coronavirus cases in Devon and Exeter"
+author: "Doug McNeall"
+contact: "dougmcneall@gmail.com @dougmcneall"
+date: "5/13/2020"
+output: html_document
+---
+
+Local Coronavirus tracker for Devon and Exeter. These are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date.  
+
+Data from <https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv'>  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+#dat <- read.csv('coronavirus-cases_latest.csv')
+dat <- read.csv('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv')
+
+# isolate Exeter cases
+exe <- dat[dat[,1]=='Exeter',]
+devon <- dat[dat[,1]=='Devon',]
+
+```
+
+
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+par(las = 1, mar = c(2.5,4,4,1))
+plot(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'],
+     xlab = '', ylab = 'cases', main = 'Daily lab-confirmed Coronavirus cases in Devon & Exeter',
+     type = 'h', lwd = 5, col = 'skyblue2', bty = 'n')
+grid()
+
+points(as.Date(exe[, 'Specimen.date']), exe[, 'Daily.lab.confirmed.cases'],
+     xlab = 'Date', ylab = 'cases', main = 'Daily lab confirmed Coronavirus cases in Devon & Exeter',
+     type = 'h', col = 'tomato2', lwd = 5)
+legend('topleft', legend = c('Devon', 'Exeter'), col = c('skyblue2', 'tomato2'), lty = 'solid', lwd=5, bty = 'n')
+
+```
+
+
+```{r, fig.width=10, fig.height=4, include=FALSE, echo=FALSE}
+
+par(las = 1)
+plot(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'], type = 'n', axes = FALSE,
+     xlab = 'Date', ylab = 'Daily lab confirmed cases', main = 'Daily lab confirmed Coronavirus cases in Devon & Exeter')
+grid()
+axis.Date(1, devon[, 'Specimen.date'])
+axis(2)
+lines(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'], type = 'o', pch = 20, col = 'black', lwd = 1.5)
+lines(as.Date(exe[, 'Specimen.date']), exe[, 'Daily.lab.confirmed.cases'], type = 'o', pch = 20, col = 'blue', lwd = 1.5)
+legend('topleft', legend = c('Devon', 'Exeter'), col = c('black', 'blue'), lty = 'solid', lwd = 1.5, pch = 20)
+```
+
+
+
