@@ -88,6 +88,12 @@ plotLocalCases(area = 'Hackney', dat = dat)
 ```
 
 
+## South West
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotLocalCases(area = 'South West', dat = dat)
+
+```
 
 
 ```{r, fig.width=10, fig.height=4, include=FALSE, echo=FALSE}
