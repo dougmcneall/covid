@@ -2,17 +2,18 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-05-18"
+date: "2020-05-19"
 output: html_document
 ---
+        
 
-
-
-Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date.  
+Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date. 
 
 Data from <https://coronavirus.data.gov.uk/>  
 About the data <https://coronavirus.data.gov.uk/about>  
-Data file <https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv>    
+Data file <https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv>   
+
+Contact: dougmcneall@gmail.com
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
