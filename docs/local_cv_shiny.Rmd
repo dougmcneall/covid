@@ -1,0 +1,139 @@
+---
+title: "Local Tracker"
+author: "Doug McNeall"
+date: "5/15/2020"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+dat <- read.csv('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv')
+
+```
+
+
+```{r, include=TRUE, echo = FALSE}
+
+
+shinyapp()
+
+#input <- textInput("area", "choose an area")
+
+fluidPage(
+    
+  # Copy the line below to make a text input box
+  textInput("text", label = h3("Text input"), value = "Enter text..."),
+  
+  hr(),
+  fluidRow(column(3, verbatimTextOutput("value")))
+      
+)
+
+
+
+plotLocalCases <- function(area = input, dat, col = 'skyblue2', ...){
+        # 'area' should be a string that names an area of interest
+        
+        localData <- dat[dat[,'Area.name']==area, ]
+        
+        par(las = 1, mar = c(2.5,4,4,1))
+        plot(as.Date(localData[, 'Specimen.date']), localData[, 'Daily.lab.confirmed.cases'],
+             xlab = '', ylab = 'cases', main = paste0('Daily lab-confirmed Coronavirus cases in ', area),
+             type = 'h', lwd = 5, col = col, bty = 'n', ...)
+        grid()
+}
+
+
+renderPlot(
+  
+  plotLocalCases(area = 'Dorset', dat = dat)
+)
+
+```
+
+```{r, echo=FALSE}
+shinyApp(
+
+  ui = fluidPage(
+    selectInput("region", "Region:",
+                choices = colnames(WorldPhones)),
+    plotOutput("phonePlot")
+  ),
+
+  server = function(input, output) {
+    output$phonePlot = renderPlot({
+      barplot(WorldPhones[,input$region]*1000,
+              ylab = "Number of Telephones", xlab = "Year")
+    })
+  },
+
+  options = list(height = 500)
+)
+```
+
+
+```{r, echo=FALSE}
+sliderInput("bins", "Number of bins:", 30, min = 1, max = 50)
+
+renderPlot({
+  x    = faithful[, 2]  # Old Faithful Geyser data
+  bins = seq(min(x), max(x), length.out = input$bins + 1)
+
+  # draw the histogram with the specified number of bins
+  hist(x, breaks = bins, col = 'darkgray', border = 'white')
+})
+```
+
+
+
+This R Markdown document is made interactive using Shiny. Unlike the more traditional workflow of creating static reports, you can now create documents that allow your readers to change the assumptions underlying your analysis and see the results immediately. 
+
+To learn more, see [Interactive Documents](http://rmarkdown.rstudio.com/authoring_shiny.html).
+
+## Inputs and Outputs
+
+You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change.  This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny `renderPlot` function. The `selectInput` and `sliderInput` functions create the input widgets used to drive the plot.
+
+```{r eruptions, echo=FALSE}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+       xlab = "Duration (minutes)", main = "Geyser eruption duration")
+  
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
+## Embedded Application
+
+It's also possible to embed an entire Shiny application within an R Markdown document using the `shinyAppDir` function. This example embeds a Shiny application located in another directory:
+
+```{r tabsets, echo=FALSE}
+shinyAppDir(
+  system.file("examples/06_tabsets", package = "shiny"),
+  options = list(
+    width = "100%", height = 550
+  )
+)
+```
+
+Note the use of the `height` parameter to determine how much vertical space the embedded application should occupy.
+
+You can also use the `shinyApp` function to define an application inline rather then in an external directory.
+
+In all of R code chunks above the `echo = FALSE` attribute is used. This is to prevent the R code within the chunk from rendering in the document alongside the Shiny components.
+
+
+

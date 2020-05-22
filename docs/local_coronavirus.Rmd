@@ -2,10 +2,9 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-05-21"      
+date: "2020-05-22"      
 output: html_document
 ---
-        
 
 Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date. In particular, the "about the data" link suggests that data older than 5 days can be considered complete.
 

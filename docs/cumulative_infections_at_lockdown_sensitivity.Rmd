@@ -1,0 +1,159 @@
+---
+title: "Sensitivity analysis of COVID cumulative cases at lockdown"
+author: "Doug McNeall"
+date: "2020-05-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load packages and helper functions.  
+```{r}
+library(DiceKriging)
+library(sensitivity)
+source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtools.R")
+```
+
+
+Load data  
+```{r}
+# seful data for comparisons later
+# https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/england14may2020
+# load the cumulative infections by day 79 (23rd March 2020) in local authorities
+# This data has the parameters BUT NOT THE RUN NUMBER or unique ID. 
+# The first 5 columns of the data are the design, normalised to -1,1.
+dat <- read.csv("~/UQ4covid/data/metawards/initial_ensemble/data/pre_lockdown_1/lads_by_day_cumulative_79.csv")
+
+# Load up the other files that we might need (folder names, )
+
+# This is the design in the original parameterspace
+# but it does not have the repeat rows (it has a "repeats" column instead)
+uq3a <- read.csv("~/UQ4covid/data/metawards/initial_ensemble/inputs/uq3a_out.csv")
+
+design <- read.csv("~/UQ4covid/data/metawards/initial_ensemble/inputs/design.csv")
+
+# This provides an index back to each raw data folder
+uq4 <- read.csv("~/UQ4covid/data/metawards/initial_ensemble/data/uq4.csv")
+
+```
+
+Plot up the cumulative infections in Exeter vs the parameters. The "post-lockdown" parameters shouldn't have any effect here - this could provide a useful test for the sensitivity analysis.  
+```{r, fig.width = 10, fig.height = 8}
+  par(mfrow = c(2,3))
+  for(i in 1:5){
+     plot(dat[, i], dat$Exeter , xlab = colnames(dat)[i], ylab = 'Cumulative infections at lockdown in Exeter')
+  }
+```
+
+
+I'm worried that having repeat runs might break a DiceKriging Emulator, so I'll pre-prcess the design and output. This might be only taking one each of the first 125 rows (there are 25 repeated points), or maybe averaging those responses.
+```{r}
+dix <- c(seq(from = 1, to = 125, by = 5), 126:200)
+
+X <- dat[dix, 1:5]
+X.norm <- normalize(X) # necessary to make e.g. sensitivity analysis code work
+X.unnorm <- unnormalize(X.norm, un.mins = apply(uq3a[,1:5],2,FUN = min), un.maxes = apply(uq3a[,1:5],2, FUN =  max))
+Y <- dat[dix, 6:ncol(dat)]
+
+```
+
+## An emulator of national-level cumulative infections
+```{r, fig.width = 10, fig.height = 8}
+
+y.national <- apply(Y,1,sum)
+
+par(mfrow = c(2,3))
+  for(i in 1:5){
+    plot(X.unnorm[, i],y.national, xlab = colnames(X)[i], ylab = 'National cumulative infections at lockdown')
+  }
+```
+
+
+Fit the emulator
+```{r}
+fit.national <- km(~., design = X.norm, response = y.national)
+```
+
+Quickly check the emulator using leave-one-out cross validation
+```{r}
+loo = leaveOneOut.km(fit.national, type = 'UK', trend.reestim = TRUE)
+
+```
+
+The emulator does pretty well, but misses that very high value at a high value of R0
+```{r, fig.width = 6, fig.height = 6}
+ylim = range(loo$mean - (2*loo$sd),loo$mean + (2*loo$sd) )
+plot(y.national, loo$mean, xlab = 'cumulative infections at lockdown', ylab = 'emulator prediction', ylim = ylim)
+segments(x0 = y.national, y0 = loo$mean - (2*loo$sd), x1 = y.national, y1 = loo$mean + (2*loo$sd))
+abline(0,1)
+
+```
+
+## Run a FAST99 sensitivity analysis  
+
+It seems that there is a relatively high level of interaction between the parameters.
+```{r}
+
+# Generate a design for the FAST99 analysis
+X.fast <- fast99(model = NULL, factors = colnames(X.norm), n = 3000,
+                 q = "qunif", q.arg = list(min = 0, max = 1))
+
+
+# Predict the response at the FAST99 design points using the emulator
+pred.fast = predict(fit.national, newdata = X.fast$X, type = 'UK')
+
+# Calculate the sensitivity indices
+fast.tell <- tell(X.fast, pred.fast$mean)
+
+bp.convert <- function(fastmodel){
+  # get the FAST summary into an easier format for barplot
+  fast.summ <- print(fastmodel)
+  fast.diff <- fast.summ[ ,2] - fast.summ[ ,1]
+  fast.bp <- t(cbind(fast.summ[ ,1], fast.diff))
+  fast.bp
+}
+
+par(las = 2, mar = c(9,5,3,2))
+barplot(bp.convert(fast.tell), col = c('skyblue', 'grey'), ylab = 'relative sensitivity', main = 'FAST99 Sensitivity')
+legend('topleft',legend = c('Main effect', 'Interactions'), fill = c('skyblue', 'grey') )
+
+```
+
+## Run a one-at-a-time sensitivity analysis
+Parameters are swept across their range one at a time, with the remaining parameters held at central values.
+```{r,fig.width = 8, fig.height = 6}
+n.oat <- 21
+X.oat <- oaat.design(X.norm, n = n.oat, hold = rep(0.5,5))
+X.oat.un <- unnormalize(X.oat, un.mins = apply(uq3a[,1:5],2,FUN = min), un.maxes = apply(uq3a[,1:5],2, FUN =  max))
+
+parnames <- colnames(X)
+colnames(X.oat) <- parnames
+pred.oat <- predict(fit.national, newdata = X.oat, type = 'UK')
+
+col.transp <- adjustcolor('grey', alpha = 0.5)
+par(mfrow = c(2,3), oma = c(0.1,0.1,3,0.1))
+
+  for(i in 1:5){
+    
+  ix <- seq(from = ((i*n.oat) - (n.oat-1)), to =  (i*n.oat), by = 1)
+  
+  plot(X.oat.un[ix,i], pred.oat$mean[ix]
+       , ylim = range(pred.oat$mean),
+       xlab = parnames[i], ylab = 'cumulative infections at lockdown',
+       type= 'n')
+  
+     polygon(x = c(X.oat.un[ix, i], rev(X.oat.un[ix, i])),
+            y = c(pred.oat$mean[ix] - (2*pred.oat$sd[ix]), rev(pred.oat$mean[ix] + (2*pred.oat$sd[ix]))),
+            col = col.transp, border = col.transp)
+     
+  lines(X.oat.un[ix,i], pred.oat$mean[ix], xlim = c(0,1), lty = 'solid')
+  
+  }
+
+mtext('One-at-a-time sensitivity', side = 3, outer = TRUE, cex = 1.5)
+```
+
+
+
