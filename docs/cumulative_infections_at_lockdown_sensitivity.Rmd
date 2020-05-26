@@ -1,9 +1,12 @@
 ---
 title: "Sensitivity analysis of COVID cumulative cases at lockdown"
 author: "Doug McNeall"
-date: "2020-05-22"
+date: "2020-05-26"
 output: html_document
 ---
+
+
+This is a preliminary sensitivity analysis to test data, emulators and techniques, and shouldn't be used to draw conclusions. There appears to be at least one ensemble member where MetaWards "breaks", for example infecting more people than there are in the population.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -19,7 +22,7 @@ source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtool
 
 Load data  
 ```{r}
-# seful data for comparisons later
+# Useful data for comparisons later
 # https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/england14may2020
 # load the cumulative infections by day 79 (23rd March 2020) in local authorities
 # This data has the parameters BUT NOT THE RUN NUMBER or unique ID. 
@@ -48,7 +51,7 @@ Plot up the cumulative infections in Exeter vs the parameters. The "post-lockdow
 ```
 
 
-I'm worried that having repeat runs might break a DiceKriging Emulator, so I'll pre-prcess the design and output. This might be only taking one each of the first 125 rows (there are 25 repeated points), or maybe averaging those responses.
+I'm worried that having repeat runs might break a DiceKriging Emulator, so I'll pre-process the design and output. This might be only taking one each of the first 125 rows (there are 25 repeated points), or maybe averaging those responses.
 ```{r}
 dix <- c(seq(from = 1, to = 125, by = 5), 126:200)
 
@@ -71,7 +74,7 @@ par(mfrow = c(2,3))
 ```
 
 
-Fit the emulator
+Fit the emulator. Note, there is NO NUGGET and Danny's analysis suggests a considerable variance between repeats for various local authorities.
 ```{r}
 fit.national <- km(~., design = X.norm, response = y.national)
 ```
@@ -93,7 +96,8 @@ abline(0,1)
 
 ## Run a FAST99 sensitivity analysis  
 
-It seems that there is a relatively high level of interaction between the parameters.
+It seems that there is a relatively high level of interaction between the parameters. Note that the sensitivity analysis 
+shows interactions between the "lockdown" parameters, which shouldn't have any influence at all on the output. This suggests the emulator is overfit to the noise (or the sensitivity analysis is interpreting noise as influence).
 ```{r}
 
 # Generate a design for the FAST99 analysis
