@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-05-25"      
+date: "2020-05-26"      
 output: html_document
 ---
 
@@ -83,6 +83,13 @@ plotLocalCases(area = 'Dorset', dat = dat)
 ```
 
 
+## South West
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotLocalCases(area = 'South West', dat = dat)
+
+```
+
 ## Milton Keynes 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
@@ -99,12 +106,13 @@ plotLocalCases(area = 'Hackney', dat = dat)
 ```
 
 
-## South West
+## Reading
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'South West', dat = dat)
+plotLocalCases(area = 'Reading', dat = dat)
 
 ```
+
 
 
 ```{r, fig.width=10, fig.height=4, include=FALSE, echo=FALSE}
