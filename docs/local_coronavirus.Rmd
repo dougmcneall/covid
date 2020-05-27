@@ -10,7 +10,8 @@ Note these are lab confirmed cases only - the real number of cases will be highe
 
 Data from <https://coronavirus.data.gov.uk/>  
 About the data <https://coronavirus.data.gov.uk/about>  
-Data file <https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv>   
+Data file <https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv>  
+Code to create this page <https://github.com/dougmcneall/covid/blob/master/docs/local_coronavirus.Rmd>
 
 Contact: dougmcneall@gmail.com
 
