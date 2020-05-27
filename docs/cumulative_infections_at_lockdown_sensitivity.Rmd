@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-This is a preliminary sensitivity analysis to test data, emulators and techniques, and shouldn't be used to draw conclusions. There appears to be at least one ensemble member where MetaWards "breaks", for example infecting more people than there are in the population.
+This is a preliminary sensitivity analysis to test data, emulators and techniques, and shouldn't be used to draw conclusions. There appears to be at least one design point where MetaWards "breaks", for example infecting more people by lockdown than there are in the population.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -17,13 +17,14 @@ Load packages and helper functions.
 library(DiceKriging)
 library(sensitivity)
 source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtools.R")
+source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/imptools.R")
+source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/vistools.R")
+
 ```
 
 
 Load data  
 ```{r}
-# Useful data for comparisons later
-# https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/england14may2020
 # load the cumulative infections by day 79 (23rd March 2020) in local authorities
 # This data has the parameters BUT NOT THE RUN NUMBER or unique ID. 
 # The first 5 columns of the data are the design, normalised to -1,1.
@@ -51,32 +52,88 @@ Plot up the cumulative infections in Exeter vs the parameters. The "post-lockdow
 ```
 
 
-I'm worried that having repeat runs might break a DiceKriging Emulator, so I'll pre-process the design and output. This might be only taking one each of the first 125 rows (there are 25 repeated points), or maybe averaging those responses.
-```{r}
-dix <- c(seq(from = 1, to = 125, by = 5), 126:200)
+Have a look at some aggregated data to see if everything is OK. It looks like we have a couple of outliers with more infections than the population of the UK!
 
-X <- dat[dix, 1:5]
-X.norm <- normalize(X) # necessary to make e.g. sensitivity analysis code work
-X.unnorm <- unnormalize(X.norm, un.mins = apply(uq3a[,1:5],2,FUN = min), un.maxes = apply(uq3a[,1:5],2, FUN =  max))
-Y <- dat[dix, 6:ncol(dat)]
+```{r}
+Y.raw <- dat[, 6:ncol(dat)]
+y.national.raw <- apply(Y.raw, 1,sum)
+hist(y.national.raw)
+high.ix <- which(y.national.raw > 7e+7)
+
+# Looks like they're all from one run: 46, 47, 48, 49, 50
+dat[high.ix ,1:5]
+
+# let's remove all the runs with those input parameters, to be safe.
+rm.ix <- 46:50
 
 ```
 
-## An emulator of national-level cumulative infections
-```{r, fig.width = 10, fig.height = 8}
+We can see where the outliers are in the design (red points)
+```{r, fig.width = 8, fig.height = 8}
 
+colvec <- rep('black', nrow(dat))
+colvec[rm.ix] <- 'red'
+pairs(dat[, 1:5], col = colvec)
+```
+
+
+```{r}
+# Remove the design points where the data is obviously in error. We've removed the whole block of the design point where more people are infected than the entire UK population.
+# Now, the first 120 rows will be 24 design points with 5 repeats each.
+dat.clean <- dat[-rm.ix, ]
+
+```
+
+
+I'm worried that having repeat runs might break a DiceKriging Emulator, so I'll pre-process the design and output. This might be only taking one each of the first 125 rows (there are 25 repeated points), or maybe averaging those responses.
+```{r}
+dix <- c(seq(from = 1, to = 120, by = 5), 121:195)
+
+X <- dat.clean[dix, 1:5]
+X.norm <- normalize(X) # necessary to make e.g. sensitivity analysis code work
+X.unnorm <- unnormalize(X.norm, un.mins = apply(uq3a[-rm.ix, 1:5],2,FUN = min), un.maxes = apply(uq3a[-rm.ix,1:5],2, FUN =  max))
+Y <- dat.clean[dix, 6:ncol(dat)]
+
+```
+
+## An emulator of national-level cumulative infections  
+
+Find the national level cumulative infections.
+```{r, fig.width = 7, fig.height = 5}
 y.national <- apply(Y,1,sum)
 
+hist(y.national, main = 'National cumulative infections at lockdown')
+
+```
+
+
+ Cumulative infections vary marginally with each parameter.
+```{r}
 par(mfrow = c(2,3))
   for(i in 1:5){
     plot(X.unnorm[, i],y.national, xlab = colnames(X)[i], ylab = 'National cumulative infections at lockdown')
   }
 ```
 
-
-Fit the emulator. Note, there is NO NUGGET and Danny's analysis suggests a considerable variance between repeats for various local authorities.
+# Look at estimates of variance across parameter space
 ```{r}
-fit.national <- km(~., design = X.norm, response = y.national)
+y.all <- apply(dat.clean[,6:ncol(dat.clean)], 1, sum)
+
+y.reps <- y.all[1:120]
+reps.list <- split(y.reps, ceiling(seq_along(y.reps)/5))
+
+reps.var <- sapply(reps.list, var)
+reps.sd <- sqrt(reps.var)
+
+mean.reps.var <- mean(reps.var)
+
+hist(reps.sd, main = "standard deviations of national infections at lockdown")
+```
+
+
+Fit the emulator, including a homogeneous nugget of the mean variance from the 5 repeats of each of the first 24 design points.
+```{r}
+fit.national <- km(~., design = X.norm, response = y.national, nugget = mean.reps.var)
 ```
 
 Quickly check the emulator using leave-one-out cross validation
@@ -85,12 +142,14 @@ loo = leaveOneOut.km(fit.national, type = 'UK', trend.reestim = TRUE)
 
 ```
 
-The emulator does pretty well, but misses that very high value at a high value of R0
+The emulator does pretty well.
 ```{r, fig.width = 6, fig.height = 6}
 ylim = range(loo$mean - (2*loo$sd),loo$mean + (2*loo$sd) )
 plot(y.national, loo$mean, xlab = 'cumulative infections at lockdown', ylab = 'emulator prediction', ylim = ylim)
 segments(x0 = y.national, y0 = loo$mean - (2*loo$sd), x1 = y.national, y1 = loo$mean + (2*loo$sd))
 abline(0,1)
+
+loo.mae = mean(abs(loo$mean - y.national))
 
 ```
 
@@ -160,4 +219,53 @@ mtext('One-at-a-time sensitivity', side = 3, outer = TRUE, cex = 1.5)
 ```
 
 
+## A quick comparison with data (or at least, with another model)
 
+What input space is consistent with the estimated cumulative infections from Jit et al.?
+```{r}
+#Have a very quick look at how much input space is removed by a comparison with data
+# Useful data for comparisons later
+# https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/england14may2020
+
+# Jit et al estimate the number of infections at lockdown
+# https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.18.2000632
+#
+# We estimated that each COVID-19 case admitted to CC reported in FF100 and CHESS corresponded to a median of 124 (95% 
+# credible interval (CrI): 81–11,500) and 120 (95% CrI: 76–46,600) infected individuals in the population, respectively, based on Chinese and US severity data [5,6].
+
+#The Figure shows the number of incident cases estimated on each day between 16 February and 23 March. On 23 March, 114,000 (95% CrI: 78,000–173,000) new cases and 258 (95% CrI: 220–319) CC reports are estimated to have occurred, with 527,000 (95% CrI: 362,000–797,000) cumulative cases since 16 February. The best fitting exponential growth rates were consistent with an epidemic doubling time of 2.8 days (95% CrI: 2.6–3.0). Assuming an exponentially distributed serial interval of 4 days [8] gave an (approximate) reproduction number of 2.0 (95% CrI: 1.9–2.1). If we assume a longer serial interval of 6 days that may be expected at the start of an epidemic, the reproduction number could be 2.5 (95% CrI: 2.4–2.6).
+
+
+# Samples from a uniform distribution across all of input space
+nsamp.unif <- 500000   
+X.unif = samp.unif(nsamp.unif, mins = rep(0, ncol(X)), maxes = rep(1, ncol(X)))
+colnames(X.unif) <- colnames(X)
+
+pred.unif <- predict(fit.national, newdata = X.unif, type = 'UK')
+
+# whart part of parameter space is implied by Jit et al. (within the 95% CI)?
+ix.kept <- which(pred.unif$mean > 362000 & pred.unif$mean < 797000)
+
+# Un-normalize and plot
+X.unif.kept <- X.unif[ix.kept, ]
+colnames(X.unif.kept) <- colnames(X)
+
+X.unif.kept.unnorm <- unnormalize(X.unif.kept, un.mins = apply(uq3a[-rm.ix, 1:5],2,FUN = min), un.maxes = apply(uq3a[-rm.ix,1:5],2, FUN =  max))
+
+```
+
+```{r, fig.width = 8, fig.height = 8, warning=FALSE}
+
+library(RColorBrewer)
+blues = brewer.pal(9, 'Blues')
+
+
+pairs(X.unif.kept.unnorm[, 1:3],
+      gap = 0,
+      panel = dfunc.up,
+      dfunc.col = blues
+      )
+```
+
+
+It looks like R0 is low using this data, but that this isn't surprising - Jit et al say the data is consistent with R0 around 2.5.
