@@ -1,12 +1,14 @@
 ---
 title: "Sensitivity analysis of COVID cumulative cases at lockdown"
 author: "Doug McNeall"
-date: "2020-05-26"
+date: "2020-06-01"
 output: html_document
 ---
 
 
 This is a preliminary sensitivity analysis to test data, emulators and techniques, and shouldn't be used to draw conclusions. There appears to be at least one design point where MetaWards "breaks", for example infecting more people by lockdown than there are in the population.
+
+We use a Gaussin process emulator from package DiceKriging to model the variation of cumulative infections at lockdown (23rd March 2020) with parameters. We then run a simple sensitivity analysis, and an initial history-matching type exercise, comparing the model with external estimates of cumulative cases from Jit et al. (2020).
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -16,6 +18,8 @@ Load packages and helper functions.
 ```{r}
 library(DiceKriging)
 library(sensitivity)
+library(RColorBrewer)
+
 source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/emtools.R")
 source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/imptools.R")
 source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/vistools.R")
@@ -23,41 +27,41 @@ source("https://raw.githubusercontent.com/dougmcneall/packages-git/master/vistoo
 ```
 
 
-Load data  
+Load the cumulative infections by day 79 (23rd March 2020) in local authorities This data has the parameters BUT NOT THE RUN NUMBER or unique ID.  
+The first 5 columns of the data are the design, normalised to -1,1.
 ```{r}
-# load the cumulative infections by day 79 (23rd March 2020) in local authorities
-# This data has the parameters BUT NOT THE RUN NUMBER or unique ID. 
-# The first 5 columns of the data are the design, normalised to -1,1.
-dat <- read.csv("~/UQ4covid/data/metawards/initial_ensemble/data/pre_lockdown_1/lads_by_day_cumulative_79.csv")
+# This data from the initial ensemble is available at
+ dat <- read.csv("https://github.com/UQ4covid/data/raw/master/metawards/initial_ensemble/data/pre_lockdown_1/lads_by_day_cumulative_79.csv")
 
-# Load up the other files that we might need (folder names, )
+# This is the design in the original parameterspace but it does not have the repeat rows (it has a "repeats" column instead)
+uq3a <- read.csv("https://raw.githubusercontent.com/UQ4covid/data/master/metawards/initial_ensemble/inputs/uq3a_out.csv")
 
-# This is the design in the original parameterspace
-# but it does not have the repeat rows (it has a "repeats" column instead)
-uq3a <- read.csv("~/UQ4covid/data/metawards/initial_ensemble/inputs/uq3a_out.csv")
-
-design <- read.csv("~/UQ4covid/data/metawards/initial_ensemble/inputs/design.csv")
+design <- read.csv("https://raw.githubusercontent.com/UQ4covid/data/master/metawards/initial_ensemble/inputs/design.csv")
 
 # This provides an index back to each raw data folder
-uq4 <- read.csv("~/UQ4covid/data/metawards/initial_ensemble/data/uq4.csv")
+uq4 <- read.csv("https://raw.githubusercontent.com/UQ4covid/data/master/metawards/initial_ensemble/data/uq4.csv")
 
 ```
 
-Plot up the cumulative infections in Exeter vs the parameters. The "post-lockdown" parameters shouldn't have any effect here - this could provide a useful test for the sensitivity analysis.  
+Plot up the cumulative infections in (e.g.) Exeter vs the parameters.  
+
+The "post-lockdown" parameters shouldn't have any effect here - this should provide a useful test for the sensitivity analysis. We should expect the sensitivity analysis to show zero impact of the lockdown parameters on the infections before lockdown. Any other result and we know the emulator is overfitting or the sensitivity analysis is bad.  
 ```{r, fig.width = 10, fig.height = 8}
   par(mfrow = c(2,3))
   for(i in 1:5){
-     plot(dat[, i], dat$Exeter , xlab = colnames(dat)[i], ylab = 'Cumulative infections at lockdown in Exeter')
+     plot(dat[, i], dat$Exeter , 
+          xlab = colnames(dat)[i], ylab = 'Cumulative infections at lockdown in Exeter',
+          pch = 19)
   }
 ```
 
 
-Have a look at some aggregated data to see if everything is OK. It looks like we have a couple of outliers with more infections than the population of the UK!
+Have a look at some aggregated data to see if everything is OK. It looks like we have a couple of outliers with more infections than the population of the UK! We'll remove the outliers so as not to corrupt the emulator.
 
 ```{r}
 Y.raw <- dat[, 6:ncol(dat)]
 y.national.raw <- apply(Y.raw, 1,sum)
-hist(y.national.raw)
+hist(y.national.raw, col = 'lightgrey')
 high.ix <- which(y.national.raw > 7e+7)
 
 # Looks like they're all from one run: 46, 47, 48, 49, 50
@@ -73,7 +77,7 @@ We can see where the outliers are in the design (red points)
 
 colvec <- rep('black', nrow(dat))
 colvec[rm.ix] <- 'red'
-pairs(dat[, 1:5], col = colvec)
+pairs(dat[, 1:5], col = colvec, pch = 19)
 ```
 
 
@@ -85,7 +89,7 @@ dat.clean <- dat[-rm.ix, ]
 ```
 
 
-I'm worried that having repeat runs might break a DiceKriging Emulator, so I'll pre-process the design and output. This might be only taking one each of the first 125 rows (there are 25 repeated points), or maybe averaging those responses.
+I'm worried that having repeat runs might break a DiceKriging Emulator, so I'll further pre-process the design and output. At the moment, we simply take the first example from each of the 24 remaining repeated design points.
 ```{r}
 dix <- c(seq(from = 1, to = 120, by = 5), 121:195)
 
@@ -102,16 +106,18 @@ Find the national level cumulative infections.
 ```{r, fig.width = 7, fig.height = 5}
 y.national <- apply(Y,1,sum)
 
-hist(y.national, main = 'National cumulative infections at lockdown')
+hist(y.national, main = 'National cumulative infections at lockdown', col = 'lightgrey')
 
 ```
 
 
  Cumulative infections vary marginally with each parameter.
-```{r}
+```{r, fig.width = 8, fig.height = 6}
 par(mfrow = c(2,3))
   for(i in 1:5){
-    plot(X.unnorm[, i],y.national, xlab = colnames(X)[i], ylab = 'National cumulative infections at lockdown')
+    plot(X.unnorm[, i],y.national,
+         xlab = colnames(X)[i], ylab = 'National cumulative infections at lockdown',
+         pch = 19)
   }
 ```
 
@@ -137,19 +143,20 @@ fit.national <- km(~., design = X.norm, response = y.national, nugget = mean.rep
 ```
 
 Quickly check the emulator using leave-one-out cross validation
-```{r}
+```{r, fig.width = 7, fig.height = 7}
 loo = leaveOneOut.km(fit.national, type = 'UK', trend.reestim = TRUE)
+loo.mae = mean(abs(loo$mean - y.national))
 
-```
-
-The emulator does pretty well.
-```{r, fig.width = 6, fig.height = 6}
 ylim = range(loo$mean - (2*loo$sd),loo$mean + (2*loo$sd) )
-plot(y.national, loo$mean, xlab = 'cumulative infections at lockdown', ylab = 'emulator prediction', ylim = ylim)
+plot(y.national, loo$mean,
+     xlab = 'cumulative infections at lockdown', ylab = 'emulator prediction',
+     main = 'leave-one-out cross validtaion',
+     pch = 19,
+     ylim = ylim)
 segments(x0 = y.national, y0 = loo$mean - (2*loo$sd), x1 = y.national, y1 = loo$mean + (2*loo$sd))
+legend('topleft', legend = "bars indicate \u00B12 sd", bty = 'n')
 abline(0,1)
 
-loo.mae = mean(abs(loo$mean - y.national))
 
 ```
 
@@ -221,7 +228,8 @@ mtext('One-at-a-time sensitivity', side = 3, outer = TRUE, cex = 1.5)
 
 ## A quick comparison with data (or at least, with another model)
 
-What input space is consistent with the estimated cumulative infections from Jit et al.?
+What input space is consistent with the estimated cumulative infections from Jit et al.? We'll use simple rejection sampling from uniform distributions across input space.
+We know that the lockdown parameters have no impact on this data (they haven't been applied yet at the end of the pre-lockdown period), so we'll exclude them form the analysis.
 ```{r}
 #Have a very quick look at how much input space is removed by a comparison with data
 # Useful data for comparisons later
@@ -254,11 +262,10 @@ X.unif.kept.unnorm <- unnormalize(X.unif.kept, un.mins = apply(uq3a[-rm.ix, 1:5]
 
 ```
 
+
+Darker shading indicates regions where more samples from the emulator fall within the estimated ranges of cumulative infections. The shapes in parameter space show how the parameters can offset each other.
 ```{r, fig.width = 8, fig.height = 8, warning=FALSE}
-
-library(RColorBrewer)
 blues = brewer.pal(9, 'Blues')
-
 
 pairs(X.unif.kept.unnorm[, 1:3],
       gap = 0,
@@ -268,4 +275,5 @@ pairs(X.unif.kept.unnorm[, 1:3],
 ```
 
 
-It looks like R0 is low using this data, but that this isn't surprising - Jit et al say the data is consistent with R0 around 2.5.
+
+  
