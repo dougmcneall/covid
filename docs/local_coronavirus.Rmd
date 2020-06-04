@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-06-02"      
+date: "2020-06-04       "      
 output: html_document
 ---
 
@@ -46,7 +46,6 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
 }
 
 ```
-
 
 
 ## Devon and Exeter  
@@ -138,6 +137,32 @@ plotLocalCases(area = 'North East', dat = dat)
 plotLocalCases(area = 'South East', dat = dat)
 
 ```
+
+
+```{r, include=FALSE}
+
+plotLocalRates <- function(area = 'Devon', dat, col = 'skyblue2', ...){
+        # 'area' should be a string that names an area of interest
+        
+        localData <- dat[dat[,'Area.name']==area, ]
+        
+        da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
+
+        
+        par(las = 1, mar = c(2.5,4,4,1))
+        plot(as.Date(localData[, 'Specimen.date']), localData[, 'Cumulative.lab.confirmed.cases.rate'],
+             xlab = '', ylab = 'cases per 100 000 population', main = paste0('Cumulative lab confirmed cases rate in ', area),
+             type = 'h', lwd = 5, col = col, bty = 'n', axes = FALSE, ...)
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+}
+
+plotLocalRates(area = 'Devon', dat = dat)
+
+```
+
 
 ```{r, fig.width=10, fig.height=4, include=FALSE, echo=FALSE}
 
