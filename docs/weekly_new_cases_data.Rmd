@@ -1,7 +1,7 @@
 ---
 title: "New cases of COVID-19 through time"
 author: "Doug McNeall"
-date: "6/5/2020"
+date: "8/5/2020"
 output: html_document
 ---
 
@@ -11,7 +11,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction 
 
-This vignette examines some estimates of UK cases of COVID-19 through time. These data should prove useful in the history matching of MetaWards. We look at daily lab-confirmed cases and estimates of new cases from the ONS survey. We aggregate the daily new cases to weekly, and interpolate in time to match the ONS survey.
+This vignette examines some estimates of UK cases of COVID-19 through time. These data should prove useful in the history matching of MetaWards. Daily lab-confirmed cases are available, but these will clearly underestimate the number of cases, as not nearly every case is recorded.  
+
+How much do the lab-confirmed cases underestimate new cases? We use ONS survey data to try and estimate by using ONS survey data.  We aggregate the daily new cases to weekly, and interpolate in time to match the ONS survey.
+
+### Conclusion
+
+Best estimate suggest that in late May, the daily lab-confirmed cases were around 12% of true cases, but there is a lot of uncertainty in the estimate.
+
+Link to the Rmarkdown: <https://github.com/dougmcneall/covid/blob/master/docs/weekly_new_cases_data.Rmd>
 
 ### ONS data direct estimates of infections.
 
@@ -32,7 +40,7 @@ On cumulative total infections, from the 5th June report:
 14th May 2020  
 <https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/england14may2020>
 
-# ONS cases (absolute numbers in England)  
+### ONS cases (absolute numbers in England)  
 Incidence rate is new cases per week per 100 people.
 ```{r}
 # This data is reproduced in ../data/ons_covid_infection_survey.csv
@@ -55,9 +63,11 @@ library(lubridate)
 
 ONS data (hand edited from the reports)
 ```{r}
-ons <- read.csv("../data/ons_covid_infection_survey.csv", header = TRUE, na.strings = c('NA'))
-```
+#ons <- read.csv("../data/ons_covid_infection_survey.csv", header = TRUE, na.strings = c('NA'))
+ons <- read.csv("https://raw.githubusercontent.com/dougmcneall/covid/master/data/ons_covid_infection_survey.csv", header = TRUE, na.strings = c('NA'))
 
+```
+  
 These data report the daily new lab-confirmed cases of COVID-19.
 ```{r}
 dat <- read.csv('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv')
