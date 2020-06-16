@@ -1,0 +1,91 @@
+---
+title: "spatial_SA"
+author: "Doug McNeall"
+date: "5/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(MASS)
+```
+
+
+Everything is indexed from the design file, including the folders for the raw data
+```{r}
+
+run_index <- read.csv(file =  "/net/home/h01/hadda/UQ4covid/data/metawards/initial_ensemble/data/uq4.csv") 
+
+```
+
+
+Load some data
+```{r}
+
+# This just sums the cases in each ward
+
+datloc <- "/net/home/h01/hadda/UQ4covid/data/metawards/initial_ensemble/raw_outputs/"
+runloc <- run_index$folder_id[1]
+fn     <- "wards_trajectory_I.csv.bz2"
+
+
+datf <- paste0(datloc,
+             runloc,
+             "/",
+             fn)
+
+misscols = 1:10
+dat <- read.csv(datf)[, -misscols]
+ward_sum = apply(dat,2, sum, na.rm = TRUE)
+    
+```
+
+
+```{r}
+
+infections_sum_per_ward <- matrix(NA, nrow = nrow(run_index), ncol = 8588)
+
+for(i in 1:nrow(run_index)){
+  
+  runloc <- run_index$folder_id[i]
+
+datf <- paste0(datloc,
+             runloc,
+             "/",
+             fn)
+  dat <- read.csv(datf)[, -misscols]
+  ward_sum <- apply(dat,2, sum, na.rm = TRUE)
+  infections_sum_per_ward[i, ] <- ward_sum 
+  
+}
+
+colnames(infections_sum_per_ward) <- colnames(dat)
+
+write.csv(infections_sum_per_ward, file = 'infections_sum_per_ward.csv', row.names = FALSE, col.names = TRUE)
+  
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -1,0 +1,1 @@
+metawards -d ncov -o output --force-overwrite-output --input ncovparams.csv -a ExtraSeedsLondon.dat --repeats 3 --extractor ~/uq4covid/tools/output_extractors/only_i_per_ward -u ~/uq4covid/ensembles/metawards/inputs/lockdown_states.txt --iterator ~/uq4covid/tools/lockdown/iterate

@@ -1,0 +1,1488 @@
+Using random number seed: 81404630
+First five random numbers equal 57, 51, 46, 46, 46
+Number of threads used equals 1
+Initialise infections...
+Importing a custom iterator from /home/h01/hadda/uq4covid/tools/lockdown/iterate
+Loaded /home/h01/hadda/uq4covid/tools/lockdown/iterate from /home/h01/hadda/uq4covid/tools/lockdown/iterate.py
+Building a custom iterator for <function iterate_custom at 0x2b1c6f9c1680>
+/home/h01/hadda/uq4covid/tools/output_extractors/only_i_per_ward
+Importing a custom extractor from /home/h01/hadda/uq4covid/tools/output_extractors/only_i_per_ward
+Loaded /home/h01/hadda/uq4covid/tools/output_extractors/only_i_per_ward from /home/h01/hadda/uq4covid/tools/output_extractors/only_i_per_ward.py
+<function extract_only_i_per_ward at 0x2b1c6f9c13b0>
+Building a custom extractor for <function extract_only_i_per_ward at 0x2b1c6f9c13b0>
+Loading additional seeds from /net/home/h01/hadda/GitHub/MetaWardsData/extra_seeds/ExtraSeedsLondon.dat...
+(1, 255, 5, None)
+S: 56082077  E: 0  I: 0  R: 0  IW: 0  POPULATION: 56082077
+Normal working week day
+Sending I per ward to the output stream
+S: 56082077  E: 0  I: 0  R: 0  IW: 0  POPULATION: 56082077
+
+ 0 0
+
+Normal working week day
+Sending I per ward to the output stream
+seeding play_infections[0][255] += 5
+S: 56082072  E: 5  I: 0  R: 0  IW: 0  POPULATION: 56082077
+
+ 1 0
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082072  E: 5  I: 0  R: 0  IW: 0  POPULATION: 56082077
+
+ 2 5
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082072  E: 5  I: 0  R: 0  IW: 0  POPULATION: 56082077
+
+ 3 5
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082072  E: 5  I: 0  R: 0  IW: 0  POPULATION: 56082077
+
+ 4 5
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082072  E: 5  I: 0  R: 0  IW: 0  POPULATION: 56082077
+
+ 5 5
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082072  E: 5  I: 0  R: 0  IW: 0  POPULATION: 56082077
+
+ 6 5
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082072  E: 4  I: 1  R: 0  IW: 0  POPULATION: 56082077
+
+ 7 5
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082071  E: 2  I: 3  R: 1  IW: 1  POPULATION: 56082077
+
+ 8 5
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082068  E: 3  I: 3  R: 3  IW: 3  POPULATION: 56082077
+
+ 9 5
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082068  E: 6  I: 2  R: 1  IW: 0  POPULATION: 56082077
+
+ 10 6
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082067  E: 6  I: 2  R: 2  IW: 1  POPULATION: 56082077
+
+ 11 8
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082061  E: 6  I: 2  R: 8  IW: 3  POPULATION: 56082077
+
+ 12 8
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082060  E: 12  I: 2  R: 3  IW: 1  POPULATION: 56082077
+
+ 13 8
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082060  E: 10  I: 5  R: 2  IW: 0  POPULATION: 56082077
+
+ 14 14
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082058  E: 8  I: 7  R: 4  IW: 2  POPULATION: 56082077
+
+ 15 15
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082056  E: 8  I: 9  R: 4  IW: 2  POPULATION: 56082077
+
+ 16 15
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082052  E: 8  I: 11  R: 6  IW: 4  POPULATION: 56082077
+
+ 17 17
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082042  E: 10  I: 11  R: 14  IW: 10  POPULATION: 56082077
+
+ 18 19
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082026  E: 19  I: 12  R: 20  IW: 10  POPULATION: 56082077
+
+ 19 21
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56082010  E: 33  I: 12  R: 22  IW: 12  POPULATION: 56082077
+
+ 20 31
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081992  E: 45  I: 14  R: 26  IW: 14  POPULATION: 56082077
+
+ 21 45
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081970  E: 55  I: 22  R: 30  IW: 19  POPULATION: 56082077
+
+ 22 59
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081946  E: 67  I: 24  R: 40  IW: 18  POPULATION: 56082077
+
+ 23 77
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081928  E: 75  I: 37  R: 37  IW: 16  POPULATION: 56082077
+
+ 24 91
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081873  E: 82  I: 44  R: 78  IW: 45  POPULATION: 56082077
+
+ 25 112
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081818  E: 118  I: 57  R: 84  IW: 39  POPULATION: 56082077
+
+ 26 126
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081759  E: 149  I: 75  R: 94  IW: 52  POPULATION: 56082077
+
+ 27 175
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081669  E: 186  I: 83  R: 139  IW: 77  POPULATION: 56082077
+
+ 28 224
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081554  E: 239  I: 108  R: 176  IW: 89  POPULATION: 56082077
+
+ 29 269
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081477  E: 302  I: 146  R: 152  IW: 61  POPULATION: 56082077
+
+ 30 347
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081370  E: 313  I: 197  R: 197  IW: 85  POPULATION: 56082077
+
+ 31 448
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56081160  E: 359  I: 232  R: 326  IW: 157  POPULATION: 56082077
+
+ 32 510
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56080912  E: 493  I: 276  R: 396  IW: 188  POPULATION: 56082077
+
+ 33 591
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56080638  E: 648  I: 324  R: 467  IW: 211  POPULATION: 56082077
+
+ 34 769
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56080293  E: 792  I: 408  R: 584  IW: 262  POPULATION: 56082077
+
+ 35 972
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56079857  E: 993  I: 491  R: 736  IW: 333  POPULATION: 56082077
+
+ 36 1200
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56079536  E: 1254  I: 602  R: 685  IW: 240  POPULATION: 56082077
+
+ 37 1484
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56079163  E: 1364  I: 725  R: 825  IW: 285  POPULATION: 56082077
+
+ 38 1856
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56078461  E: 1478  I: 877  R: 1261  IW: 525  POPULATION: 56082077
+
+ 39 2089
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56077553  E: 1878  I: 1063  R: 1583  IW: 605  POPULATION: 56082077
+
+ 40 2355
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56076486  E: 2431  I: 1254  R: 1906  IW: 717  POPULATION: 56082077
+
+ 41 2941
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56075209  E: 3013  I: 1569  R: 2286  IW: 810  POPULATION: 56082077
+
+ 42 3685
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56073697  E: 3743  I: 1921  R: 2716  IW: 932  POPULATION: 56082077
+
+ 43 4582
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56072595  E: 4548  I: 2381  R: 2553  IW: 759  POPULATION: 56082077
+
+ 44 5664
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56071214  E: 4814  I: 2900  R: 3149  IW: 917  POPULATION: 56082077
+
+ 45 6929
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56068497  E: 5257  I: 3464  R: 4859  IW: 1462  POPULATION: 56082077
+
+ 46 7714
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56065289  E: 6989  I: 3960  R: 5839  IW: 1621  POPULATION: 56082077
+
+ 47 8721
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56061684  E: 8891  I: 4729  R: 6773  IW: 1785  POPULATION: 56082077
+
+ 48 10949
+
+Normal working week day
+Sending I per ward to the output stream
+S: 56057255  E: 10762  I: 5801  R: 8259  IW: 2020  POPULATION: 56082077
+
+ 49 13620
+
+Lockdown started on 2020-07-03
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56057079  E: 13125  I: 7092  R: 4781  IW: 167  POPULATION: 56082077
+
+ 50 16563
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56056878  E: 10752  I: 8692  R: 5755  IW: 191  POPULATION: 56082077
+
+ 51 20217
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56056655  E: 8875  I: 9604  R: 6943  IW: 211  POPULATION: 56082077
+
+ 52 19444
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56056419  E: 7357  I: 9968  R: 8333  IW: 217  POPULATION: 56082077
+
+ 53 18479
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56056179  E: 6220  I: 9799  R: 9879  IW: 221  POPULATION: 56082077
+
+ 54 17325
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56055928  E: 5213  I: 9406  R: 11530  IW: 232  POPULATION: 56082077
+
+ 55 16019
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56055663  E: 4425  I: 8962  R: 13027  IW: 251  POPULATION: 56082077
+
+ 56 14619
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56055396  E: 3801  I: 8355  R: 14525  IW: 248  POPULATION: 56082077
+
+ 57 13387
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56055196  E: 3323  I: 7703  R: 15855  IW: 184  POPULATION: 56082077
+
+ 58 12156
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56054996  E: 2880  I: 7010  R: 17191  IW: 184  POPULATION: 56082077
+
+ 59 11026
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56054814  E: 2508  I: 6431  R: 18324  IW: 177  POPULATION: 56082077
+
+ 60 9890
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56054640  E: 2218  I: 5754  R: 19465  IW: 166  POPULATION: 56082077
+
+ 61 8939
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56054481  E: 1973  I: 5225  R: 20398  IW: 154  POPULATION: 56082077
+
+ 62 7972
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56054336  E: 1749  I: 4722  R: 21270  IW: 140  POPULATION: 56082077
+
+ 63 7198
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56054188  E: 1579  I: 4214  R: 22096  IW: 143  POPULATION: 56082077
+
+ 64 6471
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56054053  E: 1417  I: 3804  R: 22803  IW: 127  POPULATION: 56082077
+
+ 65 5793
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56053951  E: 1271  I: 3426  R: 23429  IW: 97  POPULATION: 56082077
+
+ 66 5221
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56053842  E: 1105  I: 3095  R: 24035  IW: 108  POPULATION: 56082077
+
+ 67 4697
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56053761  E: 995  I: 2787  R: 24534  IW: 80  POPULATION: 56082077
+
+ 68 4200
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56053685  E: 899  I: 2464  R: 25029  IW: 75  POPULATION: 56082077
+
+ 69 3782
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56053619  E: 796  I: 2209  R: 25453  IW: 65  POPULATION: 56082077
+
+ 70 3363
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 0: scale_rate = 0.05, can_work = 0.0
+S: 56053558  E: 712  I: 1982  R: 25825  IW: 61  POPULATION: 56082077
+
+ 71 3005
+
+Entering relaxed (yellow) on 2020-07-25
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56053453  E: 635  I: 1793  R: 26196  IW: 104  POPULATION: 56082077
+
+ 72 2694
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56053348  E: 614  I: 1590  R: 26525  IW: 103  POPULATION: 56082077
+
+ 73 2428
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56053255  E: 596  I: 1442  R: 26784  IW: 92  POPULATION: 56082077
+
+ 74 2204
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56053161  E: 569  I: 1331  R: 27016  IW: 90  POPULATION: 56082077
+
+ 75 2038
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56053073  E: 560  I: 1221  R: 27223  IW: 84  POPULATION: 56082077
+
+ 76 1900
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56053003  E: 530  I: 1102  R: 27442  IW: 69  POPULATION: 56082077
+
+ 77 1781
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052923  E: 502  I: 1018  R: 27634  IW: 77  POPULATION: 56082077
+
+ 78 1632
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052849  E: 483  I: 930  R: 27815  IW: 72  POPULATION: 56082077
+
+ 79 1520
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052786  E: 473  I: 864  R: 27954  IW: 61  POPULATION: 56082077
+
+ 80 1413
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052723  E: 449  I: 801  R: 28104  IW: 62  POPULATION: 56082077
+
+ 81 1337
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052677  E: 429  I: 764  R: 28207  IW: 46  POPULATION: 56082077
+
+ 82 1250
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052624  E: 395  I: 699  R: 28359  IW: 52  POPULATION: 56082077
+
+ 83 1193
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052577  E: 366  I: 665  R: 28469  IW: 47  POPULATION: 56082077
+
+ 84 1094
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052532  E: 341  I: 623  R: 28581  IW: 42  POPULATION: 56082077
+
+ 85 1031
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052478  E: 313  I: 589  R: 28697  IW: 52  POPULATION: 56082077
+
+ 86 964
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052438  E: 318  I: 547  R: 28774  IW: 39  POPULATION: 56082077
+
+ 87 902
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052400  E: 293  I: 516  R: 28868  IW: 37  POPULATION: 56082077
+
+ 88 865
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052367  E: 274  I: 481  R: 28955  IW: 33  POPULATION: 56082077
+
+ 89 809
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052340  E: 255  I: 459  R: 29023  IW: 26  POPULATION: 56082077
+
+ 90 755
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052306  E: 231  I: 438  R: 29102  IW: 34  POPULATION: 56082077
+
+ 91 714
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052265  E: 219  I: 418  R: 29175  IW: 40  POPULATION: 56082077
+
+ 92 669
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052241  E: 214  I: 397  R: 29225  IW: 24  POPULATION: 56082077
+
+ 93 637
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052206  E: 195  I: 387  R: 29289  IW: 35  POPULATION: 56082077
+
+ 94 611
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052184  E: 184  I: 367  R: 29342  IW: 21  POPULATION: 56082077
+
+ 95 582
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052158  E: 170  I: 345  R: 29404  IW: 25  POPULATION: 56082077
+
+ 96 551
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052136  E: 170  I: 302  R: 29469  IW: 22  POPULATION: 56082077
+
+ 97 515
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052115  E: 159  I: 271  R: 29532  IW: 21  POPULATION: 56082077
+
+ 98 472
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052093  E: 146  I: 259  R: 29579  IW: 22  POPULATION: 56082077
+
+ 99 430
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052079  E: 137  I: 243  R: 29618  IW: 14  POPULATION: 56082077
+
+ 100 405
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052065  E: 125  I: 234  R: 29653  IW: 13  POPULATION: 56082077
+
+ 101 380
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052046  E: 109  I: 227  R: 29695  IW: 19  POPULATION: 56082077
+
+ 102 359
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052025  E: 110  I: 215  R: 29727  IW: 21  POPULATION: 56082077
+
+ 103 336
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56052008  E: 114  I: 195  R: 29760  IW: 17  POPULATION: 56082077
+
+ 104 325
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051998  E: 109  I: 187  R: 29783  IW: 9  POPULATION: 56082077
+
+ 105 309
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051982  E: 97  I: 172  R: 29826  IW: 16  POPULATION: 56082077
+
+ 106 296
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051973  E: 95  I: 161  R: 29848  IW: 9  POPULATION: 56082077
+
+ 107 269
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051959  E: 82  I: 159  R: 29877  IW: 14  POPULATION: 56082077
+
+ 108 256
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051946  E: 79  I: 149  R: 29903  IW: 13  POPULATION: 56082077
+
+ 109 241
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051939  E: 78  I: 133  R: 29927  IW: 7  POPULATION: 56082077
+
+ 110 228
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051931  E: 69  I: 131  R: 29946  IW: 8  POPULATION: 56082077
+
+ 111 211
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051928  E: 62  I: 130  R: 29957  IW: 3  POPULATION: 56082077
+
+ 112 200
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051914  E: 54  I: 120  R: 29989  IW: 14  POPULATION: 56082077
+
+ 113 192
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051901  E: 53  I: 120  R: 30003  IW: 13  POPULATION: 56082077
+
+ 114 174
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051894  E: 59  I: 106  R: 30018  IW: 7  POPULATION: 56082077
+
+ 115 173
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051887  E: 58  I: 100  R: 30032  IW: 6  POPULATION: 56082077
+
+ 116 165
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051877  E: 52  I: 95  R: 30053  IW: 10  POPULATION: 56082077
+
+ 117 158
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051874  E: 55  I: 89  R: 30059  IW: 3  POPULATION: 56082077
+
+ 118 147
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051870  E: 44  I: 87  R: 30076  IW: 4  POPULATION: 56082077
+
+ 119 144
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051860  E: 36  I: 87  R: 30094  IW: 9  POPULATION: 56082077
+
+ 120 131
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051847  E: 39  I: 82  R: 30109  IW: 13  POPULATION: 56082077
+
+ 121 123
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051833  E: 45  I: 73  R: 30126  IW: 13  POPULATION: 56082077
+
+ 122 121
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051829  E: 49  I: 76  R: 30123  IW: 4  POPULATION: 56082077
+
+ 123 118
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051819  E: 43  I: 74  R: 30141  IW: 10  POPULATION: 56082077
+
+ 124 125
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051812  E: 48  I: 68  R: 30149  IW: 7  POPULATION: 56082077
+
+ 125 117
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051802  E: 45  I: 69  R: 30161  IW: 10  POPULATION: 56082077
+
+ 126 116
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051799  E: 49  I: 63  R: 30166  IW: 3  POPULATION: 56082077
+
+ 127 114
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051796  E: 38  I: 65  R: 30178  IW: 3  POPULATION: 56082077
+
+ 128 112
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051788  E: 32  I: 64  R: 30193  IW: 7  POPULATION: 56082077
+
+ 129 103
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051780  E: 32  I: 62  R: 30203  IW: 8  POPULATION: 56082077
+
+ 130 96
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051775  E: 33  I: 59  R: 30210  IW: 5  POPULATION: 56082077
+
+ 131 94
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051773  E: 33  I: 54  R: 30217  IW: 2  POPULATION: 56082077
+
+ 132 92
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051768  E: 28  I: 52  R: 30229  IW: 5  POPULATION: 56082077
+
+ 133 87
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051763  E: 29  I: 50  R: 30235  IW: 5  POPULATION: 56082077
+
+ 134 80
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051757  E: 28  I: 46  R: 30246  IW: 6  POPULATION: 56082077
+
+ 135 79
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051754  E: 29  I: 42  R: 30252  IW: 3  POPULATION: 56082077
+
+ 136 74
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051750  E: 27  I: 39  R: 30261  IW: 4  POPULATION: 56082077
+
+ 137 71
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051748  E: 21  I: 42  R: 30266  IW: 2  POPULATION: 56082077
+
+ 138 66
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051745  E: 17  I: 42  R: 30273  IW: 3  POPULATION: 56082077
+
+ 139 63
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051738  E: 17  I: 37  R: 30285  IW: 7  POPULATION: 56082077
+
+ 140 59
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051736  E: 21  I: 33  R: 30287  IW: 2  POPULATION: 56082077
+
+ 141 54
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051735  E: 18  I: 34  R: 30290  IW: 1  POPULATION: 56082077
+
+ 142 54
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051734  E: 15  I: 33  R: 30295  IW: 1  POPULATION: 56082077
+
+ 143 52
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051732  E: 12  I: 33  R: 30300  IW: 2  POPULATION: 56082077
+
+ 144 48
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051731  E: 11  I: 32  R: 30303  IW: 1  POPULATION: 56082077
+
+ 145 45
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051729  E: 8  I: 32  R: 30308  IW: 2  POPULATION: 56082077
+
+ 146 43
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051729  E: 9  I: 27  R: 30312  IW: 0  POPULATION: 56082077
+
+ 147 40
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051727  E: 6  I: 24  R: 30320  IW: 2  POPULATION: 56082077
+
+ 148 36
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051725  E: 6  I: 24  R: 30322  IW: 2  POPULATION: 56082077
+
+ 149 30
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051724  E: 6  I: 22  R: 30325  IW: 1  POPULATION: 56082077
+
+ 150 30
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051722  E: 5  I: 22  R: 30328  IW: 2  POPULATION: 56082077
+
+ 151 28
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051722  E: 7  I: 17  R: 30331  IW: 0  POPULATION: 56082077
+
+ 152 27
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051721  E: 6  I: 15  R: 30335  IW: 1  POPULATION: 56082077
+
+ 153 24
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051717  E: 7  I: 13  R: 30340  IW: 4  POPULATION: 56082077
+
+ 154 21
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051717  E: 10  I: 12  R: 30338  IW: 0  POPULATION: 56082077
+
+ 155 20
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051717  E: 5  I: 15  R: 30340  IW: 0  POPULATION: 56082077
+
+ 156 22
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051716  E: 4  I: 13  R: 30344  IW: 1  POPULATION: 56082077
+
+ 157 20
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051716  E: 5  I: 11  R: 30345  IW: 0  POPULATION: 56082077
+
+ 158 17
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051715  E: 4  I: 12  R: 30346  IW: 1  POPULATION: 56082077
+
+ 159 16
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051714  E: 5  I: 9  R: 30349  IW: 1  POPULATION: 56082077
+
+ 160 16
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051714  E: 5  I: 9  R: 30349  IW: 0  POPULATION: 56082077
+
+ 161 14
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051714  E: 4  I: 10  R: 30349  IW: 0  POPULATION: 56082077
+
+ 162 14
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051714  E: 3  I: 9  R: 30351  IW: 0  POPULATION: 56082077
+
+ 163 14
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051713  E: 3  I: 7  R: 30354  IW: 1  POPULATION: 56082077
+
+ 164 12
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051711  E: 4  I: 6  R: 30356  IW: 2  POPULATION: 56082077
+
+ 165 10
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051711  E: 5  I: 6  R: 30355  IW: 0  POPULATION: 56082077
+
+ 166 10
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051709  E: 4  I: 7  R: 30357  IW: 1  POPULATION: 56082077
+
+ 167 11
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051709  E: 6  I: 6  R: 30356  IW: 0  POPULATION: 56082077
+
+ 168 11
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051708  E: 3  I: 8  R: 30358  IW: 1  POPULATION: 56082077
+
+ 169 12
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051708  E: 3  I: 9  R: 30357  IW: 0  POPULATION: 56082077
+
+ 170 11
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051708  E: 3  I: 9  R: 30357  IW: 0  POPULATION: 56082077
+
+ 171 12
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051707  E: 3  I: 7  R: 30360  IW: 1  POPULATION: 56082077
+
+ 172 12
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051706  E: 4  I: 6  R: 30361  IW: 1  POPULATION: 56082077
+
+ 173 10
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051705  E: 3  I: 8  R: 30361  IW: 1  POPULATION: 56082077
+
+ 174 10
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051704  E: 4  I: 7  R: 30362  IW: 1  POPULATION: 56082077
+
+ 175 11
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051701  E: 5  I: 7  R: 30364  IW: 2  POPULATION: 56082077
+
+ 176 11
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051701  E: 8  I: 6  R: 30362  IW: 0  POPULATION: 56082077
+
+ 177 12
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051701  E: 6  I: 7  R: 30363  IW: 0  POPULATION: 56082077
+
+ 178 14
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051701  E: 6  I: 6  R: 30364  IW: 0  POPULATION: 56082077
+
+ 179 13
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051701  E: 6  I: 4  R: 30366  IW: 0  POPULATION: 56082077
+
+ 180 12
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051701  E: 4  I: 4  R: 30368  IW: 0  POPULATION: 56082077
+
+ 181 10
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051701  E: 4  I: 4  R: 30368  IW: 0  POPULATION: 56082077
+
+ 182 8
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051700  E: 2  I: 5  R: 30370  IW: 1  POPULATION: 56082077
+
+ 183 8
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051699  E: 3  I: 4  R: 30371  IW: 1  POPULATION: 56082077
+
+ 184 7
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051698  E: 4  I: 3  R: 30372  IW: 1  POPULATION: 56082077
+
+ 185 7
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051698  E: 5  I: 1  R: 30373  IW: 0  POPULATION: 56082077
+
+ 186 7
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051698  E: 5  I: 0  R: 30374  IW: 0  POPULATION: 56082077
+
+ 187 6
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051698  E: 5  I: 0  R: 30374  IW: 0  POPULATION: 56082077
+
+ 188 5
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051698  E: 4  I: 1  R: 30374  IW: 0  POPULATION: 56082077
+
+ 189 5
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051698  E: 3  I: 2  R: 30374  IW: 0  POPULATION: 56082077
+
+ 190 5
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051698  E: 3  I: 2  R: 30374  IW: 0  POPULATION: 56082077
+
+ 191 5
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051697  E: 2  I: 2  R: 30376  IW: 1  POPULATION: 56082077
+
+ 192 5
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051697  E: 3  I: 1  R: 30376  IW: 0  POPULATION: 56082077
+
+ 193 4
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051697  E: 3  I: 1  R: 30376  IW: 0  POPULATION: 56082077
+
+ 194 4
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051697  E: 3  I: 1  R: 30376  IW: 0  POPULATION: 56082077
+
+ 195 4
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051697  E: 2  I: 2  R: 30376  IW: 0  POPULATION: 56082077
+
+ 196 4
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051697  E: 2  I: 2  R: 30376  IW: 0  POPULATION: 56082077
+
+ 197 4
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051697  E: 1  I: 2  R: 30377  IW: 0  POPULATION: 56082077
+
+ 198 4
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051697  E: 0  I: 3  R: 30377  IW: 0  POPULATION: 56082077
+
+ 199 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051696  E: 0  I: 2  R: 30379  IW: 1  POPULATION: 56082077
+
+ 200 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051696  E: 1  I: 2  R: 30378  IW: 0  POPULATION: 56082077
+
+ 201 2
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051696  E: 1  I: 2  R: 30378  IW: 0  POPULATION: 56082077
+
+ 202 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051696  E: 1  I: 2  R: 30378  IW: 0  POPULATION: 56082077
+
+ 203 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051696  E: 1  I: 2  R: 30378  IW: 0  POPULATION: 56082077
+
+ 204 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051696  E: 1  I: 2  R: 30378  IW: 0  POPULATION: 56082077
+
+ 205 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 1  I: 1  R: 30380  IW: 1  POPULATION: 56082077
+
+ 206 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 2  I: 1  R: 30379  IW: 0  POPULATION: 56082077
+
+ 207 2
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 1  I: 2  R: 30379  IW: 0  POPULATION: 56082077
+
+ 208 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 1  I: 2  R: 30379  IW: 0  POPULATION: 56082077
+
+ 209 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 1  I: 2  R: 30379  IW: 0  POPULATION: 56082077
+
+ 210 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 0  I: 3  R: 30379  IW: 0  POPULATION: 56082077
+
+ 211 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 0  I: 2  R: 30380  IW: 0  POPULATION: 56082077
+
+ 212 3
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 0  I: 1  R: 30381  IW: 0  POPULATION: 56082077
+
+ 213 2
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 0  I: 1  R: 30381  IW: 0  POPULATION: 56082077
+
+ 214 1
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 0  I: 1  R: 30381  IW: 0  POPULATION: 56082077
+
+ 215 1
+
+Locked down
+Sending I per ward to the output stream
+Lockdown 1: scale_rate = 0.1, can_work = 0.0
+S: 56051695  E: 0  I: 0  R: 30382  IW: 0  POPULATION: 56082077
+
+ 216 1
+
+Infection died ... Ending on day 217
