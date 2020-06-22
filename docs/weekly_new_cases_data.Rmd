@@ -1,7 +1,7 @@
 ---
-title: "New cases of COVID-19 through time"
+title: "Cases of COVID-19 in England through time"
 author: "Doug McNeall"
-date: "2020-06-19"
+date: "2020-06-22"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction 
 
-This vignette examines some estimates of UK cases of COVID-19 through time. These data should prove useful in the history matching of MetaWards. Daily lab-confirmed cases are available, but these will clearly underestimate the number of cases, as not nearly every case is recorded.  
+This vignette examines some estimates of cases of COVID-19 in England through time. These data should prove useful in the history matching of MetaWards. Daily lab-confirmed cases are available, but these will clearly underestimate the number of cases, as not nearly every case is recorded. The ONS run an infections survey that tests a large volunteer population, with the aim of estimating the number of infections in the wider population.   
 
 How much do the lab-confirmed cases underestimate new cases? We use ONS survey data to try and estimate by using ONS survey data.  We aggregate the daily new cases to weekly, and interpolate in time to match the ONS survey.
 
@@ -19,7 +19,7 @@ NOTE: This is currently unfinished, as the "new cases" data period extends with 
 
 ### Conclusion
 
-Best estimate suggest that in late May, the daily lab-confirmed cases were around 12% of true cases, but there is a lot of uncertainty in the estimate.
+Best estimate suggest that in the period from late April to Early June, the total daily lab-confirmed cases were around 22% of true cases, but there is a lot of uncertainty in the estimates. Many "trajectories" are possible for the new cases, and you'd expect to be picking up a lower proportion of the cases early in that period and a higher number later in that period.
 
 Link to the Rmarkdown: <https://github.com/dougmcneall/covid/blob/master/docs/weekly_new_cases_data.Rmd>
 
@@ -53,14 +53,7 @@ On cumulative total infections, from the 5th June report:
 Incidence rate is new cases per week per 100 people.
 
 NOTE: the "new cases" are measured since the start of the study on April 26th 2020, so the time period for estimating them is overlapping and extends with time.
-```{r}
-# This data is reproduced in ../data/ons_covid_infection_survey.csv
-#  start_date end_date cases_med cases_lower95 cases_upper95 prop_med prop_lower95 prop_upper95 new_cases_med new_cases_lower95 new_cases_upper95 incidence_rate
-#  2020-04-27 2020-05-10 148000 94000 222000 0.27 0.17 0.41 NA NA NA
-#  2020-05-04 2020-05-17 137000 85000 208000 0.25 0.16 0.38 61000 29000 111000 0.11
-#  2020-05-11 2020-05-24 133000 62000 250000 0.24 0.11 0.46 54000 34000 86000 0.10
-#  2020-05-17 2020-05-30 53000 25000 99000  0.10 0.05 0.18 39000 26000 55000 0.07
-```
+
 
 Also check out Cambridge MRC estimates  
 <https://www.mrc-bsu.cam.ac.uk/tackling-covid-19/nowcasting-and-forecasting-of-covid-19/>  
@@ -85,7 +78,6 @@ dat <- read.csv('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases
 ```
 
 Use only England data, to match the ONS survey
-
 ```{r}
 england <- dat[dat[,'Area.name']=='England', ]
 
@@ -102,6 +94,19 @@ week_ax = seq(from = min(as.Date(england[, 'Specimen.date'])), by = 7, length.ou
 ons_midpoints <- as.Date(c("2020-05-03","2020-05-10","2020-05-17","2020-05-24", "2020-05-31", "2020-06-07"))
 ```
 
+## Estimates of the total number of active infections in England (from ONS infections survey pilot)
+```{r, fig.width = 8, fig.height = 5}
+par(las = 1, mar = c(5,7,3,2))
+plot(ons_midpoints, ons$cases_upper95, type = 'n', ylim = c(0, max(ons$cases_upper95)),
+     xlab = '', ylab = '', bty = 'n')
+abline(h = seq(from = 0, to = 250000, by = 50000), col = 'grey', lty = 'dashed')
+points(ons_midpoints, ons$cases_med, col = 'black', bg = 'black', pch = 21)
+segments(x0 = ons_midpoints, y0 = ons$cases_lower95, x1 = ons_midpoints, y1 = ons$cases_upper95)
+legend('bottomleft', pch = NULL, legend = 'vertical lines represent 95% CI', bty = 'n')
+mtext('Active cases in England', side = 3, adj = 0.25, outer = TRUE, line = -2, cex = 1.5)
+
+```
+
 
 Interpolate the weekly cases from the data. 
 ```{r}
@@ -114,8 +119,6 @@ cases.fit <- km(~., design = as.matrix(week_ax, ncol = 1), response = weekly_new
 # Predict the cases at the timepoints where we have the ONS measurements.
 pred <- predict.km(cases.fit, newdata = as.matrix(ons_midpoints, ncol = 1), type = 'UK')
 ```
-
-
 
 
 Now calculate weekly new cases on the same time baselines as the ONS data (26th April 2020, until the end of the reporting period).
@@ -140,14 +143,16 @@ weekly_rebased[i] <- sum(init.chunk['Daily.lab.confirmed.cases'], na.rm = TRUE) 
 
 }
 
-# Now calculate the proportion of new cases that we pick up over the entire period.
+
+```
+##  proportion of new cases that we pick up over each reporting period (%, from 26th April)
+```{r}
 
 print((weekly_rebased / ons[,'new_cases_med']) * 100)
 
-
-
 ```
 
+## Plot new cases
 ```{r, fig.width = 8, fig.height = 6}
 par(mar = c(5,6,3,2), las = 1)
 plot(week_ax, weekly_new_cases$weekly_sum,
@@ -176,18 +181,10 @@ legend('topleft', pch = c(19,19,19,NA), col = c('black', 'skyblue2','red', 'red'
 ```
 
 
-```{r, include = FALSE}
-
-prop_recorded_cases <- pred$mean / ons[,'new_cases_med']
-print(data.frame(ons_midpoints, prop_recorded_cases))
-
-```
-
-
-
+## Daily lab-confirmed cases in England 
 ```{r}
 
-#plot(dat$end_date, dat$new_cases_med)
+
 plot(as.Date(england[, 'Specimen.date']), england[, 'Daily.lab.confirmed.cases'], pch = 20,
      ylab = 'Daily lab-confirmed cases in England', xlab = '')
 
