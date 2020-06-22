@@ -116,6 +116,38 @@ pred <- predict.km(cases.fit, newdata = as.matrix(ons_midpoints, ncol = 1), type
 ```
 
 
+
+
+Now calculate weekly new cases on the same time baselines as the ONS data (26th April 2020, until the end of the reporting period).
+
+```{r}
+
+weekly_rebased <- rep(NA, nrow(ons))
+chunk.days.vec <- rep(NA, nrow(ons))
+chunk.weeks.vec <- rep(NA, nrow(ons))
+
+for(i in 1:nrow(ons)){
+  
+init.chunk <- init[ init$Specimen.date > as.Date("2020-04-26") & init$Specimen.date < as.Date(ons[i, 'end_date']), ]
+
+chunk.days <- nrow(init.chunk)
+chunk.days.vec[i] <- chunk.days
+
+chunk.weeks <- chunk.days/7
+chunk.weeks.vec[i] <- chunk.weeks
+
+weekly_rebased[i] <- sum(init.chunk['Daily.lab.confirmed.cases'], na.rm = TRUE) / chunk.weeks
+
+}
+
+# Now calculate the proportion of new cases that we pick up over the entire period.
+
+print((weekly_rebased / ons[,'new_cases_med']) * 100)
+
+
+
+```
+
 ```{r, fig.width = 8, fig.height = 6}
 par(mar = c(5,6,3,2), las = 1)
 plot(week_ax, weekly_new_cases$weekly_sum,
@@ -130,7 +162,10 @@ points(as.Date(ons[,'end_date']), ons[,'new_cases_med'], col = 'red', pch = 19)
 points(ons_midpoints, pred$mean, col = 'skyblue2', pch = 19)
 segments(x0 = as.Date(ons[,'end_date']), y0 = ons[,'new_cases_lower95'], x1 = as.Date(ons[,'end_date']), y1 = ons[,'new_cases_upper95'], col = 'tomato2')
 
+
 segments(x0 = as.Date("2020-04-26"),y0 = ons[, 'new_cases_med'], x1 = as.Date(ons[,'end_date']),  y1 = ons[,'new_cases_med'], col = 'red')
+
+segments(x0 = as.Date("2020-04-26"),y0 = weekly_rebased , x1 = as.Date(ons[,'end_date']),  y1 = weekly_rebased , col = 'skyblue2')
 
 
 mtext('Weekly new cases in England', side = 3, adj = 0.06, line = -2,outer = TRUE, cex = 1.5)
@@ -139,6 +174,7 @@ legend('topleft', pch = c(19,19,19,NA), col = c('black', 'skyblue2','red', 'red'
        bty = 'n')
 
 ```
+
 
 ```{r, include = FALSE}
 
