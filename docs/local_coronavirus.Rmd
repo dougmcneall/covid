@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-06-30"      
+date: "2020-07-02"      
 output: html_document   
 ---
 
@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, include=FALSE}
 dat <- read.csv('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv')
-
+weekly <- read.csv('../data/weekly_uk_covid19_cases_2020-07-02.csv')
 ```
 
 
@@ -39,10 +39,11 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
         
         localData <- dat[dat[,'Area.name']==area, ]
         
+        
         da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
 
         
-        par(las = 1, mar = c(2.5,4,4,1))
+        par(las = 1, mar = c(2.5,4,5,1))
         plot(as.Date(localData[, 'Specimen.date']), localData[, 'Daily.lab.confirmed.cases'],
              xlab = '', ylab = 'cases', main = paste0('Daily lab-confirmed Coronavirus cases in ', area),
              type = 'h', lwd = 5, col = col, bty = 'n', axes = FALSE, ...)
@@ -63,9 +64,11 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
 exe <- dat[dat[,'Area.name']=='Exeter',]
 devon <- dat[dat[,'Area.name']=='Devon',]
 
-par(las = 1, mar = c(2.5,4,4,1))
+devon_weekly <- weekly[weekly[,'area_name']=='Devon',]
+
+par(las = 1, mar = c(2.5,4,5,1))
 plot(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'],
-     xlab = '', ylab = 'cases', main = 'Daily lab-confirmed Coronavirus cases in Devon & Exeter',
+     xlab = '', ylab = 'cases', main = '',
      type = 'h', lwd = 5, col = 'skyblue2', bty = 'n', axes = FALSE)
 grid()
 
@@ -78,6 +81,8 @@ points(as.Date(exe[, 'Specimen.date']), exe[, 'Daily.lab.confirmed.cases'],
      xlab = 'Date', ylab = 'cases', main = 'Daily lab confirmed Coronavirus cases in Devon & Exeter',
      type = 'h', col = 'tomato2', lwd = 5)
 legend('topleft', legend = c('Devon', 'Exeter'), col = c('skyblue2', 'tomato2'), lty = 'solid', lwd=5, bty = 'n')
+mtext(text = 'Pillar 1: Daily lab-confirmed Coronavirus cases in Devon (& Exeter)', side = 3, line = .5, adj = 0, cex = 1.5)
+mtext(text = paste('Pillar 2:', devon_weekly$dates, '\n weekly cases:', devon_weekly$cases, '\n per 100k:',devon_weekly$cases_per_100k), side = 3, adj = 1, cex = 1.5)
 
 ```
 
