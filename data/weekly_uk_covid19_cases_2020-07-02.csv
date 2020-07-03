@@ -1,0 +1,198 @@
+code,area_name,cases_per_100k,cases,dates,population,rank,region
+W06000024,Merthyr Tydfil,177,107,Jun 23-29,60326,1,Wales
+E06000016,Leicester,140,496,Jun 16-21,354224,2,East Midlands
+W06000006,Wrexham,76,104,Jun 23-29,135957,3,Wales
+E08000032,Bradford,69,375,Jun 16-21,539776,4,Yorkshire and The Humber
+E08000016,Barnsley,55,135,Jun 16-21,246866,5,Yorkshire and The Humber
+E08000005,Rochdale,54,119,Jun 16-21,222412,6,North West
+E06000055,Bedford,42,73,Jun 16-21,173292,7,East of England
+E08000004,Oldham,39,92,Jun 16-21,237110,8,North West
+E08000018,Rotherham,34,89,Jun 16-21,265411,9,Yorkshire and The Humber
+E08000008,Tameside,33,75,Jun 16-21,226493,10,North West
+E06000008,Blackburn with Darwen,33,49,Jun 16-21,149696,11,North West
+E08000034,Kirklees,30,133,Jun 16-21,439787,12,Yorkshire and The Humber
+E06000031,Peterborough,28,56,Jun 16-21,202259,13,East of England
+E06000032,Luton,27,57,Jun 16-21,213052,14,East of England
+E06000015,Derby,25,63,Jun 16-21,257302,15,East Midlands
+E06000010,Kingston upon Hull,23,59,Jun 16-21,259778,16,Yorkshire and The Humber
+E08000003,Manchester,22,119,Jun 16-21,552858,17,North West
+W06000001,Isle of Anglesey,21,15,Jun 23-29,70043,18,Wales
+E06000033,Southend-on-Sea,21,38,Jun 16-21,183125,19,East of England
+E10000018,Leicestershire,21,147,Jun 16-21,706155,20,East Midlands
+E08000019,Sheffield,21,121,Jun 16-21,584853,21,Yorkshire and The Humber
+E08000035,Leeds,20,157,Jun 16-21,793139,22,Yorkshire and The Humber
+E08000015,Wirral,19,62,Jun 16-21,324011,23,North West
+E08000036,Wakefield,19,65,Jun 16-21,348312,24,Yorkshire and The Humber
+E06000021,Stoke-on-Trent,18,46,Jun 16-21,256375,25,West Midlands
+E08000017,Doncaster,17,54,Jun 16-21,311890,26,Yorkshire and The Humber
+E06000049,Cheshire East,16,62,Jun 16-21,384152,27,North West
+E06000056,Central Bedfordshire,16,46,Jun 16-21,288648,28,East of England
+E08000001,Bolton,16,45,Jun 16-21,287550,29,North West
+W06000003,Conwy,15,18,Jun 23-29,117203,30,Wales
+E10000017,Lancashire,15,183,Jun 16-21,1219799,31,North West
+E10000021,Northamptonshire,15,112,Jun 16-21,753278,32,East Midlands
+E06000004,Stockton-on-Tees,15,29,Jun 16-21,197348,33,North East
+E06000011,East Riding of Yorkshire,14,48,Jun 16-21,341173,34,Yorkshire and The Humber
+E10000023,North Yorkshire,14,85,Jun 16-21,618054,35,Yorkshire and The Humber
+E06000051,Shropshire,14,44,Jun 16-21,323136,36,West Midlands
+E10000016,Kent,13,213,Jun 16-21,1581555,37,South East
+E06000039,Slough,13,20,Jun 16-21,149539,38,South East
+E08000002,Bury,13,25,Jun 16-21,190990,39,North West
+E10000024,Nottinghamshire,13,105,Jun 16-21,828224,40,East Midlands
+E08000033,Calderdale,12,26,Jun 16-21,211455,41,Yorkshire and The Humber
+E08000007,Stockport,12,36,Jun 16-21,293423,42,North West
+E06000050,Cheshire West and Chester,12,42,Jun 16-21,343071,43,North West
+E06000034,Thurrock,12,21,Jun 16-21,174341,44,East of England
+E06000042,Milton Keynes,11,29,Jun 16-21,269457,45,South East
+E06000009,Blackpool,11,15,Jun 16-21,139446,46,North West
+E06000018,Nottingham,11,35,Jun 16-21,332900,47,East Midlands
+E06000030,Swindon,10,23,Jun 16-21,222193,48,South West
+E10000031,Warwickshire,10,60,Jun 16-21,577933,49,West Midlands
+E08000006,Salford,10,26,Jun 16-21,258834,50,North West
+E08000009,Trafford,10,24,Jun 16-21,237354,51,North West
+E08000031,Wolverhampton,10,26,Jun 16-21,263357,52,West Midlands
+E10000007,Derbyshire,10,78,Jun 16-21,802694,53,East Midlands
+E08000025,Birmingham,10,110,Jun 16-21,1141816,54,West Midlands
+W06000002,Gwynedd,10,12,Jun 23-29,124560,55,Wales
+E10000028,Staffordshire,9,82,Jun 16-21,879560,56,West Midlands
+E06000007,Warrington,9,19,Jun 16-21,210014,57,North West
+E10000011,East Sussex,9,50,Jun 16-21,557229,58,South East
+E06000020,Telford and Wrekin,8,15,Jun 16-21,179854,59,West Midlands
+E08000014,Sefton,8,23,Jun 16-21,276410,60,North West
+N09000008,Mid and East Antrim,8,11,Jun 17-23,139274,61,Northern Ireland
+E06000002,Middlesbrough,8,11,Jun 16-21,140980,62,North East
+E09000020,Kensington and Chelsea,8,12,Jun 16-21,156129,63,London
+E09000018,Hounslow,7,20,Jun 16-21,271523,64,London
+E08000028,Sandwell,7,24,Jun 16-21,328450,65,West Midlands
+E06000014,York,7,14,Jun 16-21,210618,66,Yorkshire and The Humber
+E08000013,St. Helens,7,12,Jun 16-21,180585,67,North West
+W06000010,Carmarthenshire,6,12,Jun 23-29,188771,68,Wales
+E08000012,Liverpool,6,31,Jun 16-21,498042,69,North West
+E06000006,Halton,6,8,Jun 16-21,129410,70,North West
+E06000035,Medway,6,17,Jun 16-21,278556,71,South East
+E10000002,Buckinghamshire,6,33,Jun 16-21,543973,72,South East
+E08000011,Knowsley,6,9,Jun 16-21,150862,73,North West
+E09000013,Hammersmith and Fulham,6,11,Jun 16-21,185143,74,London
+E10000012,Essex,6,87,Jun 16-21,1489189,75,East of England
+E10000006,Cumbria,6,29,Jun 16-21,500012,76,North West
+E10000034,Worcestershire,6,34,Jun 16-21,595786,77,West Midlands
+E08000026,Coventry,6,21,Jun 16-21,371521,78,West Midlands
+W06000015,Cardiff,6,21,Jun 23-29,366903,79,Wales
+E10000019,Lincolnshire,6,43,Jun 16-21,761224,80,East Midlands
+E06000045,Southampton,6,14,Jun 16-21,252520,81,South East
+E08000010,Wigan,6,18,Jun 16-21,328662,82,North West
+E09000031,Waltham Forest,5,15,Jun 16-21,276983,83,London
+E08000021,Newcastle upon Tyne,5,16,Jun 16-21,302820,84,North East
+E06000043,Brighton and Hove,5,15,Jun 16-21,290885,85,South East
+E09000005,Brent,5,17,Jun 16-21,329771,86,London
+W06000005,Flintshire,5,8,Jun 23-29,156100,87,Wales
+E06000047,County Durham,5,27,Jun 16-21,530094,88,North East
+E10000025,Oxfordshire,5,35,Jun 16-21,691667,89,South East
+E09000033,Westminster,5,13,Jun 16-21,261317,90,London
+E10000003,Cambridgeshire,5,33,Jun 16-21,653537,91,East of England
+E08000022,North Tyneside,5,10,Jun 16-21,207913,92,North East
+E06000005,Darlington,5,5,Jun 16-21,106803,93,North East
+E06000013,North Lincolnshire,5,8,Jun 16-21,172292,94,Yorkshire and The Humber
+E08000029,Solihull,5,10,Jun 16-21,216374,95,West Midlands
+E10000027,Somerset,5,26,Jun 16-21,562225,96,South West
+E10000015,Hertfordshire,5,55,Jun 16-21,1189519,97,East of England
+E08000030,Walsall,5,13,Jun 16-21,285478,98,West Midlands
+E09000004,Bexley,4,11,Jun 16-21,248287,99,London
+E09000024,Merton,4,9,Jun 16-21,206548,100,London
+E10000020,Norfolk,4,39,Jun 16-21,907760,101,East of England
+W06000019,Blaenau Gwent,4,3,Jun 23-29,69862,102,Wales
+E06000001,Hartlepool,4,4,Jun 16-21,93663,103,North East
+W06000004,Denbighshire,4,4,Jun 23-29,95696,104,Wales
+W06000008,Ceredigion,4,3,Jun 23-29,72695,105,Wales
+E06000036,Bracknell Forest,4,5,Jun 16-21,122549,106,South East
+E09000009,Ealing,4,14,Jun 16-21,341806,107,London
+S08000019,NHS Forth Valley,4,12,Jun 24-30,306640,108,Scotland
+E08000027,Dudley,4,12,Jun 16-21,321596,109,West Midlands
+E10000030,Surrey,4,44,Jun 16-21,1196236,110,South East
+E09000026,Redbridge,4,11,Jun 16-21,305222,111,London
+N09000001,Antrim and Newtownabbey,3,5,Jun 17-23,143504,112,Northern Ireland
+E09000028,Southwark,3,11,Jun 16-21,318830,113,London
+E08000037,Gateshead,3,7,Jun 16-21,202055,114,North East
+N09000004,Causeway Coast and Glens,3,5,Jun 17-23,144838,115,Northern Ireland
+E06000057,Northumberland,3,11,Jun 16-21,322434,116,North East
+E09000025,Newham,3,12,Jun 16-21,353134,117,London
+S08000017,NHS Dumfries and Galloway,3,5,Jun 24-30,148860,118,Scotland
+E10000032,West Sussex,3,28,Jun 16-21,863980,119,South East
+W06000021,Monmouthshire,3,3,Jun 23-29,94590,120,Wales
+E09000011,Greenwich,3,9,Jun 16-21,287942,121,London
+E09000019,Islington,3,7,Jun 16-21,242467,122,London
+E06000046,Isle of Wight,3,4,Jun 16-21,141771,123,South East
+E09000030,Tower Hamlets,3,9,Jun 16-21,324745,124,London
+E09000032,Wandsworth,3,9,Jun 16-21,329677,125,London
+N09000010,"Newry, Mourne and Down",3,5,Jun 17-23,181368,126,Northern Ireland
+E09000010,Enfield,3,9,Jun 16-21,333794,127,London
+E09000017,Hillingdon,3,8,Jun 16-21,306870,128,London
+E09000014,Haringey,3,7,Jun 16-21,268647,129,London
+E06000017,Rutland,3,1,Jun 16-21,39927,130,East Midlands
+E09000012,Hackney,3,7,Jun 16-21,281120,131,London
+N09000011,Ards and North Down,2,4,Jun 17-23,161725,132,Northern Ireland
+E09000003,Barnet,2,9,Jun 16-21,395869,133,London
+W06000014,Vale of Glamorgan,2,3,Jun 23-29,133587,134,Wales
+W06000018,Caerphilly,2,4,Jun 23-29,181075,135,Wales
+W06000020,Torfaen,2,2,Jun 23-29,93961,136,Wales
+E09000006,Bromley,2,7,Jun 16-21,332336,137,London
+E06000019,Herefordshire,2,4,Jun 16-21,192801,138,West Midlands
+E06000040,Windsor and Maidenhead,2,3,Jun 16-21,151422,139,South East
+E09000023,Lewisham,2,6,Jun 16-21,305842,140,London
+E09000029,Sutton,2,4,Jun 16-21,206349,141,London
+E06000023,Bristol,2,9,Jun 16-21,463377,142,South West
+E09000016,Havering,2,5,Jun 16-21,259552,143,London
+E09000007,Camden,2,5,Jun 16-21,270029,144,London
+E06000012,North East Lincolnshire,2,3,Jun 16-21,159563,145,Yorkshire and The Humber
+E06000038,Reading,2,3,Jun 16-21,161780,146,South East
+E08000024,Sunderland,2,5,Jun 16-21,277705,147,North East
+S08000031,NHS Greater Glasgow and Clyde,2,21,Jun 24-30,1183120,148,Scotland
+E09000015,Harrow,2,4,Jun 16-21,251160,149,London
+E09000008,Croydon,2,6,Jun 16-21,386710,150,London
+E06000026,Plymouth,2,4,Jun 16-21,262100,151,South West
+W06000023,Powys,2,2,Jun 23-29,132435,152,Wales
+N09000003,Belfast,1,5,Jun 17-23,343542,153,Northern Ireland
+E10000029,Suffolk,1,11,Jun 16-21,761350,154,East of England
+S08000030,NHS Tayside,1,6,Jun 24-30,417470,155,Scotland
+E09000002,Barking and Dagenham,1,3,Jun 16-21,212906,156,London
+E06000024,North Somerset,1,3,Jun 16-21,215052,157,South West
+N09000007,Lisburn and Castlereagh,1,2,Jun 17-23,146002,158,Northern Ireland
+W06000013,Bridgend,1,2,Jun 23-29,147049,159,Wales
+S08000032,NHS Lanarkshire,1,9,Jun 24-30,661900,160,Scotland
+W06000022,Newport,1,2,Jun 23-29,154676,161,Wales
+E06000058,"Bournemouth, Christchurch and Poole",1,5,Jun 16-21,395331,162,South West
+E10000014,Hampshire,1,17,Jun 16-21,1382542,163,South East
+E06000054,Wiltshire,1,6,Jun 16-21,500024,164,South West
+E09000021,Kingston upon Thames,1,2,Jun 16-21,177507,165,London
+S08000015,NHS Ayrshire and Arran,1,4,Jun 24-30,369360,166,Scotland
+E06000059,Dorset,1,4,Jun 16-21,378508,167,South West
+E06000022,Bath and North East Somerset,1,2,Jun 16-21,193282,168,South West
+S08000020,NHS Grampian,1,6,Jun 24-30,585700,169,Scotland
+E09000027,Richmond upon Thames,1,2,Jun 16-21,198019,170,London
+E10000008,Devon,1,8,Jun 16-21,802375,171,South West
+E06000044,Portsmouth,1,2,Jun 16-21,214905,172,South East
+E09000022,Lambeth,1,3,Jun 16-21,326034,173,London
+N09000006,Fermanagh and Omagh,1,1,Jun 17-23,117397,174,Northern Ireland
+W06000009,Pembrokeshire,1,1,Jun 23-29,125818,175,Wales
+E06000027,Torbay,1,1,Jun 16-21,136264,176,South West
+E06000003,Redcar and Cleveland,1,1,Jun 16-21,137150,177,North East
+E06000052,Cornwall and Isles of Scilly,1,4,Jun 16-21,569578,178,South West
+W06000012,Neath Port Talbot,1,1,Jun 23-29,143315,179,Wales
+N09000009,Mid Ulster,1,1,Jun 17-23,148528,180,Northern Ireland
+E10000013,Gloucestershire,1,4,Jun 16-21,637070,181,South West
+E06000041,Wokingham,1,1,Jun 16-21,171119,182,South East
+S08000029,NHS Fife,1,2,Jun 24-30,373550,183,Scotland
+S08000024,NHS Lothian,0,4,Jun 24-30,907580,184,Scotland
+W06000011,Swansea,0,1,Jun 23-29,246993,185,Wales
+E06000025,South Gloucestershire,0,1,Jun 16-21,285093,186,South West
+S08000022,NHS Highland,0,1,Jun 24-30,321700,187,Scotland
+E09000001,City of London,0,0,Jun 16-21,9721,188,London
+E08000023,South Tyneside,0,0,Jun 16-21,150976,189,North East
+E06000037,West Berkshire,0,0,Jun 16-21,158450,190,South East
+N09000002,"Armagh City, Banbridge and Craigavon",0,0,Jun 17-23,216205,191,Northern Ireland
+N09000005,Derry City and Strabane,0,0,Jun 17-23,151284,192,Northern Ireland
+W06000016,Rhondda Cynon Taff,0,0,Jun 23-29,241264,193,Wales
+S08000016,NHS Borders,0,0,Jun 24-30,115510,194,Scotland
+S08000025,NHS Orkney,0,0,Jun 24-30,22270,195,Scotland
+S08000026,NHS Shetland,0,0,Jun 24-30,22920,196,Scotland
+S08000028,NHS Western Isles,0,0,Jun 24-30,26720,197,Scotland

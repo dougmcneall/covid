@@ -2,15 +2,12 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-07-02"      
+date: "2020-07-03"      
 output: html_document   
 ---
 
-## WARNING 2020-06-30
-Today (30th June 2020) the [FT reported](https://www.ft.com/content/301c847c-a317-4950-a75b-8e66933d423a) that the "Pillar 1" (hospital testing) data used to compile these graphs currently misses the vast majority of new cases. "Pillar 2" (commercial labs and home testing) captures many more of the recent cases, such as the recent outbreak in Leicester. This was not the case when I first built this tracker a couple of months ago.
-
-It seems that hospital cases are no longer proportional to our best estimates of new local cases. I would therefore advise NOT to use the data on this page as an indication of recent coronavirus trends.
-
+## UPDATE 2020-07-03
+Data and graphs now include all cases from both pillar 1 (hospital settings) and pillar 2 (private labs and home testing), backdated through the record.
 
 ## Introduction
 Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date. In particular, the "about the data" link suggests that data older than 5 days can be considered complete.
@@ -81,7 +78,7 @@ points(as.Date(exe[, 'Specimen.date']), exe[, 'Daily.lab.confirmed.cases'],
      xlab = 'Date', ylab = 'cases', main = 'Daily lab confirmed Coronavirus cases in Devon & Exeter',
      type = 'h', col = 'tomato2', lwd = 5)
 legend('topleft', legend = c('Devon', 'Exeter'), col = c('skyblue2', 'tomato2'), lty = 'solid', lwd=5, bty = 'n')
-mtext(text = 'Pillar 1: Daily lab-confirmed Coronavirus cases in Devon (& Exeter)', side = 3, line = .5, adj = 0, cex = 1.5)
+mtext(text = 'Daily lab-confirmed Coronavirus cases in Devon (& Exeter)', side = 3, line = .5, adj = 0, cex = 1.5)
 mtext(text = paste('Pillar 2:', devon_weekly$dates, '\n weekly cases:', devon_weekly$cases, '\n per 100k:',devon_weekly$cases_per_100k), side = 3, adj = 1, cex = 1.5)
 
 ```
