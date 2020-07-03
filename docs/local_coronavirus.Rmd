@@ -6,16 +6,18 @@ date: "2020-07-03"
 output: html_document   
 ---
 
-## UPDATE 2020-07-03
-Data and graphs now include all cases from both pillar 1 (hospital settings) and pillar 2 (private labs and home testing), backdated through the record.
-
 ## Introduction
-Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date. In particular, the "about the data" link suggests that data older than 5 days can be considered complete.
+Confirmed cases of COVID-19 in England. Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date. In particular, the "about the data" link suggests that data older than 5 days can be considered complete.
+
+## UPDATE 2020-07-03
+Data and graphs now include all cases from both pillar 1 (hospital settings) and pillar 2 (private labs and home testing), backdated through the record. This may well have increased the number of recorded cases in your local area considerably.
 
 Data from <https://coronavirus.data.gov.uk/>  
 About the data <https://coronavirus.data.gov.uk/about>  
 Data file <https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv>  
 Code to create this page <https://github.com/dougmcneall/covid/blob/master/docs/local_coronavirus.Rmd>
+
+This data will be used to calibrate [MetaWards](https://metawards.org/), an infectious disease model being used to understand and predict COVID-19. You can see progress on our uncertainty quantification project using MetaWards [here](https://uq4covid.github.io/).
 
 Contact: dougmcneall@gmail.com
 
@@ -103,10 +105,9 @@ plotLocalCases(area = 'Milton Keynes', dat = dat)
 ```
 
 
-## Hackney
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Hackney', dat = dat)
+#plotLocalCases(area = 'Hackney', dat = dat)
 
 ```
 
