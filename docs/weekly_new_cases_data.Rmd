@@ -1,7 +1,7 @@
 ---
 title: "Cases of COVID-19 in England through time"
 author: "Doug McNeall"
-date: "2020-06-22"
+date: "2020-07-14"
 output: html_document
 ---
 
@@ -26,6 +26,17 @@ Link to the Rmarkdown: <https://github.com/dougmcneall/covid/blob/master/docs/we
 ### ONS data direct estimates of infections.
 
 These surveys measure the number of people who have COVID-19 at a particular time via a survey. They were conducted by the Office for National Statistics weekly and released on the following days:  
+
+9th July 2020
+<https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/england9july2020>
+
+
+2nd July 2020
+<https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/2july2020>
+
+25th June 2020
+<https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/england25june2020>
+
 
 18th June 2020
 <https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/18june2020>
@@ -91,7 +102,7 @@ weekly_new_cases <- init %>%
 #week_ax = seq(from = min(as.Date(england[, 'Specimen.date'])), to = max(as.Date(england[, 'Specimen.date'])), by = 7)
 
 week_ax = seq(from = min(as.Date(england[, 'Specimen.date'])), by = 7, length.out = nrow(weekly_new_cases))
-ons_midpoints <- as.Date(c("2020-05-03","2020-05-10","2020-05-17","2020-05-24", "2020-05-31", "2020-06-07"))
+ons_midpoints <- as.Date(c("2020-05-03","2020-05-10","2020-05-17","2020-05-24", "2020-05-31", "2020-06-07", "2020-06-14", "2020-06-21", "2020-06-28"))
 ```
 
 ## Estimates of the total number of active infections in England (from ONS infections survey pilot)
@@ -156,7 +167,7 @@ print((weekly_rebased / ons[,'new_cases_med']) * 100)
 ```{r, fig.width = 8, fig.height = 6}
 par(mar = c(5,6,3,2), las = 1)
 plot(week_ax, weekly_new_cases$weekly_sum,
-     ylim = c(0, 120000), xlim = as.Date(c("2020-03-01", "2020-06-21")),
+     ylim = c(0, 120000), xlim = as.Date(c("2020-03-01", "2020-07-21")),
      xlab = '', ylab = '',
      pch = 19,
      bty = 'n',
@@ -167,10 +178,11 @@ points(as.Date(ons[,'end_date']), ons[,'new_cases_med'], col = 'red', pch = 19)
 points(ons_midpoints, pred$mean, col = 'skyblue2', pch = 19)
 segments(x0 = as.Date(ons[,'end_date']), y0 = ons[,'new_cases_lower95'], x1 = as.Date(ons[,'end_date']), y1 = ons[,'new_cases_upper95'], col = 'tomato2')
 
+startdates <- c(NA, rep(as.Date("2020-04-26"),5), as.Date(ons[6:9,'end_date']))
 
-segments(x0 = as.Date("2020-04-26"),y0 = ons[, 'new_cases_med'], x1 = as.Date(ons[,'end_date']),  y1 = ons[,'new_cases_med'], col = 'red')
+segments(x0 = startdates,y0 = ons[, 'new_cases_med'], x1 = as.Date(ons[,'end_date']),  y1 = ons[,'new_cases_med'], col = 'red')
 
-segments(x0 = as.Date("2020-04-26"),y0 = weekly_rebased , x1 = as.Date(ons[,'end_date']),  y1 = weekly_rebased , col = 'skyblue2')
+#segments(x0 = as.Date("2020-04-26"),y0 = weekly_rebased , x1 = as.Date(ons[,'end_date']),  y1 = weekly_rebased , col = 'skyblue2')
 
 
 mtext('Weekly new cases in England', side = 3, adj = 0.06, line = -2,outer = TRUE, cex = 1.5)
