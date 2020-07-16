@@ -36,7 +36,13 @@ weekly <- read.csv('../data/weekly_uk_covid19_cases_2020-07-02.csv')
 plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
         # 'area' should be a string that names an area of interest
         
-        localData <- dat[dat[,'Area.name']==area, ]
+        localDataAll <- dat[dat[,'Area.name']==area, ]
+        
+        # The Unitary Authorities (eg 'Dorset', 'Plymouth') have the data doubled, and Area.type recorded as both 
+        # 'Lower tier local authority' and 'Upper tier local Authority'. Remove one of them.
+        
+        authvec <- unique(localDataAll$Area.type)
+        localData <- localDataAll[localDataAll$Area.type==authvec[1], ]
         
         
         da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
@@ -110,6 +116,7 @@ plotLocalCases(area = 'Milton Keynes', dat = dat)
 #plotLocalCases(area = 'Hackney', dat = dat)
 
 ```
+
 
 
 ## Reading
