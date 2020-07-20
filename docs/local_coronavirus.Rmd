@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-07-16"      
+date: "2020-07-20"      
 output: html_document   
 ---
 
@@ -107,13 +107,6 @@ plotLocalCases(area = 'Dorset', dat = dat)
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
 plotLocalCases(area = 'Milton Keynes', dat = dat)
-
-```
-
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-#plotLocalCases(area = 'Hackney', dat = dat)
 
 ```
 
