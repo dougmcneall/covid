@@ -111,6 +111,22 @@ plotLocalCases(area = 'Somerset', dat = dat)
 
 ```
 
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotLocalCases(area = 'Plymouth', dat = dat)
+
+```
+
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotLocalCases(area = 'Torbay', dat = dat)
+
+```
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotLocalCases(area = 'Bournemouth, Christchurch and Poole', dat = dat)
+
+```
 
 ## Other places of interest
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
