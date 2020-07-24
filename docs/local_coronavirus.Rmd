@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-07-23"      
+date: "2020-07-24"      
 output: html_document   
 ---
 
@@ -62,7 +62,7 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
 ```
 
 
-## Devon and Exeter  
+## The South West
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
 # Hard code the double plot here for the minute
@@ -93,17 +93,26 @@ mtext(text = paste('Pillar 2:', devon_weekly$dates, '\n weekly cases:', devon_we
 ```
 
 
-## Dorset
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
 plotLocalCases(area = 'Dorset', dat = dat)
 
 ```
 
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotLocalCases(area = 'Cornwall and Isles of Scilly', dat = dat)
+
+```
+
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotLocalCases(area = 'Somerset', dat = dat)
+
+```
 
 
-
-## Milton Keynes 
+## Other places of interest
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
 plotLocalCases(area = 'Milton Keynes', dat = dat)
@@ -111,22 +120,19 @@ plotLocalCases(area = 'Milton Keynes', dat = dat)
 ```
 
 
-
-## Reading
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
 plotLocalCases(area = 'Reading', dat = dat)
 
 ```
 
-## Leicester
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
 plotLocalCases(area = 'Leicester', dat = dat)
 
 ```
 
-
+## England and English regions
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
 plotLocalCases(area = 'England', dat = dat)
