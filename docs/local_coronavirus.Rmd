@@ -2,15 +2,12 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-07-28"      
+date: "2020-07-29"      
 output: html_document   
 ---
 
 ## Introduction
 Confirmed cases of COVID-19 in England. Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date. In particular, the "about the data" link suggests that data older than 5 days can be considered complete.
-
-## UPDATE 2020-07-03
-Data and graphs now include all cases from both pillar 1 (hospital settings) and pillar 2 (private labs and home testing), backdated through the record. This may well have increased the number of recorded cases in your local area considerably.
 
 Data from <https://coronavirus.data.gov.uk/>  
 About the data <https://coronavirus.data.gov.uk/about>  
@@ -21,9 +18,21 @@ This data will be used to calibrate [MetaWards](https://metawards.org/), an infe
 
 Contact: dougmcneall@gmail.com
 
+### Update 2020-07-29
+Weekly averages are now included. The last week's average data is not plotted, as it is often incomplete giving a misleading drop in cases.
+
+### Update 2020-07-03
+Data and graphs now include all cases from both pillar 1 (hospital settings) and pillar 2 (private labs and home testing), backdated through the record. This may well have increased the number of recorded cases in your local area considerably.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(lubridate)
+```
+
 
 ```{r, include=FALSE}
 dat <- read.csv('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv')
@@ -44,10 +53,8 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
         authvec <- unique(localDataAll$Area.type)
         localData <- localDataAll[localDataAll$Area.type==authvec[1], ]
         
-        
         da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
 
-        
         par(las = 1, mar = c(2.5,4,5,1))
         plot(as.Date(localData[, 'Specimen.date']), localData[, 'Daily.lab.confirmed.cases'],
              xlab = '', ylab = 'cases', main = '',
@@ -56,11 +63,57 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
         
         axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
         axis(2)
-        mtext(text = paste0('Daily lab-confirmed Coronavirus cases in ', area), side = 3, line = .5, adj = 0, cex = 1.5)
+        mtext(text = paste0('Daily lab-confirmed Covid-19 cases in ', area), side = 3, line = .5, adj = 0, cex = 1.5)
 }
 
 ```
 
+```{r, include = FALSE}
+#overlay weekly cases
+
+plotLocalCasesWeeklyOverlay <- function(area = 'Devon', dat, col = 'skyblue2', ...){
+        # 'area' should be a string that names an area of interest
+        
+        localDataAll <- dat[dat[,'Area.name']==area, ]
+        
+        # The Unitary Authorities (eg 'Dorset', 'Plymouth') have the data doubled, and Area.type recorded as both 
+        # 'Lower tier local authority' and 'Upper tier local Authority'. Remove one of them.
+        
+        authvec <- unique(localDataAll$Area.type)
+        localData <- localDataAll[localDataAll$Area.type==authvec[1], ]
+        
+        da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
+        
+        # plot daily data
+        par(las = 1, mar = c(2.5,4,5,1))
+        plot(as.Date(localData[, 'Specimen.date']), localData[, 'Daily.lab.confirmed.cases'],
+             xlab = '', ylab = 'cases', main = '',
+             type = 'h', lwd = 5, col = col, bty = 'n', axes = FALSE, ...)
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+        mtext(text = paste0('Daily lab-confirmed Covid-19 cases in ', area), side = 3, line = .5, adj = 0, cex = 1.5)
+        
+        # Summarise weekly data
+        init <- data.frame('Specimen.date' = as.Date(localData[,'Specimen.date']), 
+                           'Daily.lab.confirmed.cases' = localData[,'Daily.lab.confirmed.cases'])
+        
+        weekly_new_cases <- init %>% 
+                group_by(week = week(Specimen.date)) %>%
+                summarise(weekly_sum = sum(Daily.lab.confirmed.cases))
+        
+        
+        week_ax <- as.Date(paste(2020, weekly_new_cases$week, 1, sep="-"), "%Y-%U-%u")
+        
+        #week_ax = seq(from = min(as.Date(localData[, 'Specimen.date'])), by = 7, length.out = nrow(weekly_new_cases))
+        
+        # plot but exclude the latest week using head( , -1)
+        points(head(week_ax,-1), head(weekly_new_cases$weekly_sum/7,-1), pch = 20, col = 'skyblue4', type = 'o')
+        legend('topright', legend = 'Weekly Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')
+        
+}
+```
 
 ## The South West
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
@@ -70,7 +123,24 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
 exe <- dat[dat[,'Area.name']=='Exeter',]
 devon <- dat[dat[,'Area.name']=='Devon',]
 
-devon_weekly <- weekly[weekly[,'area_name']=='Devon',]
+# Summarise weekly data
+init_devon <- data.frame('Specimen.date' = as.Date(devon[,'Specimen.date']), 
+                         'Daily.lab.confirmed.cases' = devon[,'Daily.lab.confirmed.cases'])
+
+
+weekly_new_cases_devon <- init_devon %>% 
+        group_by(week = week(Specimen.date)) %>%
+        summarise(weekly_sum = sum(Daily.lab.confirmed.cases))
+
+# Summarise weekly data
+init_exe <- data.frame('Specimen.date' = as.Date(exe[,'Specimen.date']), 
+                         'Daily.lab.confirmed.cases' = exe[,'Daily.lab.confirmed.cases'])
+
+weekly_new_cases_exe <- init_exe %>% 
+        group_by(week = week(Specimen.date)) %>%
+        summarise(weekly_sum = sum(Daily.lab.confirmed.cases))
+
+
 
 par(las = 1, mar = c(2.5,4,5,1))
 plot(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'],
@@ -84,132 +154,143 @@ axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
 axis(2)
 
 points(as.Date(exe[, 'Specimen.date']), exe[, 'Daily.lab.confirmed.cases'],
-     xlab = 'Date', ylab = 'cases', main = 'Daily lab confirmed Coronavirus cases in Devon & Exeter',
+     xlab = 'Date', ylab = 'cases', main = '',
      type = 'h', col = 'tomato2', lwd = 5)
 legend('topleft', legend = c('Devon', 'Exeter'), col = c('skyblue2', 'tomato2'), lty = 'solid', lwd=5, bty = 'n')
-mtext(text = 'Daily lab-confirmed Coronavirus cases in Devon (& Exeter)', side = 3, line = .5, adj = 0, cex = 1.5)
-mtext(text = paste('Pillar 2:', devon_weekly$dates, '\n weekly cases:', devon_weekly$cases, '\n per 100k:',devon_weekly$cases_per_100k), side = 3, adj = 1, cex = 1.5)
+mtext(text = 'Daily lab-confirmed Covid-19 cases in Devon & Exeter', side = 3, line = .5, adj = 0, cex = 1.5)
+
+week_ax <- as.Date(paste(2020, weekly_new_cases_devon$week, 1, sep="-"), "%Y-%U-%u")
+
+points(head(week_ax,-1), head(weekly_new_cases_devon$weekly_sum/7,-1), pch = 20, col = 'skyblue4', type = 'o')
+
+week_ax <- as.Date(paste(2020, weekly_new_cases_exe$week, 1, sep="-"), "%Y-%U-%u")
+
+points(head(week_ax,-1), head(weekly_new_cases_exe$weekly_sum/7,-1), pch = 20, col = 'tomato4', type = 'o')
+legend('topright', legend = 'Weekly Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')
+        
+
 
 ```
 
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Dorset', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Dorset', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Cornwall and Isles of Scilly', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Cornwall and Isles of Scilly', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Somerset', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Somerset', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Plymouth', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Plymouth', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Torbay', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Torbay', dat = dat)
 
 ```
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Bournemouth, Christchurch and Poole', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Bournemouth, Christchurch and Poole', dat = dat)
 
 ```
 
 ## Other places of interest
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Milton Keynes', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Milton Keynes', dat = dat)
 
 ```
 
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Reading', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Reading', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Leicester', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Leicester', dat = dat)
 
 ```
 
 ## England and English regions
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'England', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCases(area = 'South West', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'England', dat = dat)
 
 ```
 
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'South East', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'South West', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'London', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'South East', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'East of England', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'London', dat = dat)
+
+```
+
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotLocalCasesWeeklyOverlay(area = 'East of England', dat = dat)
 
 ```
 
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'West Midlands', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'West Midlands', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'East Midlands', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'East Midlands', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'Yorkshire and The Humber', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'Yorkshire and The Humber', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'North West', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'North West', dat = dat)
 
 ```
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCases(area = 'North East', dat = dat)
+plotLocalCasesWeeklyOverlay(area = 'North East', dat = dat)
 
 ```
+
 
 
 ```{r, include=FALSE}
