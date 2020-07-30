@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-07-29"      
+date: "2020-07-30"      
 output: html_document   
 ---
 
@@ -69,7 +69,6 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
 ```
 
 ```{r, include = FALSE}
-#overlay weekly cases
 
 plotLocalCasesWeeklyOverlay <- function(area = 'Devon', dat, col = 'skyblue2', ...){
         # 'area' should be a string that names an area of interest
@@ -140,14 +139,11 @@ weekly_new_cases_exe <- init_exe %>%
         group_by(week = week(Specimen.date)) %>%
         summarise(weekly_sum = sum(Daily.lab.confirmed.cases))
 
-
-
 par(las = 1, mar = c(2.5,4,5,1))
 plot(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'],
      xlab = '', ylab = 'cases', main = '',
      type = 'h', lwd = 5, col = 'skyblue2', bty = 'n', axes = FALSE)
 grid()
-
 
 da = seq(from = min(as.Date(devon[, 'Specimen.date'])), to = max(as.Date(devon[, 'Specimen.date'])), by = 7)
 axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
@@ -168,8 +164,6 @@ week_ax <- as.Date(paste(2020, weekly_new_cases_exe$week, 1, sep="-"), "%Y-%U-%u
 points(head(week_ax,-1), head(weekly_new_cases_exe$weekly_sum/7,-1), pch = 20, col = 'tomato4', type = 'o')
 legend('topright', legend = 'Weekly Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')
         
-
-
 ```
 
 
