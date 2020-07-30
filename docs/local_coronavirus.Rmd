@@ -173,121 +173,34 @@ legend('topright', legend = 'Weekly Average', pch = 20, col = 'skyblue4', lty = 
 ```
 
 
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+```{r, echo = FALSE, fig.width = 12, fig.height = 4}
+plotlist_sw = list('Dorset', 'Cornwall and Isles of Scilly', 'Somerset', 'Plymouth', 'Torbay','Bournemouth, Christchurch and Poole' )
 
-plotLocalCasesWeeklyOverlay(area = 'Dorset', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'Cornwall and Isles of Scilly', dat = dat)
+out = lapply(plotlist_sw, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
 
 ```
 
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCasesWeeklyOverlay(area = 'Somerset', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'Plymouth', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'Torbay', dat = dat)
-
-```
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'Bournemouth, Christchurch and Poole', dat = dat)
-
-```
 
 ## Other places of interest
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'Milton Keynes', dat = dat)
-
-```
-
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCasesWeeklyOverlay(area = 'Reading', dat = dat)
+plotlist_opoi = list('Milton Keynes','Reading', 'Leicester', 'Oldham' )
 
-```
+out = lapply(plotlist_opoi, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
 
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'Leicester', dat = dat)
 
 ```
 
 ## England and English regions
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'England', dat = dat)
-
-```
-
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotLocalCasesWeeklyOverlay(area = 'South West', dat = dat)
+plotlist_eaer = list('England', 'South West', 'South East','London', 'East of England', 'West Midlands', 'East Midlands',
+                     'Yorkshire and The Humber','North West', 'North East')
 
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'South East', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'London', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'East of England', dat = dat)
-
-```
-
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'West Midlands', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'East Midlands', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'Yorkshire and The Humber', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'North West', dat = dat)
-
-```
-
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
-
-plotLocalCasesWeeklyOverlay(area = 'North East', dat = dat)
+out = lapply(plotlist_eaer, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
 
 ```
 
