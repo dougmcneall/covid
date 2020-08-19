@@ -1,0 +1,375 @@
+---
+title: "local_tracker_api"
+author: "Doug McNeall"
+date: "8/17/2020"
+output: html_document
+---
+
+
+## Introduction
+
+Experiments with extracting coronavirus case data with the V1 API
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+library(jsonlite)
+library(httr)
+
+```
+
+
+
+```{r}
+
+#endpoint <- 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure={"date":"date","newCases":"newCasesByPublishDate"}'
+
+# They have new cases by specimen date for smaller regions than nation, or by published data for nations
+endpoint <- 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=utla;areaName=devon&structure={"date":"date","newCases":"newCasesBySpecimenDate"}'
+
+httr::GET(
+    url = endpoint,
+    timeout(10)
+) -> response
+
+
+if (response$status_code >= 400) {
+    err_msg = httr::http_status(response)
+    stop(err_msg)
+}
+
+# Convert response from binary to JSON:
+json_text <- content(response, "text")
+data      <- jsonlite::fromJSON(json_text)
+
+#print(data)
+
+
+```
+
+
+```{r}
+
+
+        #da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
+        
+        da = seq(from = min(as.Date(data$data$date)), to = max(as.Date(data$data$date)), by = 7)
+
+        par(las = 1, mar = c(2.5,4,5,1))
+        plot(as.Date(data$data$date), data$data$newCases,
+             xlab = '', ylab = 'cases', main = '',
+             type = 'h', lwd = 5, col = 'skyblue2', bty = 'n', axes = FALSE)
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+       # mtext(text = paste0('Daily lab-confirmed Covid-19 cases in ', area), side = 3, line = .5, adj = 0, cex = 1.5)
+
+
+```
+
+
+
+```{r}
+AREA_TYPE = "nation"
+AREA_NAME = "england"
+
+endpoint <- "https://api.coronavirus.data.gov.uk/v1/data"
+
+# Create filters:
+filters <- c(
+  sprintf("areaType=%s", AREA_TYPE),
+  sprintf("areaName=%s", AREA_NAME)
+)
+
+# Create the structure as a list or a list of lists:
+structure <- list(
+    date = "date", 
+    name = "areaName", 
+    code = "areaCode", 
+    cases = list(
+        daily = "newCasesByPublishDate",
+        cumulative = "cumCasesByPublishDate"
+    ), 
+    deaths = list(
+        daily = "newDeathsByDeathDate",
+        cumulative = "cumDeathsByDeathDate"
+    )
+)
+
+# The "httr::GET" method automatically encodes 
+# the URL and its parameters:
+httr::GET(
+    # Concatenate the filters vector using a semicolon.
+    url = endpoint,
+    
+    # Convert the structure to JSON (ensure 
+    # that "auto_unbox" is set to TRUE).
+    query = list(
+        filters = paste(filters, collapse = ";"),
+        structure = jsonlite::toJSON(structure, auto_unbox = TRUE)
+    ),
+    
+    # The API server will automatically reject any
+    # requests that take longer than 10 seconds to 
+    # process.
+    timeout(10)
+) -> response
+
+# Handle errors:
+#if (response$status_code >= 400) {
+#    err_msg = httr::http_status(response)
+#    stop(err_msg)
+#}
+
+# Convert response from binary to JSON:
+json_text <- content(response, "text")
+data = jsonlite::fromJSON(json_text)
+
+# Store the encoded URL for inspection:
+url <- response$url
+
+print(url)
+```
+
+
+```{r}
+# This works
+
+AREA_TYPE = "nation"
+AREA_NAME = "scotland"
+
+endpoint <- "https://api.coronavirus.data.gov.uk/v1/data"
+
+# Create filters:
+filters <- c(
+  sprintf("areaType=%s", AREA_TYPE),
+  sprintf("areaName=%s", AREA_NAME)
+)
+
+# Create the structure as a list or a list of lists:
+structure <- list(
+    date  = "date", 
+    name  = "areaName", 
+    code  = "areaCode", 
+    cases = list(
+        daily      = "newCasesByPublishDate",
+        cumulative = "cumCasesByPublishDate"
+    )#, 
+    #deaths = list(
+    #    daily      = "newDeathsByDeathDate",
+    #    cumulative = "cumDeathsByDeathDate"
+    #)
+)
+
+# The "httr::GET" method automatically encodes 
+# the URL and its parameters:
+httr::GET(
+    # Concatenate the filters vector using a semicolon.
+    url = endpoint,
+    
+    # Convert the structure to JSON (ensure 
+    # that "auto_unbox" is set to TRUE).
+    query = list(
+        filters   = paste(filters, collapse = ";"),
+        structure = jsonlite::toJSON(structure, auto_unbox = TRUE)
+    ),
+    
+    # The API server will automatically reject any
+    # requests that take longer than 10 seconds to 
+    # process.
+    timeout(10)
+) -> response
+
+# Handle errors:
+if (response$status_code >= 400) {
+    err_msg = httr::http_status(response)
+    stop(err_msg)
+}
+
+# Convert response from binary to JSON:
+json_text <- content(response, "text")
+data      <- jsonlite::fromJSON(json_text)
+
+# Store the encoded URL for inspection:
+url <- response$url
+
+#print(url)
+#print(data)
+
+```
+
+```{r}
+
+        
+        da = seq(from = min(as.Date(data$data$date)), to = max(as.Date(data$data$date)), by = 7)
+
+        par(las = 1, mar = c(2.5,4,5,1))
+        plot(as.Date(data$data$date), data$data$cases$daily,
+             xlab = '', ylab = 'cases', main = '',
+             type = 'h', lwd = 5, col = 'skyblue2', bty = 'n', axes = FALSE,
+             xlim = as.Date(c('2020-03-01', max(data$data$date))))
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+
+```
+
+
+
+```{r}
+
+get_data_api <- function(AREA_TYPE, AREA_NAME){
+  
+# eg, 
+# AREA_TYPE = one of "nation", "region", "utla", ltla"
+# AREA_NAME = "england", "southwest", "devon", "exeter"
+  
+
+endpoint <- "https://api.coronavirus.data.gov.uk/v1/data"
+
+# Create filters:
+filters <- c(
+  sprintf("areaType=%s", AREA_TYPE),
+  sprintf("areaName=%s", AREA_NAME)
+)
+
+if(AREA_TYPE == "nation"){
+  dailyCaseType <- "newCasesByPublishDate"
+}
+else{
+  dailyCaseType <- "newCasesBySpecimenDate"
+}
+
+# Create the structure as a list or a list of lists:
+structure <- list(
+    date  = "date", 
+    name  = "areaName", 
+    code  = "areaCode", 
+    cases = list(
+        daily  = dailyCaseType
+    )
+)
+
+# The "httr::GET" method automatically encodes 
+# the URL and its parameters:
+httr::GET(
+    # Concatenate the filters vector using a semicolon.
+    url = endpoint,
+    
+    # Convert the structure to JSON (ensure 
+    # that "auto_unbox" is set to TRUE).
+    query = list(
+        filters   = paste(filters, collapse = ";"),
+        structure = jsonlite::toJSON(structure, auto_unbox = TRUE)
+    ),
+    
+    # The API server will automatically reject any
+    # requests that take longer than 10 seconds to 
+    # process.
+    timeout(10)
+) -> response
+
+# Handle errors:
+if (response$status_code >= 400) {
+    err_msg = httr::http_status(response)
+    stop(err_msg)
+}
+
+# Convert response from binary to JSON:
+json_text <- content(response, "text")
+data      <- jsonlite::fromJSON(json_text)
+
+# Store the encoded URL for inspection:
+url <- response$url
+
+ return(list(data = data, url = url))
+ 
+ }
+```
+
+```{r}
+
+```
+
+```{r}
+
+plot_cases_api <- function(dat, region){
+  
+        da = seq(from = min(as.Date(dat$data$data$date)), to = max(as.Date(dat$data$data$date)), by = 7)
+
+        par(las = 1, mar = c(2.5,4,5,1))
+        plot(as.Date(dat$data$data$date), dat$data$data$cases$daily,
+             xlab = '', ylab = 'cases', main = '',
+             type = 'h', lwd = 5, col = 'skyblue2', bty = 'n', axes = FALSE,
+             xlim = as.Date(c('2020-03-01', max(dat$data$data$date))))
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+        mtext(text = paste0('Daily lab-confirmed Covid-19 cases in ', region), side = 3, line = .5, adj = 0, cex = 1.5)
+  
+}
+
+
+```
+
+```{r, fig.width = 12, fig.height = 5}
+
+test <- get_data_api(AREA_TYPE = "nation", AREA_NAME = "england")
+plot_cases_api(test, "England") 
+
+```
+```{r, fig.width = 12, fig.height = 5}
+
+test <- get_data_api(AREA_TYPE = "nation", AREA_NAME = "Scotland")
+plot_cases_api(test, "Scotland") 
+
+```
+
+
+```{r, fig.width = 12, fig.height = 5}
+
+plot_cases_api(get_data_api(AREA_TYPE = "utla", AREA_NAME = "Devon"),
+               "Devon" 
+)
+
+
+```
+
+
+```{r, fig.width = 12, fig.height = 5}
+
+plot_cases_api(get_data_api(AREA_TYPE = "ltla", AREA_NAME = "Exeter"),
+               "Exeter" 
+)
+
+
+```
+
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
