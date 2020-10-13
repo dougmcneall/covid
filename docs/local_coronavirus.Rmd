@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-12-9"
+date: "2020-12-13"
 output: html_document   
 ---
 
@@ -54,7 +54,7 @@ plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
         
         localDataAll <- dat[dat[,'Area.name']==area, ]
         
-        # The Unitary Authorities (eg 'Dorset', 'Plymouth') have the data doubled, and Area.type recorded as both 
+        # The Unitary Authorities (eg   'Dorset', 'Plymouth') have the data doubled, and Area.type recorded as both 
         # 'Lower tier local authority' and 'Upper tier local Authority'. Remove one of them.
         
         authvec <- unique(localDataAll$Area.type)
