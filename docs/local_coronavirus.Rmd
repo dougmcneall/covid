@@ -2,13 +2,13 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-10-14"
+date: "2020-10-16"
 output: html_document   
 ---
 
 ## Introduction
 Confirmed cases of COVID-19 in England. Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date. In particular, the "about the data" link suggests that data older than 5 days can be considered complete.
-
+                
 Data from <https://coronavirus.data.gov.uk/>  
 About the data <https://coronavirus.data.gov.uk/about>  
 Data file <https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv>  
