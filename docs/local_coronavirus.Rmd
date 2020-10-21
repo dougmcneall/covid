@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2020-10-20"
+date: "2020-10-21"
 output: html_document   
 ---
 
