@@ -2,7 +2,7 @@
 title: "Local Coronavirus Tracker"
 author: "Doug McNeall"
 contact: "dougmcneall@gmail.com @dougmcneall"
-date: "2021-01-16"
+date: "2021-01-18"
 output: html_document   
 ---
         
@@ -18,6 +18,9 @@ This data will be used to calibrate [MetaWards](https://metawards.org/), an infe
 
 Contact: dougmcneall@gmail.com
 
+### Update 2021-01-18
+Lines now show 7-day rolling means, with the last week excluded as before.
+
 ### Update 2020-07-29
 Weekly averages are now included. The last week's average data is not plotted, as it is often incomplete giving a misleading drop in cases.
         
@@ -31,6 +34,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, include=FALSE}
 library(tidyverse)
 library(lubridate)
+library(zoo)
 ```
 
 
@@ -121,8 +125,8 @@ plotLocalCasesWeeklyOverlay <- function(area = 'Devon', dat, col = 'skyblue2', .
 }
 ```
 
-## The South West
-```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+```{r, echo=FALSE, include =FALSE, fig.width=12, fig.height = 4 }
 
 # Hard code the double plot here for the minute
 # isolate Exeter cases
@@ -174,7 +178,91 @@ legend('topright', legend = 'Weekly Average', pch = 20, col = 'skyblue4', lty = 
 ```
 
 
-```{r, echo = FALSE, fig.width = 12, fig.height = 4}
+```{r, echo = FALSE}
+plotLocalCasesRollingOverlay <- function(area = 'Devon', dat, col = 'skyblue2', ...){
+              # 'area' should be a string that names an area of interest
+        
+        localDataAll <- dat[dat[,'Area.name']==area, ]
+        
+        # The Unitary Authorities (eg 'Dorset', 'Plymouth') have the data doubled, and Area.type recorded as both 
+        # 'Lower tier local authority' and 'Upper tier local Authority'. Remove one of them.
+        
+        authvec <- unique(localDataAll$Area.type)
+        localData <- localDataAll[localDataAll$Area.type==authvec[1], ]
+        
+        localDataOrdered <-   localData[ order(as.Date(localData[,'Specimen.date'])),  ]
+        
+        LocalDataRollMean <- rollmean(localDataOrdered[, 'Daily.lab.confirmed.cases'], 7, align = 'center', na.pad = T)
+        LocalDataRollMean[(length(LocalDataRollMean)-7):length(LocalDataRollMean)] <- NA
+        
+        da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
+        
+        # plot daily data
+        par(las = 1, mar = c(2.5,4,5,1))
+        plot(as.Date(localDataOrdered[, 'Specimen.date']), localDataOrdered[, 'Daily.lab.confirmed.cases'],
+             xlab = '', ylab = 'cases', main = '',
+             type = 'h', lwd = 5, col = col, bty = 'n', axes = FALSE, ...)
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+        mtext(text = paste0('Daily lab-confirmed Covid-19 cases in ', area), side = 3, line = .5, adj = 0, cex = 1.5)
+        
+        lines(as.Date(localDataOrdered[, 'Specimen.date']), LocalDataRollMean, col = 'skyblue4', lwd = 2)
+        legend('topright', legend = '7 day rolling Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')  
+        
+}
+
+```
+
+## The South West
+```{r, fig.width=12, fig.height = 4, echo = FALSE}
+
+       exe <- dat[dat[,'Area.name']=='Exeter',]
+        exe.order <- exe[ order(as.Date(exe[,'Specimen.date'])),  ]
+        
+        exe.rm <- rollmean(exe.order[, 'Daily.lab.confirmed.cases'], 7, align = 'center', na.pad = T)
+        # replace last 7 days with NA
+        exe.rm[(length(exe.rm)-7):length(exe.rm)] <- NA
+        
+       # , format="%d/%m/%Y")
+        
+        devon <- dat[dat[,'Area.name']=='Devon',]
+        devon.order <- devon[ order(as.Date(devon[,'Specimen.date'])),  ]
+        
+        devon.rm <- rollmean(devon.order[, 'Daily.lab.confirmed.cases'], 7, align = 'center', na.pad = T)
+        devon.rm[(length(devon.rm)-7):length(devon.rm)] <- NA
+        
+        par(las = 1, mar = c(2.5,4,5,1))
+        
+        plot(as.Date(devon.order[, 'Specimen.date']), devon.order[, 'Daily.lab.confirmed.cases'],
+           xlab = '', ylab = 'cases', main = '',
+          type = 'h', lwd = 5, col = 'skyblue2', bty = 'n', axes = FALSE)
+        grid()
+        
+        lines(as.Date(devon.order[, 'Specimen.date']), devon.rm, col = 'skyblue4', lwd = 2)
+        
+        points(as.Date(exe.order[, 'Specimen.date']), exe.order[, 'Daily.lab.confirmed.cases'],
+     xlab = 'Date', ylab = 'cases', main = '',
+     type = 'h', col = 'tomato2', lwd = 5)
+        
+        lines(as.Date(exe.order[, 'Specimen.date']), exe.rm, col = 'tomato4', lwd = 2)
+        
+        
+legend('topleft', legend = c('Devon', 'Exeter'), col = c('skyblue2', 'tomato2'), lty = 'solid', lwd=5, bty = 'n')
+mtext(text = 'Daily lab-confirmed Covid-19 cases in Devon & Exeter', side = 3, line = .5, adj = 0, cex = 1.5)
+        
+        
+        da = seq(from = min(as.Date(devon.order[, 'Specimen.date'])), to = max(as.Date(devon.order[, 'Specimen.date'])), by = 7)
+axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+axis(2)
+ legend('topright', legend = '7 day rolling Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')  
+        
+```
+
+
+
+```{r, echo = FALSE, include = FALSE, fig.width = 12, fig.height = 4}
 plotlist_sw = list('Dorset', 'Cornwall and Isles of Scilly', 'Somerset', 'Plymouth', 'Torbay','Bournemouth, Christchurch and Poole' )
 
 out = lapply(plotlist_sw, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
@@ -182,14 +270,21 @@ out = lapply(plotlist_sw, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
 ```
 
 
+```{r, echo = FALSE, fig.width = 12, fig.height = 4}
+plotlist_sw = list('Dorset', 'Cornwall and Isles of Scilly', 'Somerset', 'Plymouth', 'Torbay','Bournemouth, Christchurch and Poole' )
+
+out = lapply(plotlist_sw, FUN = plotLocalCasesRollingOverlay, dat = dat)
+
+```
+
 
 ## Other places of interest
 
 ```{r, echo=FALSE, fig.width=12, fig.height = 4 }
 
-plotlist_opoi = list('Milton Keynes','Reading', 'Leicester', 'Oldham' )
+plotlist_opoi = list('Milton Keynes','Reading')
 
-out = lapply(plotlist_opoi, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
+out = lapply(plotlist_opoi, FUN = plotLocalCasesRollingOverlay, dat = dat)
 
 
 ```
@@ -201,7 +296,7 @@ out = lapply(plotlist_opoi, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
 plotlist_eaer = list('England', 'South West', 'South East','London', 'East of England', 'West Midlands', 'East Midlands',
                      'Yorkshire and The Humber','North West', 'North East')
 
-out = lapply(plotlist_eaer, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
+out = lapply(plotlist_eaer, FUN = plotLocalCasesRollingOverlay, dat = dat)
 
 ```
 
