@@ -1,0 +1,356 @@
+---
+title: "Local Coronavirus Tracker"
+author: "Doug McNeall"
+contact: "dougmcneall@gmail.com @dougmcneall"
+date: "2021-04-28               "
+output: html_document   
+---
+        
+## Introduction
+Confirmed cases of COVID-19 in England. Note these are lab confirmed cases only - the real number of cases will be higher, and the numbers for a recent day could be revised upwards at a later date. In particular, the "about the data" link suggests that data older than 5 days can be considered complete.
+                
+Data from <https://coronavirus.data.gov.uk/>  
+About the data <https://coronavirus.data.gov.uk/about>  
+Data file <https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv>  
+Code to create this page <https://github.com/dougmcneall/covid/blob/master/docs/local_coronavirus.Rmd>
+
+This data will be used to calibrate [MetaWards](https://metawards.org/), an infectious disease model being used to understand and predict COVID-19. You can see progress on our uncertainty quantification project using MetaWards [here](https://uq4covid.github.io/).
+
+Contact: dougmcneall@gmail.com
+
+### Update 2021-01-18
+Lines now show 7-day rolling means, with the last week excluded as before.
+
+### Update 2020-07-29
+Weekly averages are now included. The last week's average data is not plotted, as it is often incomplete giving a misleading drop in cases.
+        
+### Update 2020-07-03
+Data and graphs now include all cases from both pillar 1 (hospital settings) and pillar 2 (private labs and home testing), backdated through the record. This may well have increased the number of recorded cases in your local area considerably.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(zoo)
+```
+
+
+```{r, include=FALSE}
+#dat <- read.csv('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv')
+
+#dat <- read.csv('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv')
+
+# Having to download a copy of the csv from the web adress above because it's broken, for some reason.
+download.file('https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv', destfile='coronavirus-cases_latest.csv')
+dat <- read.csv('coronavirus-cases_latest.csv')
+
+#weekly <- read.csv('../data/weekly_uk_covid19_cases_2020-07-02.csv')
+```
+
+
+```{r, include=FALSE}
+
+plotLocalCases <- function(area = 'Devon', dat, col = 'skyblue2', ...){
+        # 'area' should be a string that names an area of interest
+        
+        localDataAll <- dat[dat[,'Area.name']==area, ]
+        
+        # The Unitary Authorities (eg   'Dorset', 'Plymouth') have the data doubled, and Area.type recorded as both 
+        # 'Lower tier local authority' and 'Upper tier local Authority'. Remove one of them.
+        
+        authvec <- unique(localDataAll$Area.type)
+        localData <- localDataAll[localDataAll$Area.type==authvec[1], ]
+        
+        da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
+
+        par(las = 1, mar = c(2.5,4,5,1))
+        plot(as.Date(localData[, 'Specimen.date']), localData[, 'Daily.lab.confirmed.cases'],
+             xlab = '', ylab = 'cases', main = '',
+             type = 'h', lwd = 5, col = col, bty = 'n', axes = FALSE, ...)
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+        mtext(text = paste0('Daily lab-confirmed Covid-19 cases in ', area), side = 3, line = .5, adj = 0, cex = 1.5)
+}
+
+```
+
+```{r, include = FALSE}
+
+plotLocalCasesWeeklyOverlay <- function(area = 'Devon', dat, col = 'skyblue2', ...){
+        # 'area' should be a string that names an area of interest
+        
+        localDataAll <- dat[dat[,'Area.name']==area, ]
+        
+        # The Unitary Authorities (eg 'Dorset', 'Plymouth') have the data doubled, and Area.type recorded as both 
+        # 'Lower tier local authority' and 'Upper tier local Authority'. Remove one of them.
+        
+        authvec <- unique(localDataAll$Area.type)
+        localData <- localDataAll[localDataAll$Area.type==authvec[1], ]
+        
+        da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
+        
+        # plot daily data
+        par(las = 1, mar = c(2.5,4,5,1))
+        plot(as.Date(localData[, 'Specimen.date']), localData[, 'Daily.lab.confirmed.cases'],
+             xlab = '', ylab = 'cases', main = '',
+             type = 'h', lwd = 5, col = col, bty = 'n', axes = FALSE, ...)
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+        mtext(text = paste0('Daily lab-confirmed Covid-19 cases in ', area), side = 3, line = .5, adj = 0, cex = 1.5)
+        
+        # Summarise weekly data
+        init <- data.frame('Specimen.date' = as.Date(localData[,'Specimen.date']), 
+                           'Daily.lab.confirmed.cases' = localData[,'Daily.lab.confirmed.cases'])
+        
+        weekly_new_cases <- init %>% 
+                group_by(week = week(Specimen.date)) %>%
+                summarise(weekly_sum = sum(Daily.lab.confirmed.cases))
+        
+        
+        week_ax <- as.Date(paste(2020, weekly_new_cases$week, 1, sep="-"), "%Y-%U-%u")
+        
+        #week_ax = seq(from = min(as.Date(localData[, 'Specimen.date'])), by = 7, length.out = nrow(weekly_new_cases))
+        
+        # plot but exclude the latest week using head( , -1)
+        points(head(week_ax,-1), head(weekly_new_cases$weekly_sum/7,-1), pch = 20, col = 'skyblue4', type = 'o')
+        legend('topright', legend = 'Weekly Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')
+        
+}
+```
+
+
+```{r, echo=FALSE, include =FALSE, fig.width=12, fig.height = 4 }
+
+# Hard code the double plot here for the minute
+# isolate Exeter cases
+exe <- dat[dat[,'Area.name']=='Exeter',]
+devon <- dat[dat[,'Area.name']=='Devon',]
+
+# Summarise weekly data
+init_devon <- data.frame('Specimen.date' = as.Date(devon[,'Specimen.date']), 
+                         'Daily.lab.confirmed.cases' = devon[,'Daily.lab.confirmed.cases'])
+
+
+weekly_new_cases_devon <- init_devon %>% 
+        group_by(week = week(Specimen.date)) %>%
+        summarise(weekly_sum = sum(Daily.lab.confirmed.cases))
+
+# Summarise weekly data
+init_exe <- data.frame('Specimen.date' = as.Date(exe[,'Specimen.date']), 
+                         'Daily.lab.confirmed.cases' = exe[,'Daily.lab.confirmed.cases'])
+
+weekly_new_cases_exe <- init_exe %>% 
+        group_by(week = week(Specimen.date)) %>%
+        summarise(weekly_sum = sum(Daily.lab.confirmed.cases))
+
+par(las = 1, mar = c(2.5,4,5,1))
+plot(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'],
+     xlab = '', ylab = 'cases', main = '',
+     type = 'h', lwd = 5, col = 'skyblue2', bty = 'n', axes = FALSE)
+grid()
+
+da = seq(from = min(as.Date(devon[, 'Specimen.date'])), to = max(as.Date(devon[, 'Specimen.date'])), by = 7)
+axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+axis(2)
+
+points(as.Date(exe[, 'Specimen.date']), exe[, 'Daily.lab.confirmed.cases'],
+     xlab = 'Date', ylab = 'cases', main = '',
+     type = 'h', col = 'tomato2', lwd = 5)
+legend('topleft', legend = c('Devon', 'Exeter'), col = c('skyblue2', 'tomato2'), lty = 'solid', lwd=5, bty = 'n')
+mtext(text = 'Daily lab-confirmed Covid-19 cases in Devon & Exeter', side = 3, line = .5, adj = 0, cex = 1.5)
+
+week_ax <- as.Date(paste(2020, weekly_new_cases_devon$week, 1, sep="-"), "%Y-%U-%u")
+
+points(head(week_ax,-1), head(weekly_new_cases_devon$weekly_sum/7,-1), pch = 20, col = 'skyblue4', type = 'o')
+
+week_ax <- as.Date(paste(2020, weekly_new_cases_exe$week, 1, sep="-"), "%Y-%U-%u")
+
+points(head(week_ax,-1), head(weekly_new_cases_exe$weekly_sum/7,-1), pch = 20, col = 'tomato4', type = 'o')
+legend('topright', legend = 'Weekly Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')
+        
+```
+
+
+```{r, echo = FALSE}
+plotLocalCasesRollingOverlay <- function(area = 'Devon', dat, col = 'skyblue2', ...){
+              # 'area' should be a string that names an area of interest
+        
+        localDataAll <- dat[dat[,'Area.name']==area, ]
+        
+        # The Unitary Authorities (eg 'Dorset', 'Plymouth') have the data doubled, and Area.type recorded as both 
+        # 'Lower tier local authority' and 'Upper tier local Authority'. Remove one of them.
+        
+        authvec <- unique(localDataAll$Area.type)
+        localData <- localDataAll[localDataAll$Area.type==authvec[1], ]
+        
+        localDataOrdered <-   localData[ order(as.Date(localData[,'Specimen.date'])),  ]
+        
+        LocalDataRollMean <- rollmean(localDataOrdered[, 'Daily.lab.confirmed.cases'], 7, align = 'center', na.pad = T)
+        LocalDataRollMean[(length(LocalDataRollMean)-7):length(LocalDataRollMean)] <- NA
+        
+        da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
+        
+        # plot daily data
+        par(las = 1, mar = c(2.5,4,5,1))
+        plot(as.Date(localDataOrdered[, 'Specimen.date']), localDataOrdered[, 'Daily.lab.confirmed.cases'],
+             xlab = '', ylab = 'cases', main = '',
+             type = 'h', lwd = 5, col = col, bty = 'n', axes = FALSE, ...)
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+        mtext(text = paste0('Daily lab-confirmed Covid-19 cases in ', area), side = 3, line = .5, adj = 0, cex = 1.5)
+        
+        lines(as.Date(localDataOrdered[, 'Specimen.date']), LocalDataRollMean, col = 'skyblue4', lwd = 2)
+        legend('topright', legend = '7 day rolling Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')  
+        
+}
+
+```
+
+## The South West
+```{r, fig.width=12, fig.height = 4, echo = FALSE}
+
+       exe <- dat[dat[,'Area.name']=='Exeter',]
+        exe.order <- exe[ order(as.Date(exe[,'Specimen.date'])),  ]
+        
+        exe.rm <- rollmean(exe.order[, 'Daily.lab.confirmed.cases'], 7, align = 'center', na.pad = T)
+        # replace last 7 days with NA
+        exe.rm[(length(exe.rm)-7):length(exe.rm)] <- NA
+        
+       # , format="%d/%m/%Y")
+        
+        devon <- dat[dat[,'Area.name']=='Devon',]
+        devon.order <- devon[ order(as.Date(devon[,'Specimen.date'])),  ]
+        
+        devon.rm <- rollmean(devon.order[, 'Daily.lab.confirmed.cases'], 7, align = 'center', na.pad = T)
+        devon.rm[(length(devon.rm)-7):length(devon.rm)] <- NA
+        
+        par(las = 1, mar = c(2.5,4,5,1))
+        
+        plot(as.Date(devon.order[, 'Specimen.date']), devon.order[, 'Daily.lab.confirmed.cases'],
+           xlab = '', ylab = 'cases', main = '',
+          type = 'h', lwd = 5, col = 'skyblue2', bty = 'n', axes = FALSE)
+        grid()
+        
+        lines(as.Date(devon.order[, 'Specimen.date']), devon.rm, col = 'skyblue4', lwd = 2)
+        
+        points(as.Date(exe.order[, 'Specimen.date']), exe.order[, 'Daily.lab.confirmed.cases'],
+     xlab = 'Date', ylab = 'cases', main = '',
+     type = 'h', col = 'tomato2', lwd = 5)
+        
+        lines(as.Date(exe.order[, 'Specimen.date']), exe.rm, col = 'tomato4', lwd = 2)
+        
+        
+legend('topleft', legend = c('Devon', 'Exeter'), col = c('skyblue2', 'tomato2'), lty = 'solid', lwd=5, bty = 'n')
+mtext(text = 'Daily lab-confirmed Covid-19 cases in Devon & Exeter', side = 3, line = .5, adj = 0, cex = 1.5)
+        
+        
+        da = seq(from = min(as.Date(devon.order[, 'Specimen.date'])), to = max(as.Date(devon.order[, 'Specimen.date'])), by = 7)
+axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+axis(2)
+ legend('topright', legend = '7 day rolling Average', pch = 20, col = 'skyblue4', lty = 'solid', bty = 'n')  
+        
+```
+
+
+
+```{r, echo = FALSE, include = FALSE, fig.width = 12, fig.height = 4}
+plotlist_sw = list('Dorset', 'Cornwall and Isles of Scilly', 'Somerset', 'Plymouth', 'Torbay','Bournemouth, Christchurch and Poole' )
+
+out = lapply(plotlist_sw, FUN = plotLocalCasesWeeklyOverlay, dat = dat)
+
+```
+
+
+```{r, echo = FALSE, fig.width = 12, fig.height = 4}
+plotlist_sw = list('Dorset', 'Cornwall and Isles of Scilly', 'Somerset', 'Plymouth', 'Torbay','Bournemouth, Christchurch and Poole' )
+
+out = lapply(plotlist_sw, FUN = plotLocalCasesRollingOverlay, dat = dat)
+
+```
+
+
+## Other places of interest
+
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotlist_opoi = list('Milton Keynes','Reading')
+
+out = lapply(plotlist_opoi, FUN = plotLocalCasesRollingOverlay, dat = dat)
+
+
+```
+
+## England and English regions
+
+```{r, echo=FALSE, fig.width=12, fig.height = 4 }
+
+plotlist_eaer = list('England', 'South West', 'South East','London', 'East of England', 'West Midlands', 'East Midlands',
+                     'Yorkshire and The Humber','North West', 'North East')
+
+out = lapply(plotlist_eaer, FUN = plotLocalCasesRollingOverlay, dat = dat)
+
+```
+
+
+```{r, include=FALSE}
+
+# testing statistics    
+#tests <- read.csv(file = 'https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/906109/2020-08-02-COVID-19-UK-testing-time-series.csv')
+
+
+#EnglandTests <- tests[tests[,'Nation']=='England', ]
+
+#pillar2EnglandTests <- tests[tests[,'Nation']=='England' & tests[,'Pillar']=='Pillar 1', ]
+
+```
+
+
+```{r, include=FALSE}
+
+plotLocalRates <- function(area = 'Devon', dat, col = 'skyblue2', ...){
+        # 'area' should be a string that names an area of interest
+        
+        localData <- dat[dat[,'Area.name']==area, ]
+        
+        da = seq(from = min(as.Date(localData[, 'Specimen.date'])), to = max(as.Date(localData[, 'Specimen.date'])), by = 7)
+
+        
+        par(las = 1, mar = c(2.5,4,4,1))
+        plot(as.Date(localData[, 'Specimen.date']), localData[, 'Cumulative.lab.confirmed.cases.rate'],
+             xlab = '', ylab = 'cases per 100 000 population', main = paste0('Cumulative lab confirmed cases rate in ', area),
+             type = 'h', lwd = 5, col = col, bty = 'n', axes = FALSE, ...)
+        grid()
+        
+        axis.Date(1,at=da,labels=format(da,"%d %b"),las=1)
+        axis(2)
+}
+
+plotLocalRates(area = 'Devon', dat = dat)
+
+```
+
+
+```{r, fig.width=10, fig.height=4, include=FALSE, echo=FALSE}
+
+par(las = 1)
+plot(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'], type = 'n', axes = FALSE,
+     xlab = 'Date', ylab = 'Daily lab confirmed cases', main = 'Daily lab confirmed Coronavirus cases in Devon & Exeter')
+grid()
+axis.Date(1, devon[, 'Specimen.date'])
+axis(2)
+lines(as.Date(devon[, 'Specimen.date']), devon[, 'Daily.lab.confirmed.cases'], type = 'o', pch = 20, col = 'black', lwd = 1.5)
+lines(as.Date(exe[, 'Specimen.date']), exe[, 'Daily.lab.confirmed.cases'], type = 'o', pch = 20, col = 'blue', lwd = 1.5)
+legend('topleft', legend = c('Devon', 'Exeter'), col = c('black', 'blue'), lty = 'solid', lwd = 1.5, pch = 20)
+```
+
+
+
