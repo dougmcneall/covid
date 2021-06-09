@@ -1,0 +1,377 @@
+---
+title: "Wave 03 Summary metrics"
+output:
+  html_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(RSQLite)
+library(fields)
+library(viridis)
+library(rgdal)
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+library(cowplot)
+setwd("~/Dropbox/Exeter/Projects/UQ4Covid")
+
+
+#### Load in database ####
+# filename <- "data/wave03_summaries_DW.db" # likely just called wave_summaries_DW.db when downloaded, I've renamed
+# sqlite.driver <- dbDriver("SQLite")
+# db <- dbConnect(sqlite.driver,
+#                 dbname = filename)
+# new_wave1_seeds <- dbReadTable(db,"compact")
+
+# If instead have ward-level summaries
+# filename <- "data/summaries_default.db"
+# sqlite.driver <- dbDriver("SQLite")
+# db <- dbConnect(sqlite.driver,
+#                 dbname = filename)
+# dbListTables(db)
+# newtable <- dbGetQuery(db, "SELECT * FROM compact WHERE week = 12 AND age = 8")
+
+# Don't care about this column
+# new_wave1_seeds$Hprev_mn <- NULL
+
+# Sum deaths
+# new_wave1_seeds$deaths <- new_wave1_seeds$cumHD + new_wave1_seeds$cumCD
+
+#### Aggregate for each week ####
+# ExtractWeek <- function(all_data, weeks = c(12:6)){
+#   extracted_data <- NULL
+#   for (w in 1:length(weeks)){
+#     # First extract all those with replicates (NA else)
+#     tmp_data <- subset(all_data, week == weeks[w] & !(is.na(replicate)))
+#     tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + replicate, data = tmp_data, FUN = sum) # aggregate across age and trust
+#     tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = median) # take median across replicates
+#     
+#     # Repeat for single runs (NAs)
+#     tmp_data <- subset(all_data, week == weeks[w] & (is.na(replicate)))
+#     tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = sum) # aggregate across trusts
+#     
+#     # Combine
+#     tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
+#     tmp_data$week <- weeks[w]
+#     
+#     extracted_data <- rbind(extracted_data, tmp_data)
+#   }
+#   
+#   return(extracted_data)
+# }
+# 
+# all_week_seeds <- ExtractWeek(new_wave1_seeds, weeks = c(12:6))
+# save(all_week_seeds, file = 'data/all_week_seeds.RData')
+
+
+#### Aggregate final week by age ####
+# ExtractAge <- function(all_data){
+#   # First extract all those with replicates (NA else)
+#   tmp_data <- subset(all_data, week == 12 & !(is.na(replicate)))
+#   tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age + replicate, data = tmp_data, FUN = sum) # aggregate across trust
+#   tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = median) # take median across replicates
+#   
+#   # Repeat for single runs (NAs)
+#   tmp_data <- subset(all_data, week == 12 & (is.na(replicate)))
+#   tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = sum) # aggregate across trusts
+#   
+#   # Combine
+#   tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
+#   return(tmp_data)
+# }
+# 
+# week12age_seeds <- ExtractAge(new_wave1_seeds)
+# save(week12age_seeds, file = 'data/week12age_seeds.RData')
+
+load('data/all_week_seeds.RData') # dataframe of weekly cumulative totals
+load('data/week12age_seeds.RData') # dataframe of week 12 totals by age
+all_week12 <- subset(all_week_seeds, week == 12) # week 12 cumulative totals only
+
+#### Load in design ####
+NewDesign <- read.csv('data/wave03inputs.csv') # again, might be called something else
+
+# Merge design and model output
+CombinedData <- all_week_seeds %>% left_join(NewDesign, by = c('output' = 'output'))
+
+# Load csv file of LAD deaths, trust admissions (not public)
+obs_deaths <- read.csv('data/forTJ-lad-deaths-by-age-2021-03-22.csv') # consistent, depending on 28 day vs certificate definition
+trust_admissions <- read.csv('data/forTJ-trust-admissions-by-age-2021-03-22.csv')
+
+# Download various PHE datasets
+phe_deaths <- read.csv('https://api.coronavirus.data.gov.uk/v2/data?areaType=nation&metric=cumDeaths28DaysByDeathDate&metric=newDeaths28DaysByDeathDate&format=csv')
+phe_deaths <- subset(phe_deaths, areaName == 'England') # probbly want Wales as well really
+
+phe_deaths_cert <- read.csv('https://api.coronavirus.data.gov.uk/v2/data?areaType=nation&metric=newDailyNsoDeathsByDeathDate&metric=cumDailyNsoDeathsByDeathDate&format=csv')
+phe_deaths_cert <- subset(phe_deaths_cert, areaName == 'England') # again, need Wales as well when this isn't such a small number
+
+phe_data <- read.csv('https://api.coronavirus.data.gov.uk/v2/data?areaType=nation&metric=newAdmissions&metric=cumAdmissions&format=csv')
+phe_data <- subset(phe_data, areaName == 'England')
+
+phe_admissions <- read.csv('https://api.coronavirus.data.gov.uk/v2/data?areaType=nation&areaCode=E92000001&metric=newAdmissions&format=csv')
+
+#### Subset all datasets so matches MW output ####
+EndDate <- as.Date('2020-03-21')
+
+trust_admissions <- subset(trust_admissions, date <= EndDate)
+trust_admissions <- aggregate(value ~ date, trust_admissions, sum) # summing across trusts
+
+byDayDeaths <- aggregate(value ~ date, data = obs_deaths, sum, na.rm=TRUE) # summing across LADs
+
+# Extract weekly numbers from observations, on dates that match with MW (week 12 is shorter)
+date_seq <- c(seq(from = as.Date('2020-03-17'), by = -7, len = 6)[6:1], EndDate)
+totalDeaths <- numeric(7)
+for (i in 1:7){
+  totalDeaths[i] <- sum(subset(byDayDeaths, as.character(date) <= date_seq[i])$value)
+}
+
+# The PHE datasets start at different times, so this is slightly messy and not general - be careful with zeros!!!
+obs_data <- data.frame(week = 6:12, 
+                       median = log(subset(phe_deaths_cert, as.Date(date) %in% date_seq)$cumDailyNsoDeathsByDeathDate[7:1]+1), 
+                       lower = c(0,0,0,0,log(subset(phe_deaths, as.Date(date) %in% date_seq)$cumDeaths28DaysByDeathDate[3:1]+1)), 
+                       upper = log(totalDeaths+1))
+```
+
+
+
+Looking at wave 03 (number of seeds is now an input).
+
+
+## Summary
+
+Following measures show clear differences between model and observations for reasonable proportion of runs. Can we emulate them well enough to exploit this in history matching?
+
+* Total community deaths
+* Total hospital deaths
+* All deaths
+* Total admissions
+* Proportion of deaths in 70+ (age 8 in MW)
+* Proportion of deaths in under 30s (age 1-3 in MW)
+* Proportion of deaths in London (or total)
+
+All the above are in week 12, and could also consider at earlier times, however time series plot below shows that getting right in week 12 does often naturally force runs to match earlier observations, so may not need to explicitly consider at wave 1.
+
+We could also consider age/spatial distribution of hospital admissions rather than just deaths, however as mentioned below, this data currently seems less reliable up to March 21st.
+
+
+
+
+
+## Plotting by number of seeds
+
+
+```{r, fig.height=6, out.width='50%', fig.show='hold'}
+ggplot(subset(CombinedData, week == 12), aes(x = log(cumH + 1), y = log(deaths + 1), col = ns)) +
+  geom_point() +
+  geom_hline(yintercept = c(log(250+1), log(2500+1))) +
+  geom_vline(xintercept = c(log(2500+1), log(10000+1))) +
+  scale_color_viridis() +
+  labs(col = 'Seeds', x = 'log(hosps)', y = 'log(deaths)')
+
+ggplot(subset(CombinedData, week == 12), aes(x = log(cumH + 1), y = log(deaths + 1), col = R0)) +
+  geom_point() +
+  geom_hline(yintercept = c(log(250+1), log(2500+1))) +
+  geom_vline(xintercept = c(log(2500+1), log(10000+1))) +
+  scale_color_viridis() +
+  labs(x = 'log(hosps)', y = 'log(deaths)')
+```
+
+
+
+```{r, fig.height=5}
+ggplot(subset(CombinedData, week == 12), aes(x = ns, y = R0, col = log(deaths + 1))) +
+  geom_point(size = 2) +
+  scale_color_viridis() +
+  labs(col = 'log(deaths)')
+```
+
+
+## Community and hospital deaths
+
+* Observations: unclear, but neither will be less than 10 on 21st March.
+* `r sum(all_week12$cumCD == 0)` runs have zero community deaths (CD), `r sum(all_week12$cumCD < 10)` have fewer than 10.
+* `r sum(all_week12$cumHD == 0)` runs have zero hospital deaths (HD), `r sum(all_week12$cumHD < 10)` have fewer than 10.
+* Key parameters: `alphaI1D`, `alphaHD`.
+```{r, fig.height=5, out.width='50%', fig.show='hold'}
+ggplot(data = all_week12, aes(x = log(cumCD+1), y = log(cumHD+1))) + geom_point()
+ggplot(data = NewDesign, aes(x = alphaI1D, y = alphaHD)) + geom_point(col = ifelse(all_week12$cumCD < 10 | all_week12$cumHD < 10, 'red', 'green'))
+```
+
+
+
+
+
+## Total deaths
+
+* Observations: depends on whether use within 28 days vs on death certificate, or whether sum UTLA-level data, but they're not too far apart on 21st March:
+
+```{r}
+c(sum(subset(byDayDeaths, as.character(date) <= EndDate)$value), subset(phe_deaths, date == EndDate)$cumDeaths28DaysByDeathDate, subset(phe_deaths_cert, date == EndDate)$cumDailyNsoDeathsByDeathDate)
+```
+
+* Likely to be an underestimate, but consider runs within wide range of 250-2500.
+* `r sum(all_week12$deaths < 250)` runs have fewer than 250 deaths, `r sum(all_week12$deaths > 2500)` runs have greater than 2500 deaths up to 21st March.
+
+```{r, echo = FALSE}
+CombinedData$nroy <- rep(ifelse(subset(CombinedData, week == 12)$deaths >= 250 
+                                & subset(CombinedData, week == 12)$deaths <= 2500
+                                & subset(CombinedData, week == 12)$cumHD > 0
+                                & subset(CombinedData, week == 12)$cumCD > 0
+                                & subset(CombinedData, week == 12)$cumH >= 2500
+                                & subset(CombinedData, week == 12)$cumH <= 10000, 1, 0), 7)
+CombinedData$nroy <- as.factor(CombinedData$nroy)
+```
+
+
+```{r, fig.height=5, warning = FALSE}
+ggplot(CombinedData, aes(x = week, y = log(deaths + 1), alpha = nroy, linetype = output, col = nroy)) +
+  geom_line() +
+  theme(legend.position = "none") +
+  scale_linetype_manual(values = rep(1, 224)) +
+  geom_point(data = obs_data, aes(y = median, col = NULL, alpha = NULL, linetype = NULL)) +
+  geom_point(data = obs_data, aes(y = lower, col = NULL, alpha = NULL, linetype = NULL)) +
+  geom_point(data = obs_data, aes(y = upper, col = NULL, alpha = NULL, linetype = NULL)) +
+  labs(y = 'log(deaths)')
+```
+
+
+Instead coloured by `ns`:
+```{r, fig.height=5, warning = FALSE}
+ggplot(CombinedData, aes(x = week, y = log(deaths + 1), linetype = output, col = ns)) +
+  geom_line(alpha = 0.5) +
+  scale_color_viridis() +
+  scale_linetype_manual(values = rep(1, 224), guide=FALSE) +
+  geom_point(data = obs_data, aes(y = median, col = NULL, alpha = NULL, linetype = NULL)) +
+  geom_point(data = obs_data, aes(y = lower, col = NULL, alpha = NULL, linetype = NULL)) +
+  geom_point(data = obs_data, aes(y = upper, col = NULL, alpha = NULL, linetype = NULL)) +
+  labs(y = 'log(deaths)')
+```
+
+
+
+## Total admissions
+
+* Observations: for England, daily admissions data only publicly available from 19th March onwards (total = `r sum(c(subset(phe_admissions, date <= '2020-03-21')$newAdmissions))`), and all PHE cumulative totals start from this date. At trust level, have earlier data, but this is generally an undercount, with `r sum(trust_admissions$value)` total up to 21st March.
+
+* So also likely an underestimate, consider runs within 2500-10000 as acceptable for now.
+
+* `r sum(all_week12$cumH < 2500)` runs have fewer than 2.5k admissions, `r sum(all_week12$cumH > 10000)` runs have greater than 10k admissions up to 21st March.
+
+* Plotting deaths vs hospitalisations, and colouring green for runs that passed the deaths/CD/HD constraints:
+
+```{r, echo = FALSE}
+CombinedData$nroy <- rep(ifelse(subset(CombinedData, week == 12)$deaths >= 250 
+                                & subset(CombinedData, week == 12)$deaths <= 2500
+                                & subset(CombinedData, week == 12)$cumHD > 0
+                                & subset(CombinedData, week == 12)$cumCD > 0, 1, 0), 7)
+CombinedData$nroy <- as.factor(CombinedData$nroy)
+```
+
+```{r, fig.height=5}
+ggplot(subset(CombinedData, week == 12), aes(x = log(cumH+1), y = log(deaths+1), col = nroy)) + 
+  geom_point() +
+  geom_hline(yintercept = c(log(250+1), log(2500+1))) +
+  geom_vline(xintercept = c(log(2500+1), log(10000+1))) +
+  scale_color_manual(values = c('grey', 'green')) +
+  labs(x = 'log(hosps)', y = 'log(deaths)')
+```
+
+
+
+## Age distribution
+
+* Observations: from PHE data, have deaths by age group and region. Aggregating across age groups, we can match 4-8 from MetaWards (only 4 deaths up to 21st March are in under 30s):
+
+```{r, echo = FALSE}
+totalDeathsByRun <- aggregate(cbind(cumCD,cumHD,deaths) ~ output, week12age_seeds, sum)
+tmp_data <- week12age_seeds
+# order by run
+tmp_data <- tmp_data[order(tmp_data$output), ]
+tmp_data$prop <- tmp_data$deaths / rep(totalDeathsByRun$deaths, each = 8)
+# Check that sums to 1 for each run
+#aggregate(prop ~ output, tmp_data, sum)
+tmp_data$nroy <- rep(CombinedData$nroy[1:224], each = 8) # should probably do some sort of merge here really
+
+deathsByRegion <- read.csv('https://api.coronavirus.data.gov.uk/v2/data?areaType=region&metric=newDeaths28DaysByDeathDateAgeDemographics&format=csv')
+deathsByRegion <- subset(deathsByRegion, date <= as.Date('2020-03-21'))
+# Some deaths are double counted in different age groups, remove these
+deathsByRegion <- subset(deathsByRegion, !(age %in% c('60+', '00_59')))
+deathsByAgeTotal <- aggregate(deaths ~ age, deathsByRegion, sum)
+deathsByAgeTotalMW <- data.frame(age = 4:8,
+                                 deaths = c(sum(deathsByAgeTotal$deaths[7:8]),
+                                            sum(deathsByAgeTotal$deaths[9:10]),
+                                            sum(deathsByAgeTotal$deaths[11:12]),
+                                            sum(deathsByAgeTotal$deaths[13:14]),
+                                            sum(deathsByAgeTotal$deaths[15:19])))
+deathsByAgeTotalMW$prop <- round(deathsByAgeTotalMW$deaths / sum(deathsByAgeTotal$deaths), 3)
+```
+
+```{r}
+deathsByAgeTotalMW
+```
+
+* Plotting both ensembles vs age distribution of total deaths up to 21st March, we see that the new wave generally has lower proportions in the oldest age group:
+
+```{r, fig.height=5, out.width='50%', fig.show='hold'}
+ggplot(tmp_data, aes(x = age, y = log(deaths), linetype = output, col = nroy, alpha = nroy)) +
+  geom_line() + 
+  theme(legend.position = "none") +
+  labs(y = 'log(Deaths)') +
+  scale_linetype_manual(values = rep(1, 224)) +
+  scale_color_manual(values = c('grey', 'green')) +
+  scale_alpha_manual(values = c(0.25,1)) +
+  geom_point(data = deathsByAgeTotalMW, aes(y = log(deaths), col = NULL, linetype = NULL, alpha = NULL))
+
+ggplot(tmp_data, aes(x = age, y = prop, linetype = output, col = nroy, alpha = nroy)) +
+  geom_line() + 
+  theme(legend.position = "none") +
+  labs(y = 'Proportion') +
+  scale_linetype_manual(values = rep(1, 224)) +
+  scale_color_manual(values = c('grey', 'green')) +
+  scale_alpha_manual(values = c(0.25,1)) +
+  ylim(0,1) +
+  geom_point(data = deathsByAgeTotalMW, aes(y = deaths / sum(deathsByAgeTotal$deaths), col = NULL, linetype = NULL, alpha = NULL))
+```
+
+
+
+```{r, eval = FALSE}
+#### Some emulators ####
+mogp_dir <- '/Users/jamessalter/mogp_emulator/'
+setwd('~/Documents/ExeterUQ_MOGP/')
+source('BuildEmulator/BuildEmulator.R')
+#new.choices <- choices.default
+#new.choices$lm.maxdf <- 10 # if want to change priors, add this as list in BuildNewEmulators
+
+# Usually scale design to [-1,1]
+#### THIS ISN'T RIGHT AT THE MOMENT - NEED TO USE OVERALL MAX/MIN FOR EACH PARAMETER RATHER THAN JUST IN DESIGN ####
+ScaledDesign <- NewDesign
+for (i in 1:14){
+  ScaledDesign[,i] <- ScaledDesign[,i] - min(ScaledDesign[,i])
+  ScaledDesign[,i] <- ScaledDesign[,i] / max(ScaledDesign[,i] / 2)
+  ScaledDesign[,i] <- ScaledDesign[,i] - 1
+}
+
+# Join to MW data
+CombinedDataScaled <- all_week_seeds %>% left_join(ScaledDesign, by = c('output' = 'output'))
+
+# Create tData, containing training data for emulator
+tData <- data.frame(subset(CombinedDataScaled, week == 12)[1:100,7:20],
+                    Noise = runif(100),
+                    LogDeaths = log(subset(CombinedDataScaled, week == 12)$deaths[1:100] + 1))
+  
+Em_LogDeaths <- BuildNewEmulators(tData = tData, HowManyEmulators = 1, meanFun="fitted")
+
+LOO.plot(Emulators = Em_LogDeaths, which.emulator = 1,
+         ParamNames = colnames(tData)[Em_LogDeaths$fitting.elements$ActiveIndices[[1]]])
+summary(Em_LogDeaths$fitting.elements$lm.object[[1]]$linModel)
+save_ExUQmogp(Em_LogDeaths, file = 'Em_LogDeaths')
+```
+
+
+
+

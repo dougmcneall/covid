@@ -2,3 +2,6 @@
 # https://git-scm.com/docs/gitignore
 
 /output
+/james/data
+
+/data/summaries_DW.db
