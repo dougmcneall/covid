@@ -6,8 +6,11 @@ output: html_notebook
 
 ## Emulation tests for MetaWards
 
-Model description (parameters etc. ) are [here](https://uq4covid.github.io/vignettes/data/MetaWards/vignette/ModelDescription)
-Based on Code from James Salter
+Model description (parameters etc. ) are [here](https://uq4covid.github.io/vignettes/data/MetaWards/vignette/ModelDescription)  
+
+Based on Code from James Salter.
+
+Code for this notebook is [here](https://github.com/dougmcneall/covid/blob/master/james/wave_03_test.Rmd)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, error = FALSE)
@@ -16,7 +19,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, error = FALSE)
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 library(RSQLite)
 library(fields)
-library(viridisLite)
+library(viridis)
 library(rgdal)
 library(dplyr)
 library(reshape2)
@@ -49,58 +52,58 @@ new_wave1_seeds <- dbReadTable(db,"compact")
 
 ```{r, eval = FALSE}
 
-newtable <- dbGetQuery(db, "SELECT * FROM compact WHERE week = 12 AND age = 8")
-
-# Don't care about this column
-new_wave1_seeds$Hprev_mn <- NULL
-
-# Sum deaths
-new_wave1_seeds$deaths <- new_wave1_seeds$cumHD + new_wave1_seeds$cumCD
-
-#### Aggregate for each week ####
-ExtractWeek <- function(all_data, weeks = c(12:6)){
-  extracted_data <- NULL
-  for (w in 1:length(weeks)){
-    # First extract all those with replicates (NA else)
-    tmp_data <- subset(all_data, week == weeks[w] & !(is.na(replicate)))
-    tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + replicate, data = tmp_data, FUN = sum) # aggregate across age and trust
-    tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = median) # take median across replicates
-    
-    # Repeat for single runs (NAs)
-    tmp_data <- subset(all_data, week == weeks[w] & (is.na(replicate)))
-    tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = sum) # aggregate across trusts
-    
-    # Combine
-    tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
-    tmp_data$week <- weeks[w]
-    
-    extracted_data <- rbind(extracted_data, tmp_data)
-  }
-  
-  return(extracted_data)
-}
-
-all_week_seeds <- ExtractWeek(new_wave1_seeds, weeks = c(12:6))
-save(all_week_seeds, file = 'data/all_week_seeds.RData')
-
-
-#### Aggregate final week by age ####
-ExtractAge <- function(all_data){
-  # First extract all those with replicates (NA else)
-  tmp_data <- subset(all_data, week == 12 & !(is.na(replicate)))
-  tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age + replicate, data = tmp_data, FUN = sum) # aggregate across trust
-  tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = median) # take median across replicates   
-  # Repeat for single runs (NAs)
-  tmp_data <- subset(all_data, week == 12 & (is.na(replicate)))
-  tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = sum) # aggregate across trusts
-  
-  # Combine
-  tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
-  return(tmp_data)
-}
-
-week12age_seeds <- ExtractAge(new_wave1_seeds)
-save(week12age_seeds, file = 'data/week12age_seeds.RData')
+# newtable <- dbGetQuery(db, "SELECT * FROM compact WHERE week = 12 AND age = 8")
+# 
+# # Don't care about this column
+# new_wave1_seeds$Hprev_mn <- NULL
+# 
+# # Sum deaths
+# new_wave1_seeds$deaths <- new_wave1_seeds$cumHD + new_wave1_seeds$cumCD
+# 
+# #### Aggregate for each week ####
+# ExtractWeek <- function(all_data, weeks = c(12:6)){
+#   extracted_data <- NULL
+#   for (w in 1:length(weeks)){
+#     # First extract all those with replicates (NA else)
+#     tmp_data <- subset(all_data, week == weeks[w] & !(is.na(replicate)))
+#     tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + replicate, data = tmp_data, FUN = sum) # aggregate across age and trust
+#     tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = median) # take median across replicates
+#     
+#     # Repeat for single runs (NAs)
+#     tmp_data <- subset(all_data, week == weeks[w] & (is.na(replicate)))
+#     tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = sum) # aggregate across trusts
+#     
+#     # Combine
+#     tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
+#     tmp_data$week <- weeks[w]
+#     
+#     extracted_data <- rbind(extracted_data, tmp_data)
+#   }
+#   
+#   return(extracted_data)
+# }
+# 
+# all_week_seeds <- ExtractWeek(new_wave1_seeds, weeks = c(12:6))
+# save(all_week_seeds, file = 'data/all_week_seeds.RData')
+# 
+# 
+# #### Aggregate final week by age ####
+# ExtractAge <- function(all_data){
+#   # First extract all those with replicates (NA else)
+#   tmp_data <- subset(all_data, week == 12 & !(is.na(replicate)))
+#   tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age + replicate, data = tmp_data, FUN = sum) # aggregate across trust
+#   tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = median) # take median across replicates   
+#   # Repeat for single runs (NAs)
+#   tmp_data <- subset(all_data, week == 12 & (is.na(replicate)))
+#   tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = sum) # aggregate across trusts
+#   
+#   # Combine
+#   tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
+#   return(tmp_data)
+# }
+# 
+# week12age_seeds <- ExtractAge(new_wave1_seeds)
+# save(week12age_seeds, file = 'data/week12age_seeds.RData')
 ```
 
 ```{r}
@@ -177,7 +180,15 @@ ggplot(subset(CombinedData, week == 12), aes(x = log(cumH + 1), y = log(deaths +
 ```
 
 
-### Cumulative hospital deaths
+## Ensemble design
+
+```{r, fig.width = 12, fig.height = 12}
+pairs(NewDesign[,1:14])
+
+```
+
+
+### Cumulative hospital deaths at the start of lockdown against each parameter
 ```{r, fig.width = 12, fig.height = 8}
 
 week12 <- subset(CombinedData, week == 12)
@@ -192,7 +203,7 @@ for (i in 1:14 ){
 
 
 
-### Cumulative community deaths
+### Cumulative community deaths at the start of lockdown against each parameter
 ```{r, fig.width = 12, fig.height = 8}
 
 par(mfrow = c(3,5))
@@ -203,18 +214,13 @@ for (i in 1:14 ){
 
 ```
 
-```{r}
-
-
-
-```
-
 ## Emulating cumulative deaths in hostpital (cumHD) in the community (cumCD) at the beginning of lockdown
-The DiceKriging Emulator fit looks good
+
+The DiceKriging Emulator fit for log(deaths) looks good. Leave-one-out isn't a great measure, but it's a start.
+
 ```{r, fig.width = 5, fig.height = 8,  include = FALSE}
 
 fit_cumHD <- km(~., design = NewDesign[, 1:14], response = log(1+ week12$cumHD))
-
 fit_cumCD <- km(~., design = NewDesign[, 1:14], response = log(1+ week12$cumCD))
 
 ```
@@ -277,30 +283,30 @@ abline(0,1)
 
 ```
 
-### Ensemble design
 
-```{r, fig.width = 12, fig.height = 12}
-pairs(NewDesign[,1:14])
+## Normalise input space and re-fit to produce some sensitivity analyses
 
-```
-
-```{r}
+```{r, include = FALSE}
 
 X <- NewDesign[, 1:14]
 X_norm <- normalize(X)
 
 fit_cumHD_norm <- km(~., design = X_norm, response = log(1+ week12$cumHD))
-
 fit_cumCD_norm <- km(~., design = X_norm, response = log(1+ week12$cumCD))
-
-
-```
-
-```{r, fig.width = 12, fig.height = 12}
-
 
 X_oaat <- oaat_design(X_norm, n=21, med = TRUE)
 colnames(X_oaat) = colnames(X)
+
+```
+
+
+
+### one-at-a-time sensitivity for cumulative hospital deaths 
+
+
+```{r, fig.width = 10, fig.height = 8}
+
+
 
 y_oaat <- predict.km(fit_cumHD_norm, newdata = X_oaat, type = 'UK')
 
@@ -308,13 +314,57 @@ oaatLinePlot(X_oaat = X_oaat, y_oaat_mean = y_oaat$mean, y_oaat_sd = y_oaat$sd,
              n_oaat = 21,nr = 3, nc = 5) 
 ```
 
+### one-at-a-time sensitivity for cumulative community deaths 
 
-```{r, fig.width = 12, fig.height = 12}
+```{r, fig.width = 10, fig.height = 8}
 
 y_oaat <- predict.km(fit_cumCD_norm, newdata = X_oaat, type = 'UK')
 
 oaatLinePlot(X_oaat = X_oaat, y_oaat_mean = y_oaat$mean, y_oaat_sd = y_oaat$sd, 
              n_oaat = 21,nr = 3, nc = 5) 
+```
+
+
+## FAST99 sensitivity analysis of Saltelli et al (1999)
+```{r}
+
+library(sensitivity)
+# Generate a design for the FAST99 analysis
+X_fast <- fast99(model = NULL, factors = colnames(X_norm), n = 3000,
+                 q = "qunif", q.arg = list(min = 0, max = 1))
+# Predict the response at the FAST99 design points using the emulator
+
+
+
+pred_fast_cumHD = predict(fit_cumHD_norm, newdata = X_fast$X, type = 'UK')
+pred_fast_cumCD = predict(fit_cumCD_norm, newdata = X_fast$X, type = 'UK')
+# Calculate the sensitivity indices
+fast_tell_cumHD <- tell(X_fast, pred_fast_cumHD$mean)
+fast_tell_cumCD <- tell(X_fast, pred_fast_cumCD$mean)
+
+
+bpConvert <- function(fastmodel){
+  # get the FAST summary into an easier format for barplot
+  fast_summ <- print(fastmodel)
+  fast_diff <- fast_summ[ ,2] - fast_summ[ ,1]
+  fast_bp <- t(cbind(fast_summ[ ,1], fast_diff))
+  fast_bp
+}
+
+
+
+```
+
+```{r}
+
+par(las = 2, mar = c(9,5,3,2))
+barplot(bpConvert(fast_tell_cumHD), col = c('skyblue', 'grey'), ylab = 'relative sensitivity', main = 'cumHD FAST99 Sensitivity')
+legend('topleft',legend = c('Main effect', 'Interactions'), fill = c('skyblue', 'grey') )
+
+par(las = 2, mar = c(9,5,3,2))
+barplot(bpConvert(fast_tell_cumCD), col = c('skyblue', 'grey'), ylab = 'relative sensitivity', main = 'cumCD FAST99 Sensitivity')
+legend('topleft',legend = c('Main effect', 'Interactions'), fill = c('skyblue', 'grey') )
+
 ```
 
 
