@@ -1,7 +1,7 @@
 ---
 title: "UK Covid tracker"
 author: "Doug McNeall"
-date: "2021-06-13"
+date: "2021-06-16"
 output: html_document
 ---
 
