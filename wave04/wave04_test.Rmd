@@ -1,7 +1,8 @@
 ---
-title: "MetaWards wave 03 pre-lockdown emulation test"
+title: "Metawards Wave04"
 output: html_notebook
 ---
+
 
 
 ## Emulation tests for MetaWards
@@ -33,6 +34,7 @@ library(viztools)
 ```
 
 
+
 ```{r}
 
 ### Helper functions
@@ -50,7 +52,7 @@ makeTransparent<-function(someColor, alpha=100)
 
 ```{r}
 #### Load in database ####
-filename <- "data/wave03_summaries_DW.db" # likely just called wave_summaries_DW.db when downloaded, I've renamed
+filename <- "data/summaries_DW.db" # likely just called wave_summaries_DW.db when downloaded, I've renamed
 sqlite.driver <- dbDriver("SQLite")
 db <- dbConnect(sqlite.driver,
                 dbname = filename)
@@ -67,58 +69,58 @@ new_wave1_seeds <- dbReadTable(db,"compact")
 
 ```{r, eval = FALSE}
 #### Create aggregated data ####
-# newtable <- dbGetQuery(db, "SELECT * FROM compact WHERE week = 12 AND age = 8")
-# 
-# # Don't care about this column
-# new_wave1_seeds$Hprev_mn <- NULL
-# 
-# # Sum deaths
-# new_wave1_seeds$deaths <- new_wave1_seeds$cumHD + new_wave1_seeds$cumCD
-# 
-# #### Aggregate for each week ####
-# ExtractWeek <- function(all_data, weeks = c(12:6)){
-#   extracted_data <- NULL
-#   for (w in 1:length(weeks)){
-#     # First extract all those with replicates (NA else)
-#     tmp_data <- subset(all_data, week == weeks[w] & !(is.na(replicate)))
-#     tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + replicate, data = tmp_data, FUN = sum) # aggregate across age and trust
-#     tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = median) # take median across replicates
-#     
-#     # Repeat for single runs (NAs)
-#     tmp_data <- subset(all_data, week == weeks[w] & (is.na(replicate)))
-#     tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = sum) # aggregate across trusts
-#     
-#     # Combine
-#     tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
-#     tmp_data$week <- weeks[w]
-#     
-#     extracted_data <- rbind(extracted_data, tmp_data)
-#   }
-#   
-#   return(extracted_data)
-# }
-# 
-# all_week_seeds <- ExtractWeek(new_wave1_seeds, weeks = c(12:6))
-# save(all_week_seeds, file = 'data/all_week_seeds.RData')
-# 
-# 
-# #### Aggregate final week by age ####
-# ExtractAge <- function(all_data){
-#   # First extract all those with replicates (NA else)
-#   tmp_data <- subset(all_data, week == 12 & !(is.na(replicate)))
-#   tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age + replicate, data = tmp_data, FUN = sum) # aggregate across trust
-#   tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = median) # take median across replicates   
-#   # Repeat for single runs (NAs)
-#   tmp_data <- subset(all_data, week == 12 & (is.na(replicate)))
-#   tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = sum) # aggregate across trusts
-#   
-#   # Combine
-#   tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
-#   return(tmp_data)
-# }
-# 
-# week12age_seeds <- ExtractAge(new_wave1_seeds)
-# save(week12age_seeds, file = 'data/week12age_seeds.RData')
+newtable <- dbGetQuery(db, "SELECT * FROM compact WHERE week = 12 AND age = 8")
+
+# Don't care about this column
+new_wave1_seeds$Hprev_mn <- NULL
+
+# Sum deaths
+new_wave1_seeds$deaths <- new_wave1_seeds$cumHD + new_wave1_seeds$cumCD
+
+#### Aggregate for each week ####
+ExtractWeek <- function(all_data, weeks = c(12:6)){
+  extracted_data <- NULL
+  for (w in 1:length(weeks)){
+    # First extract all those with replicates (NA else)
+    tmp_data <- subset(all_data, week == weeks[w] & !(is.na(replicate)))
+    tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + replicate, data = tmp_data, FUN = sum) # aggregate across age and trust
+    tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = median) # take median across replicates
+
+    # Repeat for single runs (NAs)
+    tmp_data <- subset(all_data, week == weeks[w] & (is.na(replicate)))
+    tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output, data = tmp_data, FUN = sum) # aggregate across trusts
+
+    # Combine
+    tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
+    tmp_data$week <- weeks[w]
+
+    extracted_data <- rbind(extracted_data, tmp_data)
+  }
+
+  return(extracted_data)
+}
+
+all_week_seeds <- ExtractWeek(new_wave1_seeds, weeks = c(12:6))
+save(all_week_seeds, file = 'data/all_week_seeds.RData')
+
+
+#### Aggregate final week by age ####
+ExtractAge <- function(all_data){
+  # First extract all those with replicates (NA else)
+  tmp_data <- subset(all_data, week == 12 & !(is.na(replicate)))
+  tmp_data <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age + replicate, data = tmp_data, FUN = sum) # aggregate across trust
+  tmp_data_reps <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = median) # take median across replicates
+  # Repeat for single runs (NAs)
+  tmp_data <- subset(all_data, week == 12 & (is.na(replicate)))
+  tmp_data_unique <- aggregate(cbind(cumH,cumHD,cumCD,deaths) ~ output + age, data = tmp_data, FUN = sum) # aggregate across trusts
+
+  # Combine
+  tmp_data <- rbind(tmp_data_reps, tmp_data_unique)
+  return(tmp_data)
+}
+
+week12age_seeds <- ExtractAge(new_wave1_seeds)
+save(week12age_seeds, file = 'data/week12age_seeds.RData')
 ```
 
 ```{r}
@@ -129,7 +131,7 @@ load('data/week12age_seeds.RData') # dataframe of week 12 totals by age
 all_week12 <- subset(all_week_seeds, week == 12) # week 12 cumulative totals only 
 
 #### Load in design ####
-NewDesign <- read.csv('data/wave03inputs.csv') # again, might be called something else
+NewDesign <- read.csv('data/inputs.csv') # again, might be called something else
 
 # Merge design and model output
 CombinedData <- all_week_seeds %>% left_join(NewDesign, by = c('output' = 'output'))
@@ -152,92 +154,31 @@ phe_admissions <- read.csv('https://api.coronavirus.data.gov.uk/v2/data?areaType
 
 ```
 
-
-
-```{r, eval = FALSE}
-#### Subset all datasets so matches MW output ####
-EndDate <- as.Date('2020-03-21')
-
-#trust_admissions <- subset(trust_admissions, date <= EndDate)
-#trust_admissions <- aggregate(value ~ date, trust_admissions, sum) # summing across trusts
-
-# byDayDeaths <- aggregate(value ~ date, data = obs_deaths, sum, na.rm=TRUE) # summing across LADs
-
-# Extract weekly numbers from observations, on dates that match with MW (week 12 is shorter)
-date_seq <- c(seq(from = as.Date('2020-03-17'), by = -7, len = 6)[6:1], EndDate)
-totalDeaths <- numeric(7)
-for (i in 1:7){
-  totalDeaths[i] <- sum(subset(byDayDeaths, as.character(date) <= date_seq[i])$value)
-}
-
-# The PHE datasets start at different times, so this is slightly messy and not general - be careful with zeros!!!
-obs_data <- data.frame(week = 6:12, 
-                       median = log(subset(phe_deaths_cert, as.Date(date) %in% date_seq)$cumDailyNsoDeathsByDeathDate[7:1]+1), 
-                       lower = c(0,0,0,0,log(subset(phe_deaths, as.Date(date) %in% date_seq)$cumDeaths28DaysByDeathDate[3:1]+1)), 
-                       upper = log(totalDeaths+1))
-```
-
-
-```{r, eval = FALSE, fig.height=6, out.width='50%', fig.show='hold'}
-ggplot(subset(CombinedData, week == 12), aes(x = log(cumH + 1), y = log(deaths + 1), col = ns)) +
-  geom_point() +
-  geom_hline(yintercept = c(log(250+1), log(2500+1))) +
-  geom_vline(xintercept = c(log(2500+1), log(10000+1))) +
-  scale_color_viridis() +
-  labs(col = 'Seeds', x = 'log(hosps)', y = 'log(deaths)')
-
-ggplot(subset(CombinedData, week == 12), aes(x = log(cumH + 1), y = log(deaths + 1), col = R0)) +
-  geom_point() +
-  geom_hline(yintercept = c(log(250+1), log(2500+1))) +
-  geom_vline(xintercept = c(log(2500+1), log(10000+1))) +
-  scale_color_viridis() +
-  labs(x = 'log(hosps)', y = 'log(deaths)')
-```
-
-
-## Ensemble design
-
 ```{r, fig.width = 12, fig.height = 12}
-pairs(NewDesign[,1:14])
+pairs(NewDesign[,1:15])
 
 ```
 
 
-### Cumulative hospital deaths at the start of lockdown against each parameter
-```{r, fig.width = 10, fig.height = 6}
+
+```{r}
 
 week12 <- subset(CombinedData, week == 12)
 
-par(mfrow = c(3,5))
-
-for (i in 1:14 ){
-  plot(NewDesign[,i], week12$cumHD, xlab = colnames(NewDesign)[i], ylab = 'cumulative hospital deaths')
-}
 
 ```
 
-
-
-### Cumulative community deaths at the start of lockdown against each parameter
-```{r, fig.width = 10, fig.height = 6}
-
-par(mfrow = c(3,5))
-
-for (i in 1:14 ){
-  plot(NewDesign[,i], week12$cumCD, xlab = colnames(NewDesign)[i], ylab = 'cumulative community deaths')
-}
-
-```
 
 
 ```{r, fig.width = 12, fig.height = 6}
 
-par(mfrow = c(4,14), mar = c(2,1,2,1), oma = c(0.1,3, 3,0.1))
+par(mfrow = c(4,15), mar = c(2,1,2,1), oma = c(0.1,3, 3,0.1))
 
 for(j in 2:5){
-for (i in 1:14) {
+for (i in 1:15) {
   
-  plot(NewDesign[,i], week12[,j], ylab = '', xlab = '', axes = FALSE, col = makeTransparent('black', 100), pch = 16)
+  plot(NewDesign[,i], week12[,j], ylab = '', xlab = '', axes = FALSE, col = makeTransparent('black', 100), 
+       bg = makeTransparent('black', 100), pch = 21)
   
   if(j==2){
     mtext(text = colnames(NewDesign)[i], side = 3, line = 2)
@@ -255,24 +196,14 @@ for (i in 1:14) {
 ```
 
 
-```{r}
-plot(1:10, pch = 16, cex = 1, col = makeTransparent('black', 100), lwd = 5)
-
-
-```
-
-
-
-
-
 ## Emulating cumulative deaths in hostpital (cumHD) in the community (cumCD) at the beginning of lockdown
 
 The DiceKriging Emulator fit for log(deaths) looks good. Leave-one-out isn't a great measure, but it's a start.
 
 ```{r, fig.width = 5, fig.height = 8,  include = FALSE}
 
-fit_cumHD <- km(~., design = NewDesign[, 1:14], response = log(1+ week12$cumHD))
-fit_cumCD <- km(~., design = NewDesign[, 1:14], response = log(1+ week12$cumCD))
+fit_cumHD <- km(~., design = NewDesign[, 1:15], response = log(1+ week12$cumHD))
+fit_cumCD <- km(~., design = NewDesign[, 1:15], response = log(1+ week12$cumCD))
 
 ```
 
@@ -334,12 +265,11 @@ abline(0,1)
 
 ```
 
-
 ## Normalise input space and re-fit to produce some sensitivity analyses
 
 ```{r, include = FALSE}
 
-X <- NewDesign[, 1:14]
+X <- NewDesign[, 1:15]
 X_norm <- normalize(X)
 
 fit_cumHD_norm <- km(~., design = X_norm, response = log(1+ week12$cumHD))
@@ -349,7 +279,6 @@ X_oaat <- oaat_design(X_norm, n=21, med = TRUE)
 colnames(X_oaat) = colnames(X)
 
 ```
-
 
 
 ### one-at-a-time sensitivity for cumulative hospital deaths 
@@ -365,6 +294,7 @@ oaatLinePlot(X_oaat = X_oaat, y_oaat_mean = y_oaat$mean, y_oaat_sd = y_oaat$sd,
              n_oaat = 21,nr = 3, nc = 5) 
 ```
 
+
 ### one-at-a-time sensitivity for cumulative community deaths 
 
 ```{r, fig.width = 10, fig.height = 8}
@@ -374,6 +304,7 @@ y_oaat <- predict.km(fit_cumCD_norm, newdata = X_oaat, type = 'UK')
 oaatLinePlot(X_oaat = X_oaat, y_oaat_mean = y_oaat$mean, y_oaat_sd = y_oaat$sd, 
              n_oaat = 21,nr = 3, nc = 5) 
 ```
+
 
 
 ## FAST99 sensitivity analysis of Saltelli et al (1999)
@@ -419,3 +350,18 @@ legend('topleft',legend = c('Main effect', 'Interactions'), fill = c('skyblue', 
 ```
 
 
+
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
