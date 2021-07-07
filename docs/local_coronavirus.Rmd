@@ -1,7 +1,7 @@
 ---
 title: "UK Covid tracker"
 author: "Doug McNeall"
-date: "2021-07-02"
+date: "2021-07-07"
 output: html_document
 ---
 
@@ -56,7 +56,7 @@ get_api_data <- function(AREA_TYPE, AREA_NAME){
     date  = "date", 
     
     name  = "areaName", 
-    
+      
     code  = "areaCode", 
     
     dailyCases = "newCasesByPublishDate",
