@@ -1,0 +1,72 @@
+---
+title: "A quick look at pini numerator"
+output: html_notebook
+---
+
+A quick check of how pini alters states, when Nposs is capped at 100, in a population of 100k. 
+
+Output is the mean of the last 300 iterations of iFFBS, for each state at t = 73. The boxplots represent the empirical distribution of 30 sample input parameter sets, taken randomly from the ensemble.
+
+population = 100000  
+Nposs = 100  
+length(DI_prime) = 73  
+pn = pini numerator  
+pini = pn / (Nposs * length(DI_prime))  
+
+
+We want to see variation across the ensemble, and it looks like we get it as the pini numerator goes higher than 1. 
+
+```{r}
+load('test_pini.rdata')
+library(tidyverse)
+
+
+```
+
+# pn = 1
+
+```{r}
+test_max_pini_1 %>%
+  as.data.frame() %>%
+  pivot_longer( cols = A:RI,  names_to = "class") %>%
+  ggplot(aes(x = class, y = value)) +
+    geom_boxplot()
+
+```
+
+
+# pn = 10
+
+
+```{r}
+test_max_pini_10 %>%
+  as.data.frame() %>%
+  pivot_longer( cols = A:RI,  names_to = "class") %>%
+  ggplot(aes(x = class, y = value)) +
+    geom_boxplot()
+
+```
+
+# pn = 100
+
+```{r}
+
+test_max_pini_100 %>%
+  as.data.frame() %>%
+  pivot_longer( cols = A:RI,  names_to = "class") %>%
+  ggplot(aes(x = class, y = value)) +
+    geom_boxplot()
+
+```
+
+# pn = 1000
+```{r}
+
+test_max_pini_1000 %>%
+  as.data.frame() %>%
+  pivot_longer( cols = A:RI,  names_to = "class") %>%
+  ggplot(aes(x = class, y = value)) +
+    geom_boxplot()
+
+```
+
